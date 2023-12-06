@@ -15,7 +15,11 @@ public class Criteria {
 		this.isNumeric = isNumeric;
 		
 		if(!isNumeric) {
-			comboValues = new JComboBox<String>(values);
+			String[] comboBoxValues = new String[values.length + 1];
+			comboBoxValues[0] = "-";
+	        System.arraycopy(values, 0, comboBoxValues, 1, values.length);
+			comboValues = new JComboBox<String>(comboBoxValues);
+			comboValues.setSelectedIndex(0);
 		}else {
 			comboValues = null;
 		}
@@ -27,7 +31,11 @@ public class Criteria {
 		this.isNumeric = isNumeric;
 		
 		if(!isNumeric) {
+			String[] comboBoxValues = new String[values.length + 1];
+			comboBoxValues[0] = "-";
+	        System.arraycopy(values, 0, comboBoxValues, 1, values.length);
 			comboValues = new JComboBox<String>(values);
+			comboValues.setSelectedIndex(0);
 		}else {
 			comboValues = null;
 		}

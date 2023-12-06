@@ -88,7 +88,7 @@ public class MainWindow extends JFrame {
 		JButton btnEvidence = new JButton("Definir evidencia");
 		btnEvidence.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AlternativeTable alternativeTable = new AlternativeTable();
+				AlternativeTable alternativeTable = new AlternativeTable(data);
 				alternativeTable.setVisible(true);
 			}
 		});

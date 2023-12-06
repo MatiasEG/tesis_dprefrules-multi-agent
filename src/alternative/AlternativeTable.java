@@ -1,15 +1,22 @@
 package alternative;
 
 import java.awt.EventQueue;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import dataManager.CriteriaManager;
+import javax.swing.table.TableColumn;
+
+import criteria.Criteria;
+import dataManager.DataManager;
 
 import java.awt.BorderLayout;
+
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
@@ -27,7 +34,7 @@ public class AlternativeTable extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AlternativeTable frame = new AlternativeTable();
+					AlternativeTable frame = new AlternativeTable(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -39,7 +46,7 @@ public class AlternativeTable extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AlternativeTable() {		
+	public AlternativeTable(DataManager data) {		
 		setTitle("Datos del problema - evidencia");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 300);
@@ -79,31 +86,45 @@ public class AlternativeTable extends JFrame {
 		JLabel lblNewLabel_1 = new JLabel("Si lo desea puede modificarla haciendo click directamente en los casilleros de la misma.");
 		panel_2.add(lblNewLabel_1, BorderLayout.SOUTH);
 		
-		String[] criterias = criteriaManager.getCriteriasNames();
-		String[] columnNames = new String[criterias.length + 1];
-		columnNames[0] = "Alternativas";
-		System.arraycopy(criterias, 0, columnNames, 1, criterias.length);
 		
-		Object[][] data = {
-				//{"ExampleName", "WorstValue, MediumValue, BestValue"}
+		List<Criteria> criterias = data.getCriterias();
+		String[] criteriaNames = new String[criterias.size()];
+		for(int i=0; i<criterias.size(); i++) {
+			criteriaNames[i] = criterias.get(i).getName();
+		}
+		
+		String[] columnNames = new String[criteriaNames.length + 1];
+		columnNames[0] = "Alternativas";
+		System.arraycopy(criteriaNames, 0, columnNames, 1, criteriaNames.length);
+		
+		String[] noInfo = new String[criteriaNames.length];
+		Arrays.fill(noInfo, "-");
+		for (String elemento : noInfo) {
+            System.out.println(elemento);
+        }
+		
+		// TODO crear un for aca, que sirva para inicializar Object[][] tableData segun la cantidad de alternativas definidas
+		String[] alt1table = new String[noInfo.length + 1];
+		alt1table[0] = "Alt1";
+		System.arraycopy(noInfo, 0, alt1table, 1, noInfo.length);
+		
+		Object[][] tableData = {
+				alt1table,
+				{"Alt2", Arrays.copyOf(noInfo, noInfo.length)},
+				{"Alt3", Arrays.copyOf(noInfo, noInfo.length)}
 		};
 		
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, BorderLayout.CENTER);
-		table = new JTable(new DefaultTableModel(data, columnNames));
+		table = new JTable(new DefaultTableModel(tableData, columnNames));
 		scrollPane.setViewportView(table);
 		
-		String[][] options = new String[criterias.length][];
-		for(int i = 0; i < criterias.length; i++) {
-			options[i] = criteriaManager.getCriteriaValuesArray(criterias[i]);
+		for(int i=0; i<criterias.size(); i++) {
+			if(!criterias.get(i).isNumeric()) {
+				TableColumn comboBoxColumn = table.getColumnModel().getColumn(1);
+	            comboBoxColumn.setCellEditor(new DefaultCellEditor(criterias.get(i).getComboValues()));
+			}
 		}
-		
-		
-		for(int i=1; i<criterias.length; i++) {
-			
-		}
-		
-		JComboBox<String> combo = new JComboBox<String>();
 		
 	}
 
