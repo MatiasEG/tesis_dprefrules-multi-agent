@@ -20,6 +20,12 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
+import java.awt.FlowLayout;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JTextField;
+import java.awt.Component;
 
 public class MainWindow extends JFrame {
 
@@ -68,12 +74,11 @@ public class MainWindow extends JFrame {
 		}
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 654);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		JButton btnCriteria = new JButton("Establecer criterios");
 		btnCriteria.addActionListener(new ActionListener() {
@@ -83,7 +88,24 @@ public class MainWindow extends JFrame {
 				criteriaTable.checkData(criterias);
 			}
 		});
-		contentPane.add(btnCriteria, BorderLayout.WEST);
+		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
+		
+		JPanel panelUsers = new JPanel();
+		contentPane.add(panelUsers);
+		panelUsers.setLayout(new BoxLayout(panelUsers, BoxLayout.Y_AXIS));
+		
+		JLabel lblNewLabel = new JLabel("Personas que participan del problema de eleccion:");
+		panelUsers.add(lblNewLabel);
+		
+		JList list = new JList();
+		panelUsers.add(list);
+		
+		JButton btnAddUser = new JButton("New button");
+		panelUsers.add(btnAddUser);
+		
+		JButton btnDeleteUser = new JButton("New button");
+		panelUsers.add(btnDeleteUser);
+		contentPane.add(btnCriteria);
 		
 		JButton btnEvidence = new JButton("Definir evidencia");
 		btnEvidence.addActionListener(new ActionListener() {
@@ -92,7 +114,7 @@ public class MainWindow extends JFrame {
 				alternativeTable.setVisible(true);
 			}
 		});
-		contentPane.add(btnEvidence, BorderLayout.EAST);
+		contentPane.add(btnEvidence);
 	}
 
 }
