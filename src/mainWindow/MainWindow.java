@@ -12,25 +12,26 @@ import criteria.Criteria;
 import criteria.CriteriaTable;
 import dataManager.CSVreader;
 import dataManager.DataManager;
+import dataManager.DataValidations;
 import errors.CriteriaFileError;
 
-import java.awt.BorderLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
-import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JTextField;
-import java.awt.Component;
+import javax.swing.JScrollPane;
 
 public class MainWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+    private DefaultListModel<String> listModelParticipants;
+    private JList<String> listParticipants;
 	
 	private DataManager data;
 	List<Criteria> criterias;
@@ -97,13 +98,27 @@ public class MainWindow extends JFrame {
 		JLabel lblNewLabel = new JLabel("Personas que participan del problema de eleccion:");
 		panelUsers.add(lblNewLabel);
 		
-		JList list = new JList();
-		panelUsers.add(list);
+		JScrollPane scrollPane = new JScrollPane();
+		panelUsers.add(scrollPane);
 		
-		JButton btnAddUser = new JButton("New button");
+		listModelParticipants = new DefaultListModel<>();
+		listParticipants = new JList<String>(listModelParticipants);
+		scrollPane.setViewportView(listParticipants);
+		
+		JButton btnAddUser = new JButton("Agregar participante");
+		btnAddUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addParticipantName(data);
+			}
+		});
 		panelUsers.add(btnAddUser);
 		
-		JButton btnDeleteUser = new JButton("New button");
+		JButton btnDeleteUser = new JButton("Eliminar participante seleccionado");
+		btnDeleteUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				deleteSelectedParticipant();
+			}
+		});
 		panelUsers.add(btnDeleteUser);
 		contentPane.add(btnCriteria);
 		
@@ -116,5 +131,39 @@ public class MainWindow extends JFrame {
 		});
 		contentPane.add(btnEvidence);
 	}
+	
+	private void deleteSelectedParticipant() {
+        int indiceSeleccionado = listParticipants.getSelectedIndex();
+
+        if (indiceSeleccionado != -1) {
+        	int opcion = JOptionPane.showConfirmDialog(this,
+                    "¿Seguro que desea eliminar el elemento seleccionado?",
+                    "Confirmar Eliminación",
+                    JOptionPane.YES_NO_OPTION);
+            if (opcion == JOptionPane.YES_OPTION) {
+                data.removeParticipant(listModelParticipants.remove(indiceSeleccionado));
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione un elemento para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+	
+	private void addParticipantName(DataManager data) {
+        String name = JOptionPane.showInputDialog(this, "Ingrese el nombre del participante que desea agregar:");
+        if (name != null && !name.trim().isEmpty()) {
+        	if(DataValidations.validateStringWithOnlyLettersAndNumbers(name)==null) {
+        		if(DataValidations.validateListNotContainNewElement(data.getParticipants(), name)) {
+        			listModelParticipants.addElement(name);
+        			data.addParticipant(name);
+        		}else {
+        			JOptionPane.showMessageDialog(null, "Error, el nombre \""+name+"\" ya se encuentra en la lista de participantes.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        		}
+        	}else {
+        		JOptionPane.showMessageDialog(null, "Error, el nombre \""+name+"\" contiene caracteres no validos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        	}
+        }else {
+        	JOptionPane.showMessageDialog(null, "Por favor, ingrese un nombre para el nuevo participante en el campo de texto", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
+    }
 
 }
