@@ -21,6 +21,7 @@ import java.awt.Component;
 import javax.swing.Box;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JScrollPane;
 
 public class ParticipantsPriorityFrame extends JFrame {
 
@@ -55,7 +56,7 @@ public class ParticipantsPriorityFrame extends JFrame {
 		this.data = data;
 		
 		setTitle("Prioridades entre agentes");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 699, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -117,15 +118,20 @@ public class ParticipantsPriorityFrame extends JFrame {
 		btnAddPriority.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int bestIndexBox = comboBoxBest.getSelectedIndex();
-				int worstIndexBox = comboBoxBest.getSelectedIndex();
+				int worstIndexBox = comboBoxWorst.getSelectedIndex();
 				
-				if(bestIndexBox!=-1 && worstIndexBox!=1) {
+				if(bestIndexBox!=-1 && worstIndexBox!=-1) {
 					String bestAgent = (String) comboBoxBest.getSelectedItem();
-					String worstAgent = (String) comboBoxBest.getSelectedItem();
-					System.out.println("Best: "+bestAgent+" --- Worst: "+worstAgent);
+					String worstAgent = (String) comboBoxWorst.getSelectedItem();
 					if(!bestAgent.equals(worstAgent)) {
-						ParticipantsPriorityFrame.this.data.addParticipantsPriority(new ParticipantsPriority(bestAgent, worstAgent));
-						listModelParticipantsPriority.addElement("El participante "+bestAgent+" tiene mayor prioridad que el participante "+worstAgent);
+						ParticipantsPriority pprior = new ParticipantsPriority(bestAgent, worstAgent);
+						String validation = pprior.isValid(data.getParticipantsPriority());
+						if(validation.equals("OK")) {
+							ParticipantsPriorityFrame.this.data.addParticipantsPriority(pprior);
+							listModelParticipantsPriority.addElement("El participante "+bestAgent+" tiene mayor prioridad que el participante "+worstAgent);
+						}else {
+							JOptionPane.showMessageDialog(null, validation, "Advertencia", JOptionPane.WARNING_MESSAGE);
+						}
 					}else {
 						JOptionPane.showMessageDialog(null, "Error, una preferencia entre participantes no puede ser con el mismo participante.", "Advertencia (X>X)", JOptionPane.WARNING_MESSAGE);
 					}
@@ -134,12 +140,15 @@ public class ParticipantsPriorityFrame extends JFrame {
 		});
 		panel_2.add(btnAddPriority, BorderLayout.NORTH);
 		
-		listModelParticipantsPriority = new DefaultListModel<>();
-		JList<String> listPriority = new JList<String>(listModelParticipantsPriority);
-		panel_2.add(listPriority, BorderLayout.CENTER);
-		
 		JButton btnDeletePriority = new JButton("Eliminar prioridad seleccionada");
 		panel_2.add(btnDeletePriority, BorderLayout.SOUTH);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		panel_2.add(scrollPane, BorderLayout.CENTER);
+		
+		listModelParticipantsPriority = new DefaultListModel<>();
+		JList<String> listPriority = new JList<String>(listModelParticipantsPriority);
+		scrollPane.setViewportView(listPriority);
 	}
 
 }

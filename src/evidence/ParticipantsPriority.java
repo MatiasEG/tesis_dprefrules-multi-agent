@@ -1,5 +1,7 @@
 package evidence;
 
+import java.util.List;
+
 public class ParticipantsPriority {
 
 	protected String morePriority;
@@ -30,4 +32,16 @@ public class ParticipantsPriority {
 		return morePriority + " > " + lessPriority;
 	}
 	
+	public String isValid(List<ParticipantsPriority> participants) {
+		for(ParticipantsPriority pprior: participants) {
+			if(pprior.getLessPriority().equals(lessPriority) && pprior.getMorePriority().equals(morePriority)) {
+				return "Ya existe una regla de prioridad entre participantes que contempla ( "+morePriority+" > "+lessPriority+" ).";
+			}
+			if(pprior.getLessPriority().equals(morePriority) && pprior.getMorePriority().equals(lessPriority)) {
+				return "No puede existir una prioridad entre participantes simetrica, usted define ( "+morePriority+" > "+lessPriority+" ), pero ya existe ( "+lessPriority+" > "+morePriority+" ).";
+			}
+		}
+		
+		return "OK";
+	}
 }
