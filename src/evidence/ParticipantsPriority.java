@@ -1,42 +1,33 @@
 package evidence;
 
-import java.awt.EventQueue;
+public class ParticipantsPriority {
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-public class ParticipantsPriority extends JFrame {
-
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ParticipantsPriority frame = new ParticipantsPriority();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	protected String morePriority;
+	protected String lessPriority;
+	
+	public ParticipantsPriority(String lessPriority, String morePriority) {
+		this.lessPriority = lessPriority;
+		this.morePriority = morePriority;
 	}
 
-	/**
-	 * Create the frame.
-	 */
-	public ParticipantsPriority() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		setContentPane(contentPane);
+	public String getMorePriority() {
+		return morePriority;
 	}
 
+	public void setMorePriority(String morePriority) {
+		this.morePriority = morePriority;
+	}
+
+	public String getLessPriority() {
+		return lessPriority;
+	}
+
+	public void setLessPriority(String lessPriority) {
+		this.lessPriority = lessPriority;
+	}
+	
+	public String getPriorityFormatted() {
+		return morePriority + " > " + lessPriority;
+	}
+	
 }

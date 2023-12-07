@@ -1,7 +1,6 @@
 package mainWindow;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -14,6 +13,7 @@ import dataManager.CSVreader;
 import dataManager.DataManager;
 import dataManager.DataValidations;
 import errors.CriteriaFileError;
+import evidence.ParticipantsPriorityFrame;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -25,6 +25,9 @@ import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import javax.swing.Box;
 
 public class MainWindow extends JFrame {
 
@@ -57,46 +60,27 @@ public class MainWindow extends JFrame {
 	 */
 	public MainWindow() {
 		data = new DataManager();
+		// TODO borrar esto y consultarselo al usuario
 		String csvFile = "C:/Users/Matia/Desktop/tesis_dprefrules-multi-agent/src/files/criteria.csv";  // .CSV path to file
 		criterias = new ArrayList<Criteria>();
 		try {
 			criterias = CSVreader.reacCriteriasCSV(csvFile, data);
-			
-			//for (Criteria criteria : data.getCriterias()) {
-			//    System.out.println("Nombre: " + criteria.getName());
-			//    System.out.println("Valores: " + String.join(", ", criteria.getValues()));
-			//    System.out.println("Numeric: " + criteria.isNumeric());
-			//    System.out.println("-------------");
-			//}
-			
 		} catch (CriteriaFileError e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
 			e.printStackTrace();
 		}
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 654);
+		setBounds(100, 100, 650, 394);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
-		
-		JButton btnCriteria = new JButton("Establecer criterios");
-		btnCriteria.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CriteriaTable criteriaTable = new CriteriaTable(data);
-				criteriaTable.setVisible(true);
-				criteriaTable.checkData(criterias);
-			}
-		});
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 		
 		JPanel panelUsers = new JPanel();
 		contentPane.add(panelUsers);
-		panelUsers.setLayout(new BoxLayout(panelUsers, BoxLayout.Y_AXIS));
-		
-		JLabel lblNewLabel = new JLabel("Personas que participan del problema de eleccion:");
-		panelUsers.add(lblNewLabel);
+		panelUsers.setLayout(new BorderLayout(0, 0));
 		
 		JScrollPane scrollPane = new JScrollPane();
 		panelUsers.add(scrollPane);
@@ -105,13 +89,17 @@ public class MainWindow extends JFrame {
 		listParticipants = new JList<String>(listModelParticipants);
 		scrollPane.setViewportView(listParticipants);
 		
+		JPanel panel = new JPanel();
+		panelUsers.add(panel, BorderLayout.SOUTH);
+		panel.setLayout(new BorderLayout(0, 0));
+		
 		JButton btnAddUser = new JButton("Agregar participante");
 		btnAddUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addParticipantName(data);
 			}
 		});
-		panelUsers.add(btnAddUser);
+		panel.add(btnAddUser, BorderLayout.EAST);
 		
 		JButton btnDeleteUser = new JButton("Eliminar participante seleccionado");
 		btnDeleteUser.addActionListener(new ActionListener() {
@@ -119,8 +107,52 @@ public class MainWindow extends JFrame {
 				deleteSelectedParticipant();
 			}
 		});
-		panelUsers.add(btnDeleteUser);
-		contentPane.add(btnCriteria);
+		panel.add(btnDeleteUser, BorderLayout.WEST);
+		
+		JButton btnUpdateParticipantsFile = new JButton("Actualizar archivo de participantes");
+		panel.add(btnUpdateParticipantsFile, BorderLayout.SOUTH);
+		
+		JButton btnEditParticipantsPriority = new JButton("Editar prioridad entre participantes");
+		btnEditParticipantsPriority.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ParticipantsPriorityFrame frame = new ParticipantsPriorityFrame(data);
+				frame.setVisible(true);
+			}
+		});
+		panel.add(btnEditParticipantsPriority, BorderLayout.CENTER);
+		
+		JPanel panel_1 = new JPanel();
+		panelUsers.add(panel_1, BorderLayout.NORTH);
+		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
+		
+		JLabel lblNewLabel = new JLabel("Personas que participan del problema de eleccion:");
+		panel_1.add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel(" - Una vez que todos los participantes esten definidos, puede establecer la prioridad que hay entre ellos");
+		panel_1.add(lblNewLabel_1);
+		
+		Component verticalStrut = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut);
+		
+		JPanel panelAlternatives = new JPanel();
+		contentPane.add(panelAlternatives);
+		
+		Component verticalStrut_1 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_1);
+		
+		JPanel panelCriterias = new JPanel();
+		contentPane.add(panelCriterias);
+		panelCriterias.setLayout(new BorderLayout(0, 0));
+		
+		JButton btnCriteria = new JButton("Establecer criterios");
+		panelCriterias.add(btnCriteria, BorderLayout.SOUTH);
+		btnCriteria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CriteriaTable criteriaTable = new CriteriaTable(data);
+				criteriaTable.setVisible(true);
+				criteriaTable.checkData(criterias);
+			}
+		});
 		
 		JButton btnEvidence = new JButton("Definir evidencia");
 		btnEvidence.addActionListener(new ActionListener() {
@@ -144,7 +176,7 @@ public class MainWindow extends JFrame {
                 data.removeParticipant(listModelParticipants.remove(indiceSeleccionado));
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Seleccione un elemento para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Debe seleccionar a un participante para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 	

@@ -40,8 +40,16 @@ public class DataManager {
 		return participants;
 	}
 	
+	public String[] getParticipantsArrayString() {
+		String[] arrayParticipants = new String[participants.size()];
+		for(int i=0; i<participants.size(); i++) {
+			arrayParticipants[i] = participants.get(i);
+		}
+		return arrayParticipants;
+	}
+	
 	public void removeParticipant(String participant) {
-		for(int i=1; i<participants.size(); i++) {
+		for(int i=0; i<participants.size(); i++) {
 			if(participants.get(i).equals(participant)) {
 				participants.remove(i);
 				break;
