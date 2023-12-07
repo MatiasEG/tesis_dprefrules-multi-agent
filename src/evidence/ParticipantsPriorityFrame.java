@@ -30,6 +30,7 @@ public class ParticipantsPriorityFrame extends JFrame {
 	private JComboBox<String> comboBoxBest;
 	private JComboBox<String> comboBoxWorst;
     private DefaultListModel<String> listModelParticipantsPriority;
+    private JList<String> listPriority;
 
 	private DataManager data;
 	
@@ -141,13 +142,29 @@ public class ParticipantsPriorityFrame extends JFrame {
 		panel_2.add(btnAddPriority, BorderLayout.NORTH);
 		
 		JButton btnDeletePriority = new JButton("Eliminar prioridad seleccionada");
+		btnDeletePriority.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selectedIndex = listPriority.getSelectedIndex();
+		        if (selectedIndex != -1) {
+		        	ParticipantsPriority participantPriorityToRemove= data.getParticipantsPriority().get(selectedIndex);
+		        	int option = JOptionPane.showConfirmDialog(ParticipantsPriorityFrame.this,
+		                    "¿Seguro que desea eliminar la regla seleccionada: ( "+participantPriorityToRemove.getMorePriority()+" > "+participantPriorityToRemove.getLessPriority()+" )?",
+		                    "Confirmar Eliminación",
+		                    JOptionPane.YES_NO_OPTION);
+		            if (option == JOptionPane.YES_OPTION) {
+		            	listModelParticipantsPriority.remove(selectedIndex);
+			        	data.getParticipantsPriority().remove(selectedIndex);
+		            }
+		        }
+			}
+		});
 		panel_2.add(btnDeletePriority, BorderLayout.SOUTH);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		panel_2.add(scrollPane, BorderLayout.CENTER);
 		
 		listModelParticipantsPriority = new DefaultListModel<>();
-		JList<String> listPriority = new JList<String>(listModelParticipantsPriority);
+		listPriority = new JList<String>(listModelParticipantsPriority);
 		scrollPane.setViewportView(listPriority);
 	}
 

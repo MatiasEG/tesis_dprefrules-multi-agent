@@ -172,18 +172,20 @@ public class MainWindow extends JFrame {
 		data.addParticipant("pepe");
 		listModelParticipants.addElement("popo");
 		data.addParticipant("popo");
+		listModelParticipants.addElement("pipi");
+		data.addParticipant("pipi");
 	}
 	
 	private void deleteSelectedParticipant() {
-        int indiceSeleccionado = listParticipants.getSelectedIndex();
+        int selectedIndex = listParticipants.getSelectedIndex();
 
-        if (indiceSeleccionado != -1) {
-        	int opcion = JOptionPane.showConfirmDialog(this,
+        if (selectedIndex != -1) {
+        	int option = JOptionPane.showConfirmDialog(this,
                     "¿Seguro que desea eliminar el elemento seleccionado?",
                     "Confirmar Eliminación",
                     JOptionPane.YES_NO_OPTION);
-            if (opcion == JOptionPane.YES_OPTION) {
-                data.removeParticipant(listModelParticipants.remove(indiceSeleccionado));
+            if (option == JOptionPane.YES_OPTION) {
+                data.removeParticipant(listModelParticipants.remove(selectedIndex));
             }
         } else {
             JOptionPane.showMessageDialog(this, "Debe seleccionar a un participante para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
