@@ -71,7 +71,7 @@ public class MainWindow extends JFrame {
 		}
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 650, 394);
+		setBounds(100, 100, 650, 700);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -87,6 +87,7 @@ public class MainWindow extends JFrame {
 		
 		listModelParticipants = new DefaultListModel<>();
 		listParticipants = new JList<String>(listModelParticipants);
+		listParticipants.setValueIsAdjusting(true);
 		scrollPane.setViewportView(listParticipants);
 		
 		JPanel panel = new JPanel();
@@ -109,7 +110,7 @@ public class MainWindow extends JFrame {
 		});
 		panel.add(btnDeleteUser, BorderLayout.WEST);
 		
-		JButton btnUpdateParticipantsFile = new JButton("Actualizar archivo de participantes");
+		JButton btnUpdateParticipantsFile = new JButton("Guardar/Actualizar archivo de participantes");
 		panel.add(btnUpdateParticipantsFile, BorderLayout.SOUTH);
 		
 		JButton btnEditParticipantsPriority = new JButton("Editar prioridad entre participantes");
@@ -120,6 +121,9 @@ public class MainWindow extends JFrame {
 			}
 		});
 		panel.add(btnEditParticipantsPriority, BorderLayout.CENTER);
+		
+		JLabel lblNewLabel_2 = new JLabel("Recuerde guardar los cambios para que estos se vean reflejados");
+		panel.add(lblNewLabel_2, BorderLayout.NORTH);
 		
 		JPanel panel_1 = new JPanel();
 		panelUsers.add(panel_1, BorderLayout.NORTH);
@@ -162,6 +166,12 @@ public class MainWindow extends JFrame {
 			}
 		});
 		contentPane.add(btnEvidence);
+		
+		//TODO eliminar
+		listModelParticipants.addElement("pepe");
+		data.addParticipant("pepe");
+		listModelParticipants.addElement("popo");
+		data.addParticipant("popo");
 	}
 	
 	private void deleteSelectedParticipant() {

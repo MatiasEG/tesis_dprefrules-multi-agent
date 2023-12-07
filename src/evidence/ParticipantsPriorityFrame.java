@@ -9,18 +9,26 @@ import javax.swing.border.EmptyBorder;
 import dataManager.DataManager;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+
 import java.awt.Component;
 import javax.swing.Box;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ParticipantsPriorityFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private JComboBox<String> comboBoxBest;
+	private JComboBox<String> comboBoxWorst;
+    private DefaultListModel<String> listModelParticipantsPriority;
 
 	private DataManager data;
 	
@@ -48,7 +56,7 @@ public class ParticipantsPriorityFrame extends JFrame {
 		
 		setTitle("Prioridades entre agentes");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 699, 300);
+		setBounds(100, 100, 699, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -89,14 +97,14 @@ public class ParticipantsPriorityFrame extends JFrame {
 		JLabel lblNewLabel_2 = new JLabel("El participante");
 		panel_1.add(lblNewLabel_2);
 		
-		JComboBox<String> comboBox = new JComboBox<String>(data.getParticipantsArrayString());
-		panel_1.add(comboBox);
+		comboBoxBest = new JComboBox<String>(data.getParticipantsArrayString());
+		panel_1.add(comboBoxBest);
 		
 		JLabel lblNewLabel_3 = new JLabel("tiene mayor prioridad que el participante");
 		panel_1.add(lblNewLabel_3);
 		
-		JComboBox<String> comboBox_1 = new JComboBox<String>(data.getParticipantsArrayString());
-		panel_1.add(comboBox_1);
+		comboBoxWorst = new JComboBox<String>(data.getParticipantsArrayString());
+		panel_1.add(comboBoxWorst);
 		
 		Component verticalStrut = Box.createVerticalStrut(20);
 		panel.add(verticalStrut);
@@ -105,14 +113,33 @@ public class ParticipantsPriorityFrame extends JFrame {
 		contentPane.add(panel_2);
 		panel_2.setLayout(new BorderLayout(0, 0));
 		
-		JButton btnNewButton = new JButton("Agregar prioridad");
-		panel_2.add(btnNewButton, BorderLayout.NORTH);
+		JButton btnAddPriority = new JButton("Agregar prioridad");
+		btnAddPriority.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int bestIndexBox = comboBoxBest.getSelectedIndex();
+				int worstIndexBox = comboBoxBest.getSelectedIndex();
+				
+				if(bestIndexBox!=-1 && worstIndexBox!=1) {
+					String bestAgent = (String) comboBoxBest.getSelectedItem();
+					String worstAgent = (String) comboBoxBest.getSelectedItem();
+					System.out.println("Best: "+bestAgent+" --- Worst: "+worstAgent);
+					if(!bestAgent.equals(worstAgent)) {
+						ParticipantsPriorityFrame.this.data.addParticipantsPriority(new ParticipantsPriority(bestAgent, worstAgent));
+						listModelParticipantsPriority.addElement("El participante "+bestAgent+" tiene mayor prioridad que el participante "+worstAgent);
+					}else {
+						JOptionPane.showMessageDialog(null, "Error, una preferencia entre participantes no puede ser con el mismo participante.", "Advertencia (X>X)", JOptionPane.WARNING_MESSAGE);
+					}
+				}
+			}
+		});
+		panel_2.add(btnAddPriority, BorderLayout.NORTH);
 		
-		JList list = new JList();
-		panel_2.add(list, BorderLayout.CENTER);
+		listModelParticipantsPriority = new DefaultListModel<>();
+		JList<String> listPriority = new JList<String>(listModelParticipantsPriority);
+		panel_2.add(listPriority, BorderLayout.CENTER);
 		
-		JButton btnNewButton_1 = new JButton("Eliminar prioridad seleccionada");
-		panel_2.add(btnNewButton_1, BorderLayout.SOUTH);
+		JButton btnDeletePriority = new JButton("Eliminar prioridad seleccionada");
+		panel_2.add(btnDeletePriority, BorderLayout.SOUTH);
 	}
 
 }

@@ -5,7 +5,7 @@ public class ParticipantsPriority {
 	protected String morePriority;
 	protected String lessPriority;
 	
-	public ParticipantsPriority(String lessPriority, String morePriority) {
+	public ParticipantsPriority(String morePriority, String lessPriority) {
 		this.lessPriority = lessPriority;
 		this.morePriority = morePriority;
 	}

@@ -4,15 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import criteria.Criteria;
+import evidence.ParticipantsPriority;
 
 public class DataManager {
 
 	private List<Criteria> criterias;
 	private List<String> participants;
+	private List<ParticipantsPriority> participantsPriority;
 	
 	public DataManager() {
 		criterias = new ArrayList<Criteria>();
 		participants = new ArrayList<String>();
+		participantsPriority = new ArrayList<ParticipantsPriority>();
 	}
 	
 	public void addCriteria(Criteria criteria) {
@@ -56,4 +59,13 @@ public class DataManager {
 			}
 		}
 	}
+	
+	public void addParticipantsPriority(ParticipantsPriority newParticipantsPriority) {
+		participantsPriority.add(newParticipantsPriority);
+	}
+	
+	public List<ParticipantsPriority> getParticipantsPriority(){
+		return participantsPriority;
+	}
+	
 }
