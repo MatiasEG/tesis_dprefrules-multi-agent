@@ -126,7 +126,7 @@ public class ParticipantsPriorityFrame extends JFrame {
 					String worstAgent = (String) comboBoxWorst.getSelectedItem();
 					if(!bestAgent.equals(worstAgent)) {
 						ParticipantsPriority pprior = new ParticipantsPriority(bestAgent, worstAgent);
-						String validation = pprior.isValid(data.getParticipantsPriority());
+						String validation = pprior.isValid(data);
 						if(validation.equals("OK")) {
 							ParticipantsPriorityFrame.this.data.addParticipantsPriority(pprior);
 							listModelParticipantsPriority.addElement("El participante "+bestAgent+" tiene mayor prioridad que el participante "+worstAgent);
@@ -164,6 +164,9 @@ public class ParticipantsPriorityFrame extends JFrame {
 		panel_2.add(scrollPane, BorderLayout.CENTER);
 		
 		listModelParticipantsPriority = new DefaultListModel<>();
+		for(ParticipantsPriority pprior: data.getParticipantsPriority()) {
+			listModelParticipantsPriority.addElement("El participante "+pprior.getMorePriority()+" tiene mayor prioridad que el participante "+pprior.getLessPriority());
+		}
 		listPriority = new JList<String>(listModelParticipantsPriority);
 		scrollPane.setViewportView(listPriority);
 	}

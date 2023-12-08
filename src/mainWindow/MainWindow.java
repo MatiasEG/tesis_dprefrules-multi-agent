@@ -12,8 +12,12 @@ import criteria.CriteriaTable;
 import dataManager.CSVreader;
 import dataManager.DataManager;
 import dataManager.DataValidations;
+import dataManager.FileChooser;
+import dataManager.IOManager;
+import errors.AgentPriorityError;
 import errors.CriteriaFileError;
 import evidence.ParticipantsPriorityFrame;
+import evidence.ParticipantsPriorityValidations;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -110,7 +114,15 @@ public class MainWindow extends JFrame {
 		});
 		panel.add(btnDeleteUser, BorderLayout.WEST);
 		
-		JButton btnUpdateParticipantsFile = new JButton("Guardar/Actualizar archivo de participantes");
+		JButton btnUpdateParticipantsFile = new JButton("Guardar/Sobreescribir archivo de participantes");
+		btnUpdateParticipantsFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(data.getParticipants().size()>0) {
+					String path = FileChooser.showFileChooser();
+					IOManager.saveAgentPriorityToCSV(path, data);
+				}
+			}
+		});
 		panel.add(btnUpdateParticipantsFile, BorderLayout.SOUTH);
 		
 		JButton btnEditParticipantsPriority = new JButton("Editar prioridad entre participantes");
@@ -134,6 +146,20 @@ public class MainWindow extends JFrame {
 		
 		JLabel lblNewLabel_1 = new JLabel(" - Una vez que todos los participantes esten definidos, puede establecer la prioridad que hay entre ellos");
 		panel_1.add(lblNewLabel_1);
+		
+		JButton btnNewButton = new JButton("Cargar archivo");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String path = FileChooser.showFileChooser();
+				try {
+					CSVreader.readAgentPriorityCSV(path, data);
+					MainWindow.this.updateVisualComponents(data);
+				} catch (AgentPriorityError e1) {
+	    			JOptionPane.showMessageDialog(null, e1.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
+		panel_1.add(btnNewButton);
 		
 		Component verticalStrut = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut);
@@ -168,12 +194,12 @@ public class MainWindow extends JFrame {
 		contentPane.add(btnEvidence);
 		
 		//TODO eliminar
-		listModelParticipants.addElement("pepe");
-		data.addParticipant("pepe");
-		listModelParticipants.addElement("popo");
-		data.addParticipant("popo");
-		listModelParticipants.addElement("pipi");
-		data.addParticipant("pipi");
+		//listModelParticipants.addElement("pepe");
+		//data.addParticipant("pepe");
+		//listModelParticipants.addElement("popo");
+		//data.addParticipant("popo");
+		//listModelParticipants.addElement("pipi");
+		//data.addParticipant("pipi");
 	}
 	
 	private void deleteSelectedParticipant() {
@@ -194,20 +220,24 @@ public class MainWindow extends JFrame {
 	
 	private void addParticipantName(DataManager data) {
         String name = JOptionPane.showInputDialog(this, "Ingrese el nombre del participante que desea agregar:");
-        if (name != null && !name.trim().isEmpty()) {
-        	if(DataValidations.validateStringWithOnlyLettersAndNumbers(name)==null) {
-        		if(DataValidations.validateListNotContainNewElement(data.getParticipants(), name)) {
-        			listModelParticipants.addElement(name);
-        			data.addParticipant(name);
-        		}else {
-        			JOptionPane.showMessageDialog(null, "Error, el nombre \""+name+"\" ya se encuentra en la lista de participantes.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-        		}
-        	}else {
-        		JOptionPane.showMessageDialog(null, "Error, el nombre \""+name+"\" contiene caracteres no validos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-        	}
+        String validation = ParticipantsPriorityValidations.validateAgentName(name, data);
+        if(validation.equals("OK")) {
+        	if(DataValidations.validateStringListNotContainNewElement(data.getParticipants(), name)) {
+    			listModelParticipants.addElement(name);
+    			data.addParticipant(name);
+    		}else {
+    			JOptionPane.showMessageDialog(null, "Error, el nombre \""+name+"\" ya se encuentra en la lista de participantes.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+    		}
         }else {
-        	JOptionPane.showMessageDialog(null, "Por favor, ingrese un nombre para el nuevo participante en el campo de texto", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        	JOptionPane.showMessageDialog(null, validation, "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
     }
+	
+	private void updateVisualComponents(DataManager data) {		
+		listModelParticipants.clear();
+		for(String agent: data.getParticipants()) {
+			listModelParticipants.addElement(agent);
+		}
+	}
 
 }

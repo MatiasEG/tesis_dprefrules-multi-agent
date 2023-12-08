@@ -2,6 +2,8 @@ package evidence;
 
 import java.util.List;
 
+import dataManager.DataManager;
+
 public class ParticipantsPriority {
 
 	protected String morePriority;
@@ -32,7 +34,8 @@ public class ParticipantsPriority {
 		return morePriority + " > " + lessPriority;
 	}
 	
-	public String isValid(List<ParticipantsPriority> participants) {
+	public String isValid(DataManager data) {
+		List<ParticipantsPriority> participants = data.getParticipantsPriority();
 		for(ParticipantsPriority pprior: participants) {
 			if(pprior.getLessPriority().equals(lessPriority) && pprior.getMorePriority().equals(morePriority)) {
 				return "Ya existe una regla de prioridad entre participantes que contempla ( "+morePriority+" > "+lessPriority+" ).";

@@ -58,6 +58,14 @@ public class DataManager {
 				break;
 			}
 		}
+		
+		System.out.println("Agente a eliminar: "+participant);
+		for(int i=participantsPriority.size()-1; i>-1; i--) {
+			System.out.println("Comparo - "+participantsPriority.get(i).getMorePriority()+" - "+participantsPriority.get(i).getLessPriority());
+			if(participantsPriority.get(i).getMorePriority().equals(participant) || participantsPriority.get(i).getLessPriority().equals(participant)) {
+				participantsPriority.remove(i);
+			}
+		}
 	}
 	
 	public void addParticipantsPriority(ParticipantsPriority newParticipantsPriority) {
@@ -68,4 +76,14 @@ public class DataManager {
 		return participantsPriority;
 	}
 	
+	
+	public void updateData(DataManager newData) {
+		criterias = new ArrayList<Criteria>();
+		participants = new ArrayList<String>();
+		participantsPriority = new ArrayList<ParticipantsPriority>();
+		
+		criterias = newData.getCriterias();
+		participants = newData.getParticipants();
+		participantsPriority = newData.getParticipantsPriority();
+	}
 }

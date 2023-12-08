@@ -114,7 +114,7 @@ public class CriteriaTable extends JFrame {
 		        // complete path
 		        String filePath = projectPath + "\\src\\files\\criteria.csv";
 		        
-				IOManager.saveTableToCSV(table, filePath);
+				IOManager.saveCriteriaTableToCSV(table, filePath);
 			}
 		});
 		panelButtons_1.add(btnAcept, BorderLayout.WEST);

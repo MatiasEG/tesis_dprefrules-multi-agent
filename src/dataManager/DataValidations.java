@@ -18,7 +18,7 @@ public class DataValidations {
 		return null;
 	}
 	
-	public static boolean validateListNotContainNewElement(List<String> list, String newElement) {
+	public static boolean validateStringListNotContainNewElement(List<String> list, String newElement) {
 		for(String str: list) {
 			if(str.equals(newElement)) {
 				return false;
@@ -27,5 +27,5 @@ public class DataValidations {
 		
 		return true;
 	}
-		
+	
 }
