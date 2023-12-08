@@ -32,6 +32,8 @@ import javax.swing.JScrollPane;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.swing.Box;
+import javax.swing.SwingConstants;
+import java.awt.FlowLayout;
 
 public class MainWindow extends JFrame {
 
@@ -135,6 +137,7 @@ public class MainWindow extends JFrame {
 		panel.add(btnEditParticipantsPriority, BorderLayout.CENTER);
 		
 		JLabel lblNewLabel_2 = new JLabel("Recuerde guardar los cambios para que estos se vean reflejados");
+		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
 		panel.add(lblNewLabel_2, BorderLayout.NORTH);
 		
 		JPanel panel_1 = new JPanel();
@@ -142,12 +145,15 @@ public class MainWindow extends JFrame {
 		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
 		
 		JLabel lblNewLabel = new JLabel("Personas que participan del problema de eleccion:");
+		lblNewLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel_1.add(lblNewLabel);
 		
-		JLabel lblNewLabel_1 = new JLabel(" - Una vez que todos los participantes esten definidos, puede establecer la prioridad que hay entre ellos");
+		JLabel lblNewLabel_1 = new JLabel("- Una vez que todos los participantes esten definidos, puede establecer la prioridad que hay entre ellos -");
+		lblNewLabel_1.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel_1.add(lblNewLabel_1);
 		
 		JButton btnNewButton = new JButton("Cargar archivo");
+		btnNewButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String path = FileChooser.showFileChooser();
@@ -166,6 +172,27 @@ public class MainWindow extends JFrame {
 		
 		JPanel panelAlternatives = new JPanel();
 		contentPane.add(panelAlternatives);
+		panelAlternatives.setLayout(new BoxLayout(panelAlternatives, BoxLayout.Y_AXIS));
+		
+		JLabel lblNewLabel_3 = new JLabel("Determine cuales son las alternativas posibles");
+		lblNewLabel_3.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panelAlternatives.add(lblNewLabel_3);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		panelAlternatives.add(scrollPane_1);
+		
+		JList list = new JList();
+		scrollPane_1.setViewportView(list);
+		
+		JPanel panel_2 = new JPanel();
+		contentPane.add(panel_2);
+		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		JButton btnNewAlternative = new JButton("Agregar alternativa");
+		panel_2.add(btnNewAlternative);
+		
+		JButton btnDeleteAlternative = new JButton("Eliminar alternativa");
+		panel_2.add(btnDeleteAlternative);
 		
 		Component verticalStrut_1 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_1);
@@ -192,14 +219,6 @@ public class MainWindow extends JFrame {
 			}
 		});
 		contentPane.add(btnEvidence);
-		
-		//TODO eliminar
-		//listModelParticipants.addElement("pepe");
-		//data.addParticipant("pepe");
-		//listModelParticipants.addElement("popo");
-		//data.addParticipant("popo");
-		//listModelParticipants.addElement("pipi");
-		//data.addParticipant("pipi");
 	}
 	
 	private void deleteSelectedParticipant() {
