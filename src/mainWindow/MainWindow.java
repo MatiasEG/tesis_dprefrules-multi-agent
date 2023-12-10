@@ -16,6 +16,8 @@ import dataManager.FileChooser;
 import dataManager.IOManager;
 import errors.AgentPriorityError;
 import errors.CriteriaFileError;
+import errors.SintacticStringError;
+import evidence.Alternative;
 import evidence.ParticipantsPriorityFrame;
 import evidence.ParticipantsPriorityValidations;
 
@@ -41,6 +43,8 @@ public class MainWindow extends JFrame {
 	private JPanel contentPane;
     private DefaultListModel<String> listModelParticipants;
     private JList<String> listParticipants;
+    private DefaultListModel<String> listModelAlternatives;
+    private JList<String> listAlternatives;
 	
 	private DataManager data;
 	List<Criteria> criterias;
@@ -181,17 +185,28 @@ public class MainWindow extends JFrame {
 		JScrollPane scrollPane_1 = new JScrollPane();
 		panelAlternatives.add(scrollPane_1);
 		
-		JList list = new JList();
-		scrollPane_1.setViewportView(list);
+		listModelAlternatives = new DefaultListModel<>();
+		listAlternatives = new JList<String>(listModelAlternatives);
+		scrollPane_1.setViewportView(listAlternatives);
 		
 		JPanel panel_2 = new JPanel();
 		contentPane.add(panel_2);
 		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JButton btnNewAlternative = new JButton("Agregar alternativa");
+		btnNewAlternative.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addAlternative(data);
+			}
+		});
 		panel_2.add(btnNewAlternative);
 		
 		JButton btnDeleteAlternative = new JButton("Eliminar alternativa");
+		btnDeleteAlternative.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				deleteSelectedAlternative();
+			}
+		});
 		panel_2.add(btnDeleteAlternative);
 		
 		Component verticalStrut_1 = Box.createVerticalStrut(20);
@@ -226,7 +241,7 @@ public class MainWindow extends JFrame {
 
         if (selectedIndex != -1) {
         	int option = JOptionPane.showConfirmDialog(this,
-                    "¿Seguro que desea eliminar el elemento seleccionado?",
+                    "¿Seguro que desea eliminar el participante seleccionado ("+listModelParticipants.getElementAt(selectedIndex)+")?",
                     "Confirmar Eliminación",
                     JOptionPane.YES_NO_OPTION);
             if (option == JOptionPane.YES_OPTION) {
@@ -250,6 +265,38 @@ public class MainWindow extends JFrame {
         }else {
         	JOptionPane.showMessageDialog(null, validation, "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
+    }
+	
+	private void deleteSelectedAlternative() {
+        int selectedIndex = listAlternatives.getSelectedIndex();
+
+        if (selectedIndex != -1) {
+        	int option = JOptionPane.showConfirmDialog(this,
+                    "¿Seguro que desea eliminar la alternativa seleccionada ("+listModelAlternatives.getElementAt(selectedIndex)+")?",
+                    "Confirmar Eliminación",
+                    JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
+                data.removeAlternative(listModelAlternatives.remove(selectedIndex));
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar a un participante para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+	
+	private void addAlternative(DataManager data) {
+        String name = JOptionPane.showInputDialog(this, "Ingrese el nombre de la alternativa que desea agregar:");
+        SintacticStringError validation = DataValidations.validateStringWithOnlyLettersAndNumbers(name);
+        if(validation==null) {
+        	if(DataValidations.validateStringListNotContainNewElement(data.getAlternativesNames(), name)) {
+				listModelAlternatives.addElement(name);
+				data.addAlternative(new Alternative(name));
+			}else {
+				JOptionPane.showMessageDialog(null, "Error, el nombre \""+name+"\" ya se encuentra en la lista de participantes.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+			}
+        }else {
+        	JOptionPane.showMessageDialog(null, "Error."+validation.getMsg(), "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
+	    	
     }
 	
 	private void updateVisualComponents(DataManager data) {		

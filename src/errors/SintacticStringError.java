@@ -1,12 +1,12 @@
 package errors;
 
-public class CriteriaError {
+public class SintacticStringError {
 
 	private String word;
 	private String error;
 	private String msg;
 	
-	public CriteriaError(String word, String error, String msg) {
+	public SintacticStringError(String word, String error, String msg) {
 		this.word = word;
 		this.error = error;
 		this.msg = msg;

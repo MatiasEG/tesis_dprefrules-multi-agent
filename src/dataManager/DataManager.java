@@ -4,18 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import criteria.Criteria;
+import evidence.Alternative;
 import evidence.ParticipantsPriority;
 
 public class DataManager {
 
-	private List<Criteria> criterias;
-	private List<String> participants;
-	private List<ParticipantsPriority> participantsPriority;
+	protected List<Criteria> criterias;
+	protected List<String> participants;
+	protected List<ParticipantsPriority> participantsPriority;
+	protected List<Alternative> alternatives;
 	
 	public DataManager() {
 		criterias = new ArrayList<Criteria>();
 		participants = new ArrayList<String>();
 		participantsPriority = new ArrayList<ParticipantsPriority>();
+		alternatives = new ArrayList<Alternative>();
 	}
 	
 	public void addCriteria(Criteria criteria) {
@@ -61,7 +64,6 @@ public class DataManager {
 		
 		System.out.println("Agente a eliminar: "+participant);
 		for(int i=participantsPriority.size()-1; i>-1; i--) {
-			System.out.println("Comparo - "+participantsPriority.get(i).getMorePriority()+" - "+participantsPriority.get(i).getLessPriority());
 			if(participantsPriority.get(i).getMorePriority().equals(participant) || participantsPriority.get(i).getLessPriority().equals(participant)) {
 				participantsPriority.remove(i);
 			}
@@ -85,5 +87,30 @@ public class DataManager {
 		criterias = newData.getCriterias();
 		participants = newData.getParticipants();
 		participantsPriority = newData.getParticipantsPriority();
+	}
+	
+	public void addAlternative(Alternative newAlternative) {
+		alternatives.add(newAlternative);
+	}
+	
+	public List<Alternative> getAlternatives(){
+		return alternatives;
+	}
+	
+	public List<String> getAlternativesNames(){
+		List<String> names = new ArrayList<String>();
+		for(Alternative alt: alternatives) {
+			names.add(alt.getName());
+		}
+		return names;
+	}
+	
+	public void removeAlternative(String alternative) {
+		for(int i=0; i<alternatives.size(); i++) {
+			if(alternatives.get(i).getName().equals(alternative)) {
+				alternatives.remove(i);
+				break;
+			}
+		}
 	}
 }

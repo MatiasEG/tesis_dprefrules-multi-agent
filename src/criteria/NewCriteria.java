@@ -8,7 +8,7 @@ import javax.swing.border.EmptyBorder;
 
 import dataManager.CriteriaManager;
 import dataManager.DataManager;
-import errors.CriteriaError;
+import errors.SintacticStringError;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
@@ -245,7 +245,7 @@ public class NewCriteria extends JFrame {
 		JButton btnAcept = new JButton("Aceptar y Guardar criterio");
 		btnAcept.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CriteriaError criteriaError;
+				SintacticStringError criteriaError;
 				if((!textFieldNumericValue1.getText().equals("") && !textFieldNumericValue2.getText().equals("")) || !textFieldSimbolicValues.getText().equals("")) {
 					criteriaError = CriteriaManager.checkValidCriteriaName(textFieldCriteriaName.getText(), myCriteria, NewCriteria.this.data.getCriterias());
 					if(criteriaError==null) {
