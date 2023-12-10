@@ -13,10 +13,8 @@ import dataManager.CSVreader;
 import dataManager.DataManager;
 import dataManager.DataValidations;
 import dataManager.FileChooser;
-import dataManager.IOManager;
+import dataManager.CSVwriter;
 import errors.AgentPriorityError;
-import errors.SintacticStringError;
-import evidence.Alternative;
 import evidence.ParticipantsPriorityFrame;
 import evidence.ParticipantsPriorityValidations;
 
@@ -33,7 +31,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.swing.Box;
 import javax.swing.SwingConstants;
-import java.awt.FlowLayout;
 
 public class MainWindow extends JFrame {
 
@@ -41,8 +38,6 @@ public class MainWindow extends JFrame {
 	private JPanel contentPane;
     private DefaultListModel<String> listModelParticipants;
     private JList<String> listParticipants;
-    private DefaultListModel<String> listModelAlternatives;
-    private JList<String> listAlternatives;
 	
 	private DataManager data;
 	List<Criteria> criterias;
@@ -114,7 +109,7 @@ public class MainWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(data.getParticipants().size()>0) {
 					String path = FileChooser.showFileChooser();
-					IOManager.saveAgentPriorityToCSV(path, data);
+					CSVwriter.saveAgentPriorityToCSV(path, data);
 				}
 			}
 		});
@@ -137,7 +132,7 @@ public class MainWindow extends JFrame {
 		panelUsers.add(panel_1, BorderLayout.NORTH);
 		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
 		
-		JLabel lblNewLabel = new JLabel("Personas que participan del problema de eleccion:");
+		JLabel lblNewLabel = new JLabel("Personas que participan del problema de eleccion");
 		lblNewLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel_1.add(lblNewLabel);
 		
@@ -163,6 +158,28 @@ public class MainWindow extends JFrame {
 		Component verticalStrut = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut);
 		
+		JPanel panelCriterias = new JPanel();
+		contentPane.add(panelCriterias);
+		panelCriterias.setLayout(new BoxLayout(panelCriterias, BoxLayout.Y_AXIS));
+		
+		JLabel lblNewLabel_4 = new JLabel("- A continuacion defina los criterios con los que usted desea comparar las alternativas -");
+		panelCriterias.add(lblNewLabel_4);
+		lblNewLabel_4.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		JButton btnCriteria = new JButton("Establecer criterios");
+		btnCriteria.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panelCriterias.add(btnCriteria);
+		btnCriteria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CriteriaTable criteriaTable = new CriteriaTable(data);
+				criteriaTable.setVisible(true);
+				criteriaTable.checkData(data);
+			}
+		});
+		
+		Component verticalStrut_1 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_1);
+		
 		JPanel panelAlternatives = new JPanel();
 		contentPane.add(panelAlternatives);
 		panelAlternatives.setLayout(new BoxLayout(panelAlternatives, BoxLayout.Y_AXIS));
@@ -171,57 +188,15 @@ public class MainWindow extends JFrame {
 		lblNewLabel_3.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panelAlternatives.add(lblNewLabel_3);
 		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		panelAlternatives.add(scrollPane_1);
-		
-		listModelAlternatives = new DefaultListModel<>();
-		listAlternatives = new JList<String>(listModelAlternatives);
-		scrollPane_1.setViewportView(listAlternatives);
-		
-		JPanel panel_2 = new JPanel();
-		contentPane.add(panel_2);
-		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
-		JButton btnNewAlternative = new JButton("Agregar alternativa");
-		btnNewAlternative.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				addAlternative(data);
-			}
-		});
-		panel_2.add(btnNewAlternative);
-		
-		JButton btnDeleteAlternative = new JButton("Eliminar alternativa");
-		btnDeleteAlternative.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				deleteSelectedAlternative();
-			}
-		});
-		panel_2.add(btnDeleteAlternative);
-		
-		Component verticalStrut_1 = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut_1);
-		
-		JPanel panelCriterias = new JPanel();
-		contentPane.add(panelCriterias);
-		panelCriterias.setLayout(new BorderLayout(0, 0));
-		
-		JButton btnCriteria = new JButton("Establecer criterios");
-		panelCriterias.add(btnCriteria, BorderLayout.CENTER);
-		btnCriteria.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CriteriaTable criteriaTable = new CriteriaTable(data);
-				criteriaTable.setVisible(true);
-			}
-		});
-		
 		JButton btnEvidence = new JButton("Definir evidencia");
+		btnEvidence.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panelAlternatives.add(btnEvidence);
 		btnEvidence.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				EvidenceTable alternativeTable = new EvidenceTable(data);
 				alternativeTable.setVisible(true);
 			}
 		});
-		contentPane.add(btnEvidence);
 	}
 	
 	private void deleteSelectedParticipant() {
@@ -253,38 +228,6 @@ public class MainWindow extends JFrame {
         }else {
         	JOptionPane.showMessageDialog(null, validation, "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
-    }
-	
-	private void deleteSelectedAlternative() {
-        int selectedIndex = listAlternatives.getSelectedIndex();
-
-        if (selectedIndex != -1) {
-        	int option = JOptionPane.showConfirmDialog(this,
-                    "¿Seguro que desea eliminar la alternativa seleccionada ("+listModelAlternatives.getElementAt(selectedIndex)+")?",
-                    "Confirmar Eliminación",
-                    JOptionPane.YES_NO_OPTION);
-            if (option == JOptionPane.YES_OPTION) {
-                data.removeAlternative(listModelAlternatives.remove(selectedIndex));
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar a un participante para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-	
-	private void addAlternative(DataManager data) {
-        String name = JOptionPane.showInputDialog(this, "Ingrese el nombre de la alternativa que desea agregar:");
-        SintacticStringError validation = DataValidations.validateStringWithOnlyLettersAndNumbers(name);
-        if(validation==null) {
-        	if(DataValidations.validateStringListNotContainNewElement(data.getAlternativesNames(), name)) {
-				listModelAlternatives.addElement(name);
-				data.addAlternative(new Alternative(name));
-			}else {
-				JOptionPane.showMessageDialog(null, "Error, el nombre \""+name+"\" ya se encuentra en la lista de participantes.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-			}
-        }else {
-        	JOptionPane.showMessageDialog(null, "Error."+validation.getMsg(), "Advertencia", JOptionPane.WARNING_MESSAGE);
-        }
-	    	
     }
 	
 	private void updateVisualComponents(DataManager data) {		

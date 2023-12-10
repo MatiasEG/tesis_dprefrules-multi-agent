@@ -11,12 +11,12 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import criteria.Criteria;
+import dataManager.CSVwriter;
 import dataManager.DataManager;
 import dataManager.DataValidations;
+import dataManager.FileChooser;
 import errors.SintacticStringError;
 import evidence.Alternative;
-
-import java.awt.BorderLayout;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -27,12 +27,15 @@ import javax.swing.JScrollPane;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.BoxLayout;
+import java.awt.Component;
 
 public class EvidenceTable extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTable table;
+	private DefaultTableModel model;
 
 	/**
 	 * Launch the application.
@@ -60,41 +63,23 @@ public class EvidenceTable extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(0, 0));
-		
-		JPanel panel = new JPanel();
-		contentPane.add(panel, BorderLayout.SOUTH);
-		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
-		JButton btnNewButton = new JButton("New button");
-		panel.add(btnNewButton);
-		
-		JButton btnNewAlternative = new JButton("Nueva alternativa");
-		btnNewAlternative.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				addAlternative(data);
-			}
-		});
-		panel.add(btnNewAlternative);
-		
-		JButton btnDeleteAlternative = new JButton("Eliminar alternativa");
-		panel.add(btnDeleteAlternative);
-		
-		JButton btnAcept = new JButton("Aceptar y guardar");
-		panel.add(btnAcept);
-		
-		JButton btnCancel = new JButton("Cancelar y descartar");
-		panel.add(btnCancel);
+		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 		
 		JPanel panel_2 = new JPanel();
-		contentPane.add(panel_2, BorderLayout.NORTH);
-		panel_2.setLayout(new BorderLayout(0, 0));
+		contentPane.add(panel_2);
+		panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.Y_AXIS));
 		
-		JLabel lblNewLabel = new JLabel("A continuacion puede ver una tabla con los datos propuestos hasta ahora.");
-		panel_2.add(lblNewLabel, BorderLayout.NORTH);
+		JLabel lblNewLabel = new JLabel("- A continuacion puede ver una tabla con los datos propuestos hasta ahora -");
+		lblNewLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panel_2.add(lblNewLabel);
 		
-		JLabel lblNewLabel_1 = new JLabel("Si lo desea puede modificarla haciendo click directamente en los casilleros de la misma.");
-		panel_2.add(lblNewLabel_1, BorderLayout.SOUTH);
+		JLabel lblNewLabel_1 = new JLabel("- Si lo desea puede modificarla haciendo click directamente en los casilleros de la misma -");
+		lblNewLabel_1.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panel_2.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("- Recuerde que el nombre no puede contener espacios ni caracteres especiales -");
+		lblNewLabel_2.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panel_2.add(lblNewLabel_2);
 		
 		
 		List<Criteria> criterias = data.getCriterias();
@@ -113,7 +98,7 @@ public class EvidenceTable extends JFrame {
 		Object[][] tableData = new Object[0][0];
 		
 		table = new JTable(new DefaultTableModel(tableData, columnNames));
-		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		model = (DefaultTableModel) table.getModel();
 		
 		for(int i=0; i<data.getAlternatives().size(); i++) {
 			//model.addRow(new Object[] {data.getAlternatives().get(i).getName(), Arrays.copyOf(noInfo, noInfo.length)});
@@ -124,8 +109,70 @@ public class EvidenceTable extends JFrame {
 		}
 		
 		JScrollPane scrollPane = new JScrollPane();
-		contentPane.add(scrollPane, BorderLayout.CENTER);
+		contentPane.add(scrollPane);
 		scrollPane.setViewportView(table);
+		
+		JPanel panel = new JPanel();
+		contentPane.add(panel);
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		JButton btnLoadFile = new JButton("Cargar desde archivo");
+		btnLoadFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//TODO cargar desde archivo la evidencia
+			}
+		});
+		panel.add(btnLoadFile);
+		
+		JButton btnNewAlternative = new JButton("Nueva alternativa");
+		btnNewAlternative.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addAlternative(data);
+			}
+		});
+		panel.add(btnNewAlternative);
+		
+		JButton btnDeleteAlternative = new JButton("Eliminar alternativa");
+		btnDeleteAlternative.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 int selectedRow = table.getSelectedRow();
+                 if (selectedRow != -1) {
+                	 DefaultTableModel model = (DefaultTableModel) table.getModel();
+                	 String alternativeName = (String) model.getDataVector().elementAt(table.getSelectedRow()).elementAt(0);
+                	 int option = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que deseas eliminar la alternativa seleccionada ("+alternativeName+")?", "Confirmación", JOptionPane.YES_NO_OPTION);
+                	 
+                	 if (option == JOptionPane.YES_OPTION) {
+                		 // user want to delete selected alternative
+                		 model.removeRow(selectedRow);
+                		 data.removeAlternative(alternativeName);
+                		 JOptionPane.showMessageDialog(null, "La alternativa seleccionada fue correctamente removido");
+                	 }else {
+                		 // user do not want to delete selected alternative
+                	 }
+                 } else {
+                     JOptionPane.showMessageDialog(null, "Por favor, selecciona una fila para eliminar.",
+                             "Sin selección", JOptionPane.INFORMATION_MESSAGE);
+                 }
+			}
+		});
+		panel.add(btnDeleteAlternative);
+		
+		JButton btnAcept = new JButton("Aceptar y guardar");
+		btnAcept.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (table.isEditing()) {
+		            table.getCellEditor().stopCellEditing();
+		        }
+				validateEvidence(data);
+				
+				String path = FileChooser.showFileChooser();
+				CSVwriter.saveEvidenceToCSV(path, data);
+			}
+		});
+		panel.add(btnAcept);
+		
+		JButton btnCancel = new JButton("Cancelar y descartar");
+		panel.add(btnCancel);
 		
 		for(int i=0; i<criterias.size(); i++) {
 			if(!criterias.get(i).isNumeric()) {
@@ -153,5 +200,22 @@ public class EvidenceTable extends JFrame {
         }else {
         	JOptionPane.showMessageDialog(null, validation.getMsg(), "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
+	}
+	
+	private boolean validateEvidence(DataManager data) {
+		String value;
+		for (int row = 0; row < model.getRowCount(); row++) {
+			data.getAlternatives().get(row).resetValues();
+		    for (int col = 1; col < model.getColumnCount(); col++) {
+		    	value = (String) model.getValueAt(row, col);
+		    	if(data.getCriterias().get(col-1).valueIsValid(value)) {
+		    		data.getAlternatives().get(row).addValue(value);
+		    	}else {
+		    		JOptionPane.showMessageDialog(null, "Error, ingreso un valor no valido para la alternativa ("+data.getAlternatives().get(row).getName()+") en el criterio ("+data.getCriterias().get(col-1).getName()+")", "Advertencia", JOptionPane.WARNING_MESSAGE);
+		    		return false;
+		    	}
+		    }
+		}
+		return true;
 	}
 }

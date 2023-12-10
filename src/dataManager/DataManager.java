@@ -42,6 +42,15 @@ public class DataManager {
 		return null;
 	}
 	
+	public void removeCriteria(String name) {
+		for(int i=0; i<criterias.size(); i++) {
+			if(criterias.get(i).getName().equals(name)) {
+				criterias.remove(i);
+				break;
+			}
+		}
+	}
+	
 	public void addParticipant(String newParticipant) {
 		participants.add(newParticipant);
 	}

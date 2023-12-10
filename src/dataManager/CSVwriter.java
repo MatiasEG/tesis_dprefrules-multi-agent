@@ -6,11 +6,14 @@ import java.io.IOException;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import criteria.Criteria;
+import evidence.Alternative;
 import evidence.ParticipantsPriority;
 
-public class IOManager {
+public class CSVwriter {
 
 	public static void saveCriteriaTableToCSV(JTable table, String filePath) {
+		filePath = checkCSVextension(filePath);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             // obtain data model
             DefaultTableModel model = (DefaultTableModel) table.getModel();
@@ -39,6 +42,7 @@ public class IOManager {
     }
 	
 	public static void saveAgentPriorityToCSV(String filePath, DataManager data) {
+		filePath = checkCSVextension(filePath);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
 
             writer.write("priority_order");
@@ -55,4 +59,35 @@ public class IOManager {
             e.printStackTrace();
         }
     }
+	
+	public static void saveEvidenceToCSV(String filePath, DataManager data) {
+		filePath = checkCSVextension(filePath);
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+
+			String header = "alternative";
+			for(Criteria criteria: data.getCriterias()) {
+				header += ";"+criteria.getName();
+			}
+			
+            writer.write(header);
+            writer.newLine();
+
+            // write data
+            for(Alternative alt: data.getAlternatives()) {
+            	writer.write(alt.toString());
+            	writer.newLine();
+            }
+
+            System.out.println("Archivo CSV creado con éxito.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+	
+	private static String checkCSVextension(String path) {
+		if(!path.endsWith(".csv")) {
+			path += ".csv";
+		}
+		return path;
+	}
 }

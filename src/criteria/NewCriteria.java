@@ -68,7 +68,6 @@ public class NewCriteria extends JFrame {
 		myCriteria = criteria;
 		
 		setTitle("Nuevo criterio");
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 650, 215);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -253,6 +252,7 @@ public class NewCriteria extends JFrame {
 							criteriaError = CriteriaManager.checkValidCriteriaValues(textFieldSimbolicValues.getText(), isNumericEnabled);
 							if(criteriaError==null) {
 								myCriteriaTable.addCriteria(textFieldCriteriaName.getText(), textFieldSimbolicValues.getText(), isNumericEnabled, myCriteria);
+								//data.addCriteria(new Criteria(textFieldCriteriaName.getText(), , isNumeric));
 								NewCriteria.this.dispose();
 							}else {
 								JOptionPane.showMessageDialog(null, "Por favor, revise los valores simbolicos del criterio y y siga las instrucciones solicitadas", criteriaError.getMsg(), JOptionPane.WARNING_MESSAGE);

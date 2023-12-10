@@ -9,7 +9,7 @@ import javax.swing.table.DefaultTableModel;
 import dataManager.CSVreader;
 import dataManager.DataManager;
 import dataManager.FileChooser;
-import dataManager.IOManager;
+import dataManager.CSVwriter;
 import errors.CriteriaFileError;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -148,6 +148,7 @@ public class CriteriaTable extends JFrame {
 					if (option == JOptionPane.YES_OPTION) {
 						// user want to delete selected criteria
 						model.removeRow(table.getSelectedRow());
+						data.removeCriteria(criteriaName);
 						JOptionPane.showMessageDialog(null, "El criterio seleccionado fue correctamente removido");
 					}else {
 						// user do not want to delete selected criteria
@@ -190,7 +191,7 @@ public class CriteriaTable extends JFrame {
 		        // complete path
 		        String filePath = projectPath + "\\src\\files\\criteria.csv";
 		        
-				IOManager.saveCriteriaTableToCSV(table, filePath);
+				CSVwriter.saveCriteriaTableToCSV(table, filePath);
 			}
 		});
 		

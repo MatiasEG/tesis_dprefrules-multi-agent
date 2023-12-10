@@ -82,4 +82,29 @@ public class Criteria {
 		
 		return valuesFormatted;
 	}
+	
+	public boolean valueIsValid(String value) {
+		if(!value.equals("-")) {
+			if(isNumeric) {
+	    		try {
+	    			int x = Integer.parseInt(value);
+	    			int max = Integer.max(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+	    			int min = Integer.min(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+	    			
+	    			if(x>max || x<min) return false;
+	    			
+	    		}catch(NumberFormatException e) {
+	    			return false;
+	    		}
+	    	}else {
+	    		for(int i=0; i<values.length; i++) {
+	    			if(values[i].equals(value)) {
+	    				return true;
+	    			}
+	    		}
+	    		return false;
+	    	}
+		}
+		return true;
+	}
 }
