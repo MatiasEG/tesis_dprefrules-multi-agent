@@ -6,8 +6,11 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import dataManager.CSVreader;
 import dataManager.DataManager;
+import dataManager.FileChooser;
 import dataManager.IOManager;
+import errors.CriteriaFileError;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
@@ -18,8 +21,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
-import java.util.List;
 import java.awt.event.ActionEvent;
+import java.awt.FlowLayout;
 
 @SuppressWarnings("serial")
 public class CriteriaTable extends JFrame {
@@ -36,12 +39,12 @@ public class CriteriaTable extends JFrame {
 	private JButton btnAcept;
 	private JButton btnAddCriteria;
 	private JButton btnCancel;
-	private JPanel panelButtons_2;
 	private JButton btnDeleteCriteria;
 	private JScrollPane scrollPaneCriteria;
 	
 	private JButton btnEditCriteria;
 	private DataManager data;
+	private JButton btnNewButton;
 
 	/**
 	 * Launch the application.
@@ -67,7 +70,7 @@ public class CriteriaTable extends JFrame {
 		
 		setTitle("Criterios a evaluar");
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 400);
+		setBounds(100, 100, 1100, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -102,31 +105,26 @@ public class CriteriaTable extends JFrame {
 		panelButtons_1 = new JPanel();
 		contentPane.add(panelButtons_1, BorderLayout.SOUTH);
 		panelButtons_1.setPreferredSize(new Dimension(50,50));
-		panelButtons_1.setLayout(new BorderLayout(0, 0));
+		FlowLayout fl_panelButtons_1 = new FlowLayout(FlowLayout.CENTER, 5, 5);
+		panelButtons_1.setLayout(fl_panelButtons_1);
 		
-		btnAcept = new JButton("Aceptar");
-		btnAcept.addActionListener(new ActionListener() {
+		btnNewButton = new JButton("Cargar archivo de criterios");
+		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO deberia consultar el proyect path
-				
-				// project path
-		        String projectPath = System.getProperty("user.dir");
-		        // complete path
-		        String filePath = projectPath + "\\src\\files\\criteria.csv";
-		        
-				IOManager.saveCriteriaTableToCSV(table, filePath);
+				String path = FileChooser.showFileChooser();
+				try {
+					CSVreader.readCriteriasCSV(path, data);
+					CriteriaTable.this.checkData(data);
+				} catch (CriteriaFileError e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
+					e1.printStackTrace();
+				}
 			}
 		});
-		panelButtons_1.add(btnAcept, BorderLayout.WEST);
-		
-		btnCancel = new JButton("Cancelar");
-		panelButtons_1.add(btnCancel, BorderLayout.EAST);
-		
-		panelButtons_2 = new JPanel();
-		panelButtons_1.add(panelButtons_2, BorderLayout.CENTER);
-		panelButtons_2.setLayout(new BorderLayout(0, 0));
+		panelButtons_1.add(btnNewButton);
 		
 		btnAddCriteria = new JButton("Agregar nuevo criterio");
+		panelButtons_1.add(btnAddCriteria);
 		btnAddCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				NewCriteria frame = new NewCriteria(CriteriaTable.this, data, null);
@@ -135,9 +133,9 @@ public class CriteriaTable extends JFrame {
 				//model.addRow(new Object[] {});
 			}
 		});
-		panelButtons_2.add(btnAddCriteria, BorderLayout.WEST);
 		
 		btnDeleteCriteria = new JButton("Eliminar criterio seleccionado");
+		panelButtons_1.add(btnDeleteCriteria);
 		btnDeleteCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				// check for selected row first
@@ -160,9 +158,9 @@ public class CriteriaTable extends JFrame {
 				}
 			}
 		});
-		panelButtons_2.add(btnDeleteCriteria, BorderLayout.EAST);
 		
 		btnEditCriteria = new JButton("Editar criterio seleccionado");
+		panelButtons_1.add(btnEditCriteria);
 		btnEditCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
@@ -180,7 +178,24 @@ public class CriteriaTable extends JFrame {
 				frame.setVisible(true);
 			}
 		});
-		panelButtons_2.add(btnEditCriteria, BorderLayout.CENTER);
+		
+		btnAcept = new JButton("Aceptar");
+		panelButtons_1.add(btnAcept);
+		btnAcept.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO deberia consultar el proyect path
+				
+				// project path
+		        String projectPath = System.getProperty("user.dir");
+		        // complete path
+		        String filePath = projectPath + "\\src\\files\\criteria.csv";
+		        
+				IOManager.saveCriteriaTableToCSV(table, filePath);
+			}
+		});
+		
+		btnCancel = new JButton("Cancelar");
+		panelButtons_1.add(btnCancel);
 		
 		scrollPaneCriteria = new JScrollPane();
 		contentPane.add(scrollPaneCriteria, BorderLayout.CENTER);
@@ -200,9 +215,18 @@ public class CriteriaTable extends JFrame {
 		
 	}
 	
-	public void checkData(List<Criteria> criterias) {
-		for(Criteria cr: criterias) {
-			addCriteria(cr.name, String.join(", ",cr.getValues()), cr.isNumeric, null);
+	public void checkData(DataManager data) {
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		model.setRowCount(0);
+		table.repaint();
+		for(Criteria cr: data.getCriterias()) {
+			if(cr.isNumeric) {
+				String[] numericValues = cr.getValues();
+				model.addRow(new Object[] {cr.getName(), "between("+numericValues[0]+","+numericValues[1]+")"});
+			}else {
+				model.addRow(new Object[] {cr.getName(), "["+cr.getCriteriaValuesString()+"]"});
+			}
+			
 		}
 	}
 	

@@ -16,7 +16,8 @@ import evidence.ParticipantsPriorityValidations;
 
 public class CSVreader {
 
-	public static List<Criteria> reacCriteriasCSV(String csvFile, DataManager data) throws CriteriaFileError{
+	public static void readCriteriasCSV(String csvFile, DataManager oldData) throws CriteriaFileError{
+		DataManager newData = new DataManager();
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 	    	if(br.readLine().equals("criterion;values")) {
@@ -43,6 +44,7 @@ public class CSVreader {
 			            	
 			            	criteria = new Criteria(name, values, false);
 			            }
+						//newData.addCriteria(criteria);
 						criterias.add(criteria);
 		            }else{
 		            	throw new CriteriaFileError("El archivo no contiene la sintaxis correspondiente.");
@@ -54,8 +56,8 @@ public class CSVreader {
 	    }catch (IOException e) {
 	    	e.printStackTrace();
 	    }
-	    
-	    return criterias;
+		newData.setCriterias(criterias);
+		oldData.updateData(newData);
 	}
 	
 	private static String[] obtainValuesBetween(String cadena) {

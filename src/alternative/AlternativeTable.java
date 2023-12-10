@@ -47,7 +47,6 @@ public class AlternativeTable extends JFrame {
 	 */
 	public AlternativeTable(DataManager data) {		
 		setTitle("Datos del problema - evidencia");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -98,9 +97,9 @@ public class AlternativeTable extends JFrame {
 		
 		String[] noInfo = new String[criteriaNames.length];
 		Arrays.fill(noInfo, "-");
-		for (String elemento : noInfo) {
-            System.out.println(elemento);
-        }
+		for(String s: noInfo) {
+			System.out.println(s);
+		}
 		
 		Object[][] tableData = new Object[0][0];
 		
@@ -108,7 +107,11 @@ public class AlternativeTable extends JFrame {
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		
 		for(int i=0; i<data.getAlternatives().size(); i++) {
-			model.addRow(new Object[] {data.getAlternatives().get(i).getName(), noInfo});
+			//model.addRow(new Object[] {data.getAlternatives().get(i).getName(), Arrays.copyOf(noInfo, noInfo.length)});
+			model.addRow(new Object[] {data.getAlternatives().get(i).getName()});
+			for (int j = 1; j <= criteriaNames.length; j++) {
+		        model.setValueAt("-", i, j);
+		    }
 		}
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -121,7 +124,7 @@ public class AlternativeTable extends JFrame {
 	            comboBoxColumn.setCellEditor(new DefaultCellEditor(criterias.get(i).getComboValues()));
 			}
 		}
-		
+		table.repaint();
 	}
 
 }

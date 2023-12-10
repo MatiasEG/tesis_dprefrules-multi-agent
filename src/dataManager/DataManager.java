@@ -29,6 +29,10 @@ public class DataManager {
 		return criterias;
 	}
 	
+	public void setCriterias(List<Criteria> newCriterias) {
+		criterias = newCriterias;
+	}
+	
 	public Criteria getCriteria(String name) {
 		for(Criteria cr: criterias) {
 			if(cr.getName().equals(name)) {

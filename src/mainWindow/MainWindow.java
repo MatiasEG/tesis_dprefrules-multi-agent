@@ -15,7 +15,6 @@ import dataManager.DataValidations;
 import dataManager.FileChooser;
 import dataManager.IOManager;
 import errors.AgentPriorityError;
-import errors.CriteriaFileError;
 import errors.SintacticStringError;
 import evidence.Alternative;
 import evidence.ParticipantsPriorityFrame;
@@ -23,7 +22,6 @@ import evidence.ParticipantsPriorityValidations;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.BoxLayout;
@@ -70,15 +68,6 @@ public class MainWindow extends JFrame {
 	 */
 	public MainWindow() {
 		data = new DataManager();
-		// TODO borrar esto y consultarselo al usuario
-		String csvFile = "C:/Users/Matia/Desktop/tesis_dprefrules-multi-agent/src/files/criteria.csv";  // .CSV path to file
-		criterias = new ArrayList<Criteria>();
-		try {
-			criterias = CSVreader.reacCriteriasCSV(csvFile, data);
-		} catch (CriteriaFileError e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
-			e.printStackTrace();
-		}
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 650, 700);
@@ -222,7 +211,6 @@ public class MainWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				CriteriaTable criteriaTable = new CriteriaTable(data);
 				criteriaTable.setVisible(true);
-				criteriaTable.checkData(criterias);
 			}
 		});
 		
