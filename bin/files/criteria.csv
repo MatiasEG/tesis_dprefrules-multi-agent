@@ -1,3 +1,4 @@
 criterion;values
 entretenimiento;[malo,moderado,bueno,exelente]
 dias;between(1,30)
+costo;[alto,medio,bajo]

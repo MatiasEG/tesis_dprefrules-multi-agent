@@ -11,10 +11,12 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import criteria.Criteria;
+import dataManager.CSVreader;
 import dataManager.CSVwriter;
 import dataManager.DataManager;
 import dataManager.DataValidations;
 import dataManager.FileChooser;
+import errors.EvidenceFileError;
 import errors.SintacticStringError;
 import evidence.Alternative;
 
@@ -119,7 +121,14 @@ public class EvidenceTable extends JFrame {
 		JButton btnLoadFile = new JButton("Cargar desde archivo");
 		btnLoadFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO cargar desde archivo la evidencia
+				String path = FileChooser.showFileChooser();
+				try {
+					CSVreader.readEvidenceCSV(path, data);
+				} catch (EvidenceFileError e1) {
+					JOptionPane.showMessageDialog(null, "Error. "+e1.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
+					e1.printStackTrace();
+				}
+				checkData(data);
 			}
 		});
 		panel.add(btnLoadFile);
@@ -217,5 +226,24 @@ public class EvidenceTable extends JFrame {
 		    }
 		}
 		return true;
+	}
+	
+	public void checkData(DataManager data) {
+		model.setRowCount(0);
+		for(int i=0; i<data.getCriterias().size(); i++) {
+			if(!data.getCriterias().get(i).isNumeric()) {
+				TableColumn comboBoxColumn = table.getColumnModel().getColumn(i+1);
+	            comboBoxColumn.setCellEditor(new DefaultCellEditor(data.getCriterias().get(i).getComboValues()));
+			}
+		}
+		for (Alternative alt : data.getAlternatives()) {
+	        Object[] rowData = new Object[model.getColumnCount()];
+	        rowData[0] = alt.getName();
+	        for(int col=1; col<model.getColumnCount(); col++) {
+	            rowData[col] = alt.getValues().get(col-1);
+	        }
+	        model.addRow(rowData);
+	    }
+		table.repaint();
 	}
 }

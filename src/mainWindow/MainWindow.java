@@ -195,6 +195,7 @@ public class MainWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				EvidenceTable alternativeTable = new EvidenceTable(data);
 				alternativeTable.setVisible(true);
+				alternativeTable.checkData(data);
 			}
 		});
 	}

@@ -1,3 +1,4 @@
-alternative;entretenimiento;dias
-isla;moderado;10
-selva;exelente;15
+alternative;entretenimiento;dias;costo
+isla;moderado;10;bajo
+selva;exelente;15;medio
+bosque;moderado;20;alto

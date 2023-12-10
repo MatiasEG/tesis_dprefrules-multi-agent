@@ -11,6 +11,8 @@ import dataManager.DataManager;
 import dataManager.FileChooser;
 import dataManager.CSVwriter;
 import errors.CriteriaFileError;
+import evidence.Alternative;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
@@ -147,8 +149,12 @@ public class CriteriaTable extends JFrame {
 					
 					if (option == JOptionPane.YES_OPTION) {
 						// user want to delete selected criteria
-						model.removeRow(table.getSelectedRow());
+						int index = table.getSelectedRow();
+						model.removeRow(index);
 						data.removeCriteria(criteriaName);
+						for(Alternative alt: data.getAlternatives()) {
+							alt.removeValue(index);
+						}
 						JOptionPane.showMessageDialog(null, "El criterio seleccionado fue correctamente removido");
 					}else {
 						// user do not want to delete selected criteria
@@ -246,6 +252,9 @@ public class CriteriaTable extends JFrame {
 		if(criteriaUpdate==null) {
 			model.addRow(new Object[] {criteriaName, "between("+splittedValues[0]+","+splittedValues[1]+")"});
 			data.addCriteria(new Criteria(criteriaName, splittedValues, isNumeric));
+			for(Alternative alt: data.getAlternatives()) {
+				alt.addValue("-");
+			}
 		}else {
 			int rowIndex = findRow(table, criteriaUpdate);
 	        if (rowIndex != -1) {
@@ -271,6 +280,9 @@ public class CriteriaTable extends JFrame {
 		if(criteriaUpdate==null) {
 			model.addRow(new Object[] {criteriaName, valueFormatted});
 			data.addCriteria(new Criteria(criteriaName, splittedValues, isNumeric));
+			for(Alternative alt: data.getAlternatives()) {
+				alt.addValue("-");
+			}
 		}else {
 			int rowIndex = findRow(table, criteriaUpdate);
 	        if (rowIndex != -1) {

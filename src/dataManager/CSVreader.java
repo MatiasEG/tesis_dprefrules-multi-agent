@@ -11,6 +11,8 @@ import java.util.regex.Pattern;
 import criteria.Criteria;
 import errors.AgentPriorityError;
 import errors.CriteriaFileError;
+import errors.EvidenceFileError;
+import evidence.Alternative;
 import evidence.ParticipantsPriority;
 import evidence.ParticipantsPriorityValidations;
 
@@ -18,6 +20,9 @@ public class CSVreader {
 
 	public static void readCriteriasCSV(String csvFile, DataManager oldData) throws CriteriaFileError{
 		DataManager newData = new DataManager();
+		newData.setParticipants(oldData.getParticipants());
+		newData.setParticipantsPriority(oldData.getParticipantsPriority());
+		
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 	    	if(br.readLine().equals("criterion;values")) {
@@ -79,6 +84,9 @@ public class CSVreader {
 	
 	public static void readAgentPriorityCSV(String csvFile, DataManager oldData) throws AgentPriorityError {
 		DataManager newData = new DataManager();
+		newData.setCriterias(oldData.getCriterias());
+		newData.setAlternatives(oldData.getAlternatives());
+		
 		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 	    	if(br.readLine().equals("priority_order")) {
 	    		String line;
@@ -111,6 +119,48 @@ public class CSVreader {
 		        oldData.updateData(newData);
 	    	}else {
 	    		throw new AgentPriorityError("El archivo no contiene la sintaxis correspondiente.");
+	    	}
+	    }catch (IOException e) {
+	    	e.printStackTrace();
+	    }
+	}
+	
+	public static void readEvidenceCSV(String csvFile, DataManager oldData) throws EvidenceFileError {
+		DataManager newData = new DataManager();
+		newData.setCriterias(oldData.getCriterias());
+		newData.setParticipants(oldData.getParticipants());
+		newData.setParticipantsPriority(oldData.getParticipantsPriority());
+		
+		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+			String header = "alternative";
+			for(Criteria criteria: newData.getCriterias()) {
+				header += ";"+criteria.getName();
+			}
+			
+	    	if(br.readLine().equals(header)) {
+	    		String line;
+		        while ((line = br.readLine()) != null) {
+		            String[] parts = line.split(";");
+					if (parts.length == (newData.getCriterias().size()+1)) {
+						String altName = parts[0].trim();
+						Alternative alt = new Alternative(altName);
+						newData.addAlternative(alt);
+						int altIndex = newData.getAlternatives().size()-1;
+						
+						for(int i=1; i<parts.length; i++) {
+							if(newData.getCriterias().get(i-1).valueIsValid(parts[i].trim())) {
+								newData.getAlternatives().get(altIndex).addValue(parts[i].trim());
+							}else {
+				            	throw new EvidenceFileError("El criterio ("+newData.getCriterias().get(i-1).getName()+") contiene una valor no valido ("+parts[i].trim()+") en el archivo de evidencia.");
+							}
+						}
+		            }else {
+		            	throw new EvidenceFileError("El archivo no contiene la sintaxis correspondiente.");
+		            }
+				}
+		        oldData.updateData(newData);
+	    	}else {
+	    		throw new EvidenceFileError("El archivo no contiene los criterios definidos anteriormente.");
 	    	}
 	    }catch (IOException e) {
 	    	e.printStackTrace();

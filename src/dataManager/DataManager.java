@@ -96,10 +96,12 @@ public class DataManager {
 		criterias = new ArrayList<Criteria>();
 		participants = new ArrayList<String>();
 		participantsPriority = new ArrayList<ParticipantsPriority>();
-		
+		alternatives = new ArrayList<Alternative>();
+
 		criterias = newData.getCriterias();
 		participants = newData.getParticipants();
 		participantsPriority = newData.getParticipantsPriority();
+		alternatives = newData.getAlternatives();
 	}
 	
 	public void addAlternative(Alternative newAlternative) {
@@ -125,5 +127,17 @@ public class DataManager {
 				break;
 			}
 		}
+	}
+	
+	public void setParticipants(List<String> participants) {
+		this.participants = participants;
+	}
+	
+	public void setParticipantsPriority(List<ParticipantsPriority> participantsPriority) {
+		this.participantsPriority = participantsPriority;
+	}
+	
+	public void setAlternatives(List<Alternative> alternatives) {
+		this.alternatives = alternatives;
 	}
 }
