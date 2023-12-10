@@ -6,7 +6,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import alternative.AlternativeTable;
+import alternative.EvidenceTable;
 import criteria.Criteria;
 import criteria.CriteriaTable;
 import dataManager.CSVreader;
@@ -217,7 +217,7 @@ public class MainWindow extends JFrame {
 		JButton btnEvidence = new JButton("Definir evidencia");
 		btnEvidence.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AlternativeTable alternativeTable = new AlternativeTable(data);
+				EvidenceTable alternativeTable = new EvidenceTable(data);
 				alternativeTable.setVisible(true);
 			}
 		});

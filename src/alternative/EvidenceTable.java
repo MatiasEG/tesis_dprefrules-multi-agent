@@ -12,15 +12,23 @@ import javax.swing.table.TableColumn;
 
 import criteria.Criteria;
 import dataManager.DataManager;
+import dataManager.DataValidations;
+import errors.SintacticStringError;
+import evidence.Alternative;
+
 import java.awt.BorderLayout;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class AlternativeTable extends JFrame {
+public class EvidenceTable extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -33,7 +41,7 @@ public class AlternativeTable extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AlternativeTable frame = new AlternativeTable(null);
+					EvidenceTable frame = new EvidenceTable(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -45,9 +53,9 @@ public class AlternativeTable extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AlternativeTable(DataManager data) {		
+	public EvidenceTable(DataManager data) {		
 		setTitle("Datos del problema - evidencia");
-		setBounds(100, 100, 600, 300);
+		setBounds(100, 100, 760, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -56,23 +64,27 @@ public class AlternativeTable extends JFrame {
 		
 		JPanel panel = new JPanel();
 		contentPane.add(panel, BorderLayout.SOUTH);
-		panel.setLayout(new BorderLayout(0, 0));
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JButton btnDeleteAlternative = new JButton("Eliminar alternativa");
-		panel.add(btnDeleteAlternative, BorderLayout.WEST);
-		
-		JButton btnCancel = new JButton("Cancelar y descartar");
-		panel.add(btnCancel, BorderLayout.EAST);
-		
-		JPanel panel_1 = new JPanel();
-		panel.add(panel_1, BorderLayout.CENTER);
-		panel_1.setLayout(new BorderLayout(0, 0));
+		JButton btnNewButton = new JButton("New button");
+		panel.add(btnNewButton);
 		
 		JButton btnNewAlternative = new JButton("Nueva alternativa");
-		panel_1.add(btnNewAlternative, BorderLayout.WEST);
+		btnNewAlternative.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addAlternative(data);
+			}
+		});
+		panel.add(btnNewAlternative);
+		
+		JButton btnDeleteAlternative = new JButton("Eliminar alternativa");
+		panel.add(btnDeleteAlternative);
 		
 		JButton btnAcept = new JButton("Aceptar y guardar");
-		panel_1.add(btnAcept, BorderLayout.EAST);
+		panel.add(btnAcept);
+		
+		JButton btnCancel = new JButton("Cancelar y descartar");
+		panel.add(btnCancel);
 		
 		JPanel panel_2 = new JPanel();
 		contentPane.add(panel_2, BorderLayout.NORTH);
@@ -97,9 +109,6 @@ public class AlternativeTable extends JFrame {
 		
 		String[] noInfo = new String[criteriaNames.length];
 		Arrays.fill(noInfo, "-");
-		for(String s: noInfo) {
-			System.out.println(s);
-		}
 		
 		Object[][] tableData = new Object[0][0];
 		
@@ -127,4 +136,22 @@ public class AlternativeTable extends JFrame {
 		table.repaint();
 	}
 
+	private void addAlternative(DataManager data) {
+		String name = JOptionPane.showInputDialog(this, "Ingrese el nombre de la alternativa que desea agregar:");
+        SintacticStringError validation = DataValidations.validateStringWithOnlyLettersAndNumbers(name);
+        if(validation==null) {
+        	if(DataValidations.validateStringListNotContainNewElement(data.getAlternativesNames(), name)) {
+        		DefaultTableModel model = (DefaultTableModel) table.getModel();
+        		model.addRow(new Object[] {name});
+    			for (int j = 1; j < model.getColumnCount(); j++) {
+    		        model.setValueAt("-", model.getRowCount()-1, j);
+    		    }
+    			data.addAlternative(new Alternative(name));
+    		}else {
+    			JOptionPane.showMessageDialog(null, "Error, la alternativa \""+name+"\" ya se encuentra en la lista de alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+    		}
+        }else {
+        	JOptionPane.showMessageDialog(null, validation.getMsg(), "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
+	}
 }
