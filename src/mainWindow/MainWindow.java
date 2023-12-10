@@ -217,7 +217,7 @@ public class MainWindow extends JFrame {
 		panelCriterias.setLayout(new BorderLayout(0, 0));
 		
 		JButton btnCriteria = new JButton("Establecer criterios");
-		panelCriterias.add(btnCriteria, BorderLayout.SOUTH);
+		panelCriterias.add(btnCriteria, BorderLayout.CENTER);
 		btnCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CriteriaTable criteriaTable = new CriteriaTable(data);

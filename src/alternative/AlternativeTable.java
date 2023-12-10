@@ -12,7 +12,6 @@ import javax.swing.table.TableColumn;
 
 import criteria.Criteria;
 import dataManager.DataManager;
-
 import java.awt.BorderLayout;
 
 import javax.swing.DefaultCellEditor;
@@ -103,20 +102,17 @@ public class AlternativeTable extends JFrame {
             System.out.println(elemento);
         }
 		
-		// TODO crear un for aca, que sirva para inicializar Object[][] tableData segun la cantidad de alternativas definidas
-		String[] alt1table = new String[noInfo.length + 1];
-		alt1table[0] = "Alt1";
-		System.arraycopy(noInfo, 0, alt1table, 1, noInfo.length);
+		Object[][] tableData = new Object[0][0];
 		
-		Object[][] tableData = {
-				alt1table,
-				{"Alt2", Arrays.copyOf(noInfo, noInfo.length)},
-				{"Alt3", Arrays.copyOf(noInfo, noInfo.length)}
-		};
+		table = new JTable(new DefaultTableModel(tableData, columnNames));
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		
+		for(int i=0; i<data.getAlternatives().size(); i++) {
+			model.addRow(new Object[] {data.getAlternatives().get(i).getName(), noInfo});
+		}
 		
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, BorderLayout.CENTER);
-		table = new JTable(new DefaultTableModel(tableData, columnNames));
 		scrollPane.setViewportView(table);
 		
 		for(int i=0; i<criterias.size(); i++) {
