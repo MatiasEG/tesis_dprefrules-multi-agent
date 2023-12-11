@@ -3,36 +3,34 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-
 import criteria.Criteria;
 import evidence.Alternative;
 import evidence.ParticipantsPriority;
 
 public class CSVwriter {
 
-	public static void saveCriteriaTableToCSV(JTable table, String filePath) {
+	public static void saveCriteriaTableToCSV(String filePath, DataManager data) {
 		filePath = checkCSVextension(filePath);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            // obtain data model
-            DefaultTableModel model = (DefaultTableModel) table.getModel();
 
             writer.write("criterion;values");
             writer.newLine();
 
             // write data
-            for (int row = 0; row < model.getRowCount(); row++) {
-                for (int col = 0; col < model.getColumnCount(); col++) {
-                    Object cellData = model.getValueAt(row, col);
-                    
-                    writer.write(cellData.toString());
-                    
-                    if (col < model.getColumnCount() - 1) {
-                        writer.write(";");
-                    }
-                }
-                writer.newLine();
+            for(Criteria criteria: data.getCriterias()) {
+            	writer.write(criteria.getName()+";");
+            	String values = "";
+            	if(!criteria.isNumeric()) {
+            		values += "[";
+            		values += putAllValues(criteria);
+            		values += "]";
+            	}else {
+            		values += "between(";
+            		values += putAllValues(criteria);
+            		values += ")";
+            	}
+            	writer.write(values);
+            	writer.newLine();
             }
 
             System.out.println("Archivo CSV creado con éxito.");
@@ -40,6 +38,14 @@ public class CSVwriter {
             e.printStackTrace();
         }
     }
+	
+	private static String putAllValues(Criteria criteria) {
+		String values = "";
+		for(String value: criteria.getValues()) {
+			values += value+",";
+		}
+		return values.substring(0, values.length() - 1);
+	}
 	
 	public static void saveAgentPriorityToCSV(String filePath, DataManager data) {
 		filePath = checkCSVextension(filePath);

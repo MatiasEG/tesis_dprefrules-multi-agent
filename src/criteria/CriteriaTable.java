@@ -38,15 +38,14 @@ public class CriteriaTable extends JFrame {
 	private JLabel lblNewLabel_3;
 	private JLabel lblNewLabel_4;
 	private JPanel panelButtons_1;
-	private JButton btnAcept;
+	private JButton btnSaveFile;
 	private JButton btnAddCriteria;
-	private JButton btnCancel;
 	private JButton btnDeleteCriteria;
 	private JScrollPane scrollPaneCriteria;
 	
 	private JButton btnEditCriteria;
 	private DataManager data;
-	private JButton btnNewButton;
+	private JButton btnLoadFile;
 
 	/**
 	 * Launch the application.
@@ -72,7 +71,7 @@ public class CriteriaTable extends JFrame {
 		
 		setTitle("Criterios a evaluar");
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1100, 400);
+		setBounds(100, 100, 950, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -110,8 +109,8 @@ public class CriteriaTable extends JFrame {
 		FlowLayout fl_panelButtons_1 = new FlowLayout(FlowLayout.CENTER, 5, 5);
 		panelButtons_1.setLayout(fl_panelButtons_1);
 		
-		btnNewButton = new JButton("Cargar archivo de criterios");
-		btnNewButton.addActionListener(new ActionListener() {
+		btnLoadFile = new JButton("Cargar archivo");
+		btnLoadFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String path = FileChooser.showFileChooser();
 				try {
@@ -123,7 +122,7 @@ public class CriteriaTable extends JFrame {
 				}
 			}
 		});
-		panelButtons_1.add(btnNewButton);
+		panelButtons_1.add(btnLoadFile);
 		
 		btnAddCriteria = new JButton("Agregar nuevo criterio");
 		panelButtons_1.add(btnAddCriteria);
@@ -186,23 +185,15 @@ public class CriteriaTable extends JFrame {
 			}
 		});
 		
-		btnAcept = new JButton("Aceptar");
-		panelButtons_1.add(btnAcept);
-		btnAcept.addActionListener(new ActionListener() {
+		btnSaveFile = new JButton("Guardar archivo");
+		panelButtons_1.add(btnSaveFile);
+		btnSaveFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO deberia consultar el proyect path
-				
-				// project path
-		        String projectPath = System.getProperty("user.dir");
-		        // complete path
-		        String filePath = projectPath + "\\src\\files\\criteria.csv";
+				String path = FileChooser.showFileChooser();
 		        
-				CSVwriter.saveCriteriaTableToCSV(table, filePath);
+				CSVwriter.saveCriteriaTableToCSV(path, data);
 			}
 		});
-		
-		btnCancel = new JButton("Cancelar");
-		panelButtons_1.add(btnCancel);
 		
 		scrollPaneCriteria = new JScrollPane();
 		contentPane.add(scrollPaneCriteria, BorderLayout.CENTER);
@@ -213,9 +204,9 @@ public class CriteriaTable extends JFrame {
 		};
 		
 		table = new JTable(new DefaultTableModel(tableData, columnNames));
-		// Deshabilitar la edición de celdas
+		// disable cell edition
 		table.setDefaultEditor(Object.class, null);
-        // Configurar para que solo se pueda seleccionar una fila a la vez
+        // one row selected at the same time
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		scrollPaneCriteria.setViewportView(table);

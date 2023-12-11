@@ -118,7 +118,7 @@ public class EvidenceTable extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JButton btnLoadFile = new JButton("Cargar desde archivo");
+		JButton btnLoadFile = new JButton("Cargar archivo");
 		btnLoadFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String path = FileChooser.showFileChooser();
@@ -166,7 +166,7 @@ public class EvidenceTable extends JFrame {
 		});
 		panel.add(btnDeleteAlternative);
 		
-		JButton btnAcept = new JButton("Aceptar y guardar");
+		JButton btnAcept = new JButton("Guardar archivo");
 		btnAcept.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (table.isEditing()) {
@@ -176,12 +176,23 @@ public class EvidenceTable extends JFrame {
 				
 				String path = FileChooser.showFileChooser();
 				CSVwriter.saveEvidenceToCSV(path, data);
+				
+				EvidenceTable.this.dispose();
 			}
 		});
 		panel.add(btnAcept);
 		
-		JButton btnCancel = new JButton("Cancelar y descartar");
-		panel.add(btnCancel);
+		JButton btnConfirmChanges = new JButton("Confirmar cambios");
+		btnConfirmChanges.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (table.isEditing()) {
+		            table.getCellEditor().stopCellEditing();
+		        }
+				validateEvidence(data);
+				EvidenceTable.this.dispose();
+			}
+		});
+		panel.add(btnConfirmChanges);
 		
 		for(int i=0; i<criterias.size(); i++) {
 			if(!criterias.get(i).isNumeric()) {
