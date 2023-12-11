@@ -31,6 +31,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.swing.Box;
 import javax.swing.SwingConstants;
+import java.awt.FlowLayout;
 
 public class MainWindow extends JFrame {
 
@@ -62,74 +63,28 @@ public class MainWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public MainWindow() {
+		setTitle("Sistema de Decision Multi-Agente");
 		data = new DataManager();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 650, 700);
+		setBounds(100, 100, 800, 407);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 		
-		JPanel panelUsers = new JPanel();
-		contentPane.add(panelUsers);
-		panelUsers.setLayout(new BorderLayout(0, 0));
+		JPanel panelAgents = new JPanel();
+		contentPane.add(panelAgents);
+		panelAgents.setLayout(new BoxLayout(panelAgents, BoxLayout.Y_AXIS));
 		
-		JScrollPane scrollPane = new JScrollPane();
-		panelUsers.add(scrollPane);
+		Component verticalStrut = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut);
 		
 		listModelParticipants = new DefaultListModel<>();
-		listParticipants = new JList<String>(listModelParticipants);
-		listParticipants.setValueIsAdjusting(true);
-		scrollPane.setViewportView(listParticipants);
-		
-		JPanel panel = new JPanel();
-		panelUsers.add(panel, BorderLayout.SOUTH);
-		panel.setLayout(new BorderLayout(0, 0));
-		
-		JButton btnAddUser = new JButton("Agregar participante");
-		btnAddUser.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				addParticipantName(data);
-			}
-		});
-		panel.add(btnAddUser, BorderLayout.EAST);
-		
-		JButton btnDeleteUser = new JButton("Eliminar participante seleccionado");
-		btnDeleteUser.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				deleteSelectedParticipant();
-			}
-		});
-		panel.add(btnDeleteUser, BorderLayout.WEST);
-		
-		JButton btnUpdateParticipantsFile = new JButton("Guardar/Sobreescribir archivo de participantes");
-		btnUpdateParticipantsFile.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(data.getParticipants().size()>0) {
-					String path = FileChooser.showFileChooser();
-					CSVwriter.saveAgentPriorityToCSV(path, data);
-				}
-			}
-		});
-		panel.add(btnUpdateParticipantsFile, BorderLayout.SOUTH);
-		
-		JButton btnEditParticipantsPriority = new JButton("Editar prioridad entre participantes");
-		btnEditParticipantsPriority.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ParticipantsPriorityFrame frame = new ParticipantsPriorityFrame(data);
-				frame.setVisible(true);
-			}
-		});
-		panel.add(btnEditParticipantsPriority, BorderLayout.CENTER);
-		
-		JLabel lblNewLabel_2 = new JLabel("Recuerde guardar los cambios para que estos se vean reflejados");
-		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(lblNewLabel_2, BorderLayout.NORTH);
 		
 		JPanel panel_1 = new JPanel();
-		panelUsers.add(panel_1, BorderLayout.NORTH);
+		panelAgents.add(panel_1, BorderLayout.NORTH);
 		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
 		
 		JLabel lblNewLabel = new JLabel("Personas que participan del problema de eleccion");
@@ -155,8 +110,67 @@ public class MainWindow extends JFrame {
 		});
 		panel_1.add(btnNewButton);
 		
-		Component verticalStrut = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut);
+		JScrollPane scrollPane = new JScrollPane();
+		panel_1.add(scrollPane);
+		listParticipants = new JList<String>(listModelParticipants);
+		listParticipants.setValueIsAdjusting(true);
+		scrollPane.setViewportView(listParticipants);
+		
+		JPanel panel = new JPanel();
+		panel_1.add(panel);
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		
+		Component verticalStrut_2 = Box.createVerticalStrut(20);
+		panel.add(verticalStrut_2);
+		
+		JLabel lblNewLabel_2 = new JLabel("Recuerde guardar los cambios para que estos se vean reflejados");
+		lblNewLabel_2.setAlignmentX(Component.CENTER_ALIGNMENT);
+		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(lblNewLabel_2);
+		
+		JPanel panel_2 = new JPanel();
+		panel.add(panel_2);
+		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		JButton btnAddUser = new JButton("Agregar participante");
+		panel_2.add(btnAddUser);
+		btnAddUser.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		JButton btnDeleteUser = new JButton("Eliminar participante seleccionado");
+		panel_2.add(btnDeleteUser);
+		btnDeleteUser.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		JButton btnUpdateParticipantsFile = new JButton("Guardar archivo");
+		panel_2.add(btnUpdateParticipantsFile);
+		btnUpdateParticipantsFile.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		JButton btnEditParticipantsPriority = new JButton("Editar prioridad entre participantes");
+		panel_2.add(btnEditParticipantsPriority);
+		btnEditParticipantsPriority.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnEditParticipantsPriority.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ParticipantsPriorityFrame frame = new ParticipantsPriorityFrame(data);
+				frame.setVisible(true);
+			}
+		});
+		btnUpdateParticipantsFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(data.getParticipants().size()>0) {
+					String path = FileChooser.showFileChooser();
+					CSVwriter.saveAgentPriorityToCSV(path, data);
+				}
+			}
+		});
+		btnDeleteUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				deleteSelectedParticipant();
+			}
+		});
+		btnAddUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addParticipantName(data);
+			}
+		});
 		
 		JPanel panelCriterias = new JPanel();
 		contentPane.add(panelCriterias);
