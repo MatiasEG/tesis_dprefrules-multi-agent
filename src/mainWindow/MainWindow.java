@@ -149,8 +149,13 @@ public class MainWindow extends JFrame {
 		btnEditParticipantsPriority.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnEditParticipantsPriority.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AgentPriorityFrame frame = new AgentPriorityFrame(data);
-				frame.setVisible(true);
+				String validation = canDefineAgentPriority(data);
+				if(validation.equals("OK")) {
+					AgentPriorityFrame frame = new AgentPriorityFrame(data);
+					frame.setVisible(true);
+				}else {
+					JOptionPane.showMessageDialog(null, validation, "Advertencia", JOptionPane.WARNING_MESSAGE);
+				}
 			}
 		});
 		btnUpdateParticipantsFile.addActionListener(new ActionListener() {
@@ -185,9 +190,14 @@ public class MainWindow extends JFrame {
 		panelCriterias.add(btnCriteria);
 		btnCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CriteriaFrame criteriaTable = new CriteriaFrame(data);
-				criteriaTable.setVisible(true);
-				criteriaTable.checkData(data);
+				String validation = canDefineCriterias(data);
+				if(validation.equals("OK")) {
+					CriteriaFrame criteriaTable = new CriteriaFrame(data);
+					criteriaTable.setVisible(true);
+					criteriaTable.checkData(data);
+				}else {
+					JOptionPane.showMessageDialog(null, validation, "Advertencia", JOptionPane.WARNING_MESSAGE);
+				}
 			}
 		});
 		
@@ -207,9 +217,14 @@ public class MainWindow extends JFrame {
 		panelAlternatives.add(btnEvidence);
 		btnEvidence.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				EvidenceFrame alternativeTable = new EvidenceFrame(data);
-				alternativeTable.setVisible(true);
-				alternativeTable.checkData(data);
+				String validation = canDefineEvidence(data);
+				if(validation.equals("OK")) {
+					EvidenceFrame alternativeTable = new EvidenceFrame(data);
+					alternativeTable.setVisible(true);
+					alternativeTable.checkData(data);
+				}else {
+					JOptionPane.showMessageDialog(null, validation, "Advertencia", JOptionPane.WARNING_MESSAGE);
+				}
 			}
 		});
 	}
@@ -251,5 +266,32 @@ public class MainWindow extends JFrame {
 			listModelParticipants.addElement(agent);
 		}
 	}
+	
+	private String canDefineEvidence(DataManager data) {
+		if(data.getParticipants().size()>0) {
+			if(data.getCriterias().size()>0) {
+				return "OK";
+			}else {
+				return "Advertencia. Debe definir al menos a un criterio de comparacion de alternativas.";
+			}
+		}else {
+			return "Advertencia. Debe definir al menos a un participante del problema.";
+		}
+	}
 
+	private String canDefineCriterias(DataManager data) {
+		if(data.getParticipants().size()>0) {
+			return "OK";
+		}else {
+			return "Advertencia. Debe definir al menos a un participante del problema.";
+		}
+	}
+	
+	private String canDefineAgentPriority(DataManager data) {
+		if(data.getParticipants().size()>1) {
+			return "OK";
+		}else {
+			return "Advertencia. Debe definir al menos a dos participante del problema para poder compararlos.";
+		}
+	}
 }
