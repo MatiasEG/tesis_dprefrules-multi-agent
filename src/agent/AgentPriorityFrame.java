@@ -1,6 +1,4 @@
-package evidence;
-
-import java.awt.EventQueue;
+package agent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -23,7 +21,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 
-public class ParticipantsPriorityFrame extends JFrame {
+public class AgentPriorityFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -33,27 +31,11 @@ public class ParticipantsPriorityFrame extends JFrame {
     private JList<String> listPriority;
 
 	private DataManager data;
-	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ParticipantsPriorityFrame frame = new ParticipantsPriorityFrame(null);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
 	 */
-	public ParticipantsPriorityFrame(DataManager data) {
+	public AgentPriorityFrame(DataManager data) {
 		this.data = data;
 		
 		setTitle("Prioridades entre agentes");
@@ -125,10 +107,10 @@ public class ParticipantsPriorityFrame extends JFrame {
 					String bestAgent = (String) comboBoxBest.getSelectedItem();
 					String worstAgent = (String) comboBoxWorst.getSelectedItem();
 					if(!bestAgent.equals(worstAgent)) {
-						ParticipantsPriority pprior = new ParticipantsPriority(bestAgent, worstAgent);
+						AgentPriority pprior = new AgentPriority(bestAgent, worstAgent);
 						String validation = pprior.isValid(data);
 						if(validation.equals("OK")) {
-							ParticipantsPriorityFrame.this.data.addParticipantsPriority(pprior);
+							AgentPriorityFrame.this.data.addParticipantsPriority(pprior);
 							listModelParticipantsPriority.addElement("El participante "+bestAgent+" tiene mayor prioridad que el participante "+worstAgent);
 						}else {
 							JOptionPane.showMessageDialog(null, validation, "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -146,8 +128,8 @@ public class ParticipantsPriorityFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int selectedIndex = listPriority.getSelectedIndex();
 		        if (selectedIndex != -1) {
-		        	ParticipantsPriority participantPriorityToRemove= data.getParticipantsPriority().get(selectedIndex);
-		        	int option = JOptionPane.showConfirmDialog(ParticipantsPriorityFrame.this,
+		        	AgentPriority participantPriorityToRemove= data.getParticipantsPriority().get(selectedIndex);
+		        	int option = JOptionPane.showConfirmDialog(AgentPriorityFrame.this,
 		                    "¿Seguro que desea eliminar la regla seleccionada: ( "+participantPriorityToRemove.getMorePriority()+" > "+participantPriorityToRemove.getLessPriority()+" )?",
 		                    "Confirmar Eliminación",
 		                    JOptionPane.YES_NO_OPTION);
@@ -164,7 +146,7 @@ public class ParticipantsPriorityFrame extends JFrame {
 		panel_2.add(scrollPane, BorderLayout.CENTER);
 		
 		listModelParticipantsPriority = new DefaultListModel<>();
-		for(ParticipantsPriority pprior: data.getParticipantsPriority()) {
+		for(AgentPriority pprior: data.getParticipantsPriority()) {
 			listModelParticipantsPriority.addElement("El participante "+pprior.getMorePriority()+" tiene mayor prioridad que el participante "+pprior.getLessPriority());
 		}
 		listPriority = new JList<String>(listModelParticipantsPriority);

@@ -1,10 +1,10 @@
-package evidence;
+package agent;
 
-public class Participant {
+public class Agent {
 
 	protected String name;
 	
-	public Participant(String name) {
+	public Agent(String name) {
 		this.name = name;
 	}
 

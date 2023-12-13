@@ -1,11 +1,12 @@
-package dataManager;
+package IOmanager;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import agent.AgentPriority;
+import alternative.Alternative;
 import criteria.Criteria;
-import evidence.Alternative;
-import evidence.ParticipantsPriority;
+import dataManager.DataManager;
 
 public class CSVwriter {
 
@@ -55,7 +56,7 @@ public class CSVwriter {
             writer.newLine();
 
             // write data
-            for(ParticipantsPriority pprior: data.getParticipantsPriority()) {
+            for(AgentPriority pprior: data.getParticipantsPriority()) {
             	writer.write(pprior.getPriorityFormatted());
             	writer.newLine();
             }

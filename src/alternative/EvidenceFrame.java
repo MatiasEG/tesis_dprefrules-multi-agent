@@ -1,6 +1,5 @@
 package alternative;
 
-import java.awt.EventQueue;
 import java.util.Arrays;
 import java.util.List;
 
@@ -10,15 +9,14 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import IOmanager.CSVreader;
+import IOmanager.CSVwriter;
+import IOmanager.FileChooser;
 import criteria.Criteria;
-import dataManager.CSVreader;
-import dataManager.CSVwriter;
 import dataManager.DataManager;
 import dataManager.DataValidations;
-import dataManager.FileChooser;
 import errors.EvidenceFileError;
 import errors.SintacticStringError;
-import evidence.Alternative;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -32,7 +30,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.BoxLayout;
 import java.awt.Component;
 
-public class EvidenceTable extends JFrame {
+public class EvidenceFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -40,25 +38,9 @@ public class EvidenceTable extends JFrame {
 	private DefaultTableModel model;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					EvidenceTable frame = new EvidenceTable(null);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
-	public EvidenceTable(DataManager data) {		
+	public EvidenceFrame(DataManager data) {		
 		setTitle("Datos del problema - evidencia");
 		setBounds(100, 100, 760, 300);
 		contentPane = new JPanel();
@@ -177,7 +159,7 @@ public class EvidenceTable extends JFrame {
 				String path = FileChooser.showFileChooser();
 				CSVwriter.saveEvidenceToCSV(path, data);
 				
-				EvidenceTable.this.dispose();
+				EvidenceFrame.this.dispose();
 			}
 		});
 		panel.add(btnAcept);
@@ -189,7 +171,7 @@ public class EvidenceTable extends JFrame {
 		            table.getCellEditor().stopCellEditing();
 		        }
 				validateEvidence(data);
-				EvidenceTable.this.dispose();
+				EvidenceFrame.this.dispose();
 			}
 		});
 		panel.add(btnConfirmChanges);

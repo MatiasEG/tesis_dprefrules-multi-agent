@@ -1,17 +1,15 @@
 package criteria;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import dataManager.CSVreader;
+import IOmanager.CSVreader;
+import IOmanager.CSVwriter;
+import IOmanager.FileChooser;
+import alternative.Alternative;
 import dataManager.DataManager;
-import dataManager.FileChooser;
-import dataManager.CSVwriter;
 import errors.CriteriaFileError;
-import evidence.Alternative;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -27,7 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.FlowLayout;
 
 @SuppressWarnings("serial")
-public class CriteriaTable extends JFrame {
+public class CriteriaFrame extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
@@ -48,25 +46,9 @@ public class CriteriaTable extends JFrame {
 	private JButton btnLoadFile;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CriteriaTable frame = new CriteriaTable(null);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
-	public CriteriaTable(DataManager data) {
+	public CriteriaFrame(DataManager data) {
 		this.data = data;
 		
 		setTitle("Criterios a evaluar");
@@ -115,7 +97,7 @@ public class CriteriaTable extends JFrame {
 				String path = FileChooser.showFileChooser();
 				try {
 					CSVreader.readCriteriasCSV(path, data);
-					CriteriaTable.this.checkData(data);
+					CriteriaFrame.this.checkData(data);
 				} catch (CriteriaFileError e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
 					e1.printStackTrace();
@@ -128,10 +110,8 @@ public class CriteriaTable extends JFrame {
 		panelButtons_1.add(btnAddCriteria);
 		btnAddCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NewCriteria frame = new NewCriteria(CriteriaTable.this, data, null);
+				CriteriaCreation frame = new CriteriaCreation(CriteriaFrame.this, data, null);
 				frame.setVisible(true);
-				//DefaultTableModel model = (DefaultTableModel) table.getModel();
-				//model.addRow(new Object[] {});
 			}
 		});
 		
@@ -180,7 +160,7 @@ public class CriteriaTable extends JFrame {
 					}
 				}
 				
-				NewCriteria frame = new NewCriteria(CriteriaTable.this, data, criteriaSelected);//TODO actualizar criteriaSelected
+				CriteriaCreation frame = new CriteriaCreation(CriteriaFrame.this, data, criteriaSelected);
 				frame.setVisible(true);
 			}
 		});
@@ -199,9 +179,7 @@ public class CriteriaTable extends JFrame {
 		contentPane.add(scrollPaneCriteria, BorderLayout.CENTER);
 		
 		String[] columnNames = {"Criterio", "Rango de valores"};
-		Object[][] tableData = {
-				//{"ExampleName", "[WorstValue, MediumValue, BestValue]"}
-		};
+		Object[][] tableData = {};
 		
 		table = new JTable(new DefaultTableModel(tableData, columnNames));
 		// disable cell edition

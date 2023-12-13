@@ -6,17 +6,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import alternative.EvidenceTable;
+import IOmanager.CSVreader;
+import IOmanager.CSVwriter;
+import IOmanager.FileChooser;
+import agent.AgentPriorityFrame;
+import agent.AgentPriorityValidations;
+import alternative.EvidenceFrame;
 import criteria.Criteria;
-import criteria.CriteriaTable;
-import dataManager.CSVreader;
+import criteria.CriteriaFrame;
 import dataManager.DataManager;
 import dataManager.DataValidations;
-import dataManager.FileChooser;
-import dataManager.CSVwriter;
 import errors.AgentPriorityError;
-import evidence.ParticipantsPriorityFrame;
-import evidence.ParticipantsPriorityValidations;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -149,7 +149,7 @@ public class MainWindow extends JFrame {
 		btnEditParticipantsPriority.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnEditParticipantsPriority.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ParticipantsPriorityFrame frame = new ParticipantsPriorityFrame(data);
+				AgentPriorityFrame frame = new AgentPriorityFrame(data);
 				frame.setVisible(true);
 			}
 		});
@@ -185,7 +185,7 @@ public class MainWindow extends JFrame {
 		panelCriterias.add(btnCriteria);
 		btnCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CriteriaTable criteriaTable = new CriteriaTable(data);
+				CriteriaFrame criteriaTable = new CriteriaFrame(data);
 				criteriaTable.setVisible(true);
 				criteriaTable.checkData(data);
 			}
@@ -207,7 +207,7 @@ public class MainWindow extends JFrame {
 		panelAlternatives.add(btnEvidence);
 		btnEvidence.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				EvidenceTable alternativeTable = new EvidenceTable(data);
+				EvidenceFrame alternativeTable = new EvidenceFrame(data);
 				alternativeTable.setVisible(true);
 				alternativeTable.checkData(data);
 			}
@@ -232,7 +232,7 @@ public class MainWindow extends JFrame {
 	
 	private void addParticipantName(DataManager data) {
         String name = JOptionPane.showInputDialog(this, "Ingrese el nombre del participante que desea agregar:");
-        String validation = ParticipantsPriorityValidations.validateAgentName(name, data);
+        String validation = AgentPriorityValidations.validateAgentName(name, data);
         if(validation.equals("OK")) {
         	if(DataValidations.validateStringListNotContainNewElement(data.getParticipants(), name)) {
     			listModelParticipants.addElement(name);

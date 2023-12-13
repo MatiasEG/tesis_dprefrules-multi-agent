@@ -1,9 +1,9 @@
-package evidence;
+package agent;
 
 import dataManager.DataManager;
 import dataManager.DataValidations;
 
-public class ParticipantsPriorityValidations {
+public class AgentPriorityValidations {
 
 	public static String validateAgentName(String name, DataManager data) {
 		if (name != null && !name.trim().isEmpty()) {

@@ -1,15 +1,15 @@
-package evidence;
+package agent;
 
 import java.util.List;
 
 import dataManager.DataManager;
 
-public class ParticipantsPriority {
+public class AgentPriority {
 
 	protected String morePriority;
 	protected String lessPriority;
 	
-	public ParticipantsPriority(String morePriority, String lessPriority) {
+	public AgentPriority(String morePriority, String lessPriority) {
 		this.lessPriority = lessPriority;
 		this.morePriority = morePriority;
 	}
@@ -35,8 +35,8 @@ public class ParticipantsPriority {
 	}
 	
 	public String isValid(DataManager data) {
-		List<ParticipantsPriority> participants = data.getParticipantsPriority();
-		for(ParticipantsPriority pprior: participants) {
+		List<AgentPriority> participants = data.getParticipantsPriority();
+		for(AgentPriority pprior: participants) {
 			if(pprior.getLessPriority().equals(lessPriority) && pprior.getMorePriority().equals(morePriority)) {
 				return "Ya existe una regla de prioridad entre participantes que contempla ( "+morePriority+" > "+lessPriority+" ).";
 			}

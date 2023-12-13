@@ -1,4 +1,4 @@
-package dataManager;
+package IOmanager;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -8,13 +8,15 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import agent.AgentPriority;
+import agent.AgentPriorityValidations;
+import alternative.Alternative;
 import criteria.Criteria;
+import dataManager.CriteriaManager;
+import dataManager.DataManager;
 import errors.AgentPriorityError;
 import errors.CriteriaFileError;
 import errors.EvidenceFileError;
-import evidence.Alternative;
-import evidence.ParticipantsPriority;
-import evidence.ParticipantsPriorityValidations;
 
 public class CSVreader {
 
@@ -96,19 +98,19 @@ public class CSVreader {
 					    String morePriorAgent = parts[0].trim();
 					    String lessPriorAgent = parts[1].trim();
 					    
-					    String nameValidations1 = ParticipantsPriorityValidations.validateAgentName(morePriorAgent, newData);
+					    String nameValidations1 = AgentPriorityValidations.validateAgentName(morePriorAgent, newData);
 					    if(!nameValidations1.equals("OK")) throw new AgentPriorityError(nameValidations1);
 					    
-					    String nameValidations2 = ParticipantsPriorityValidations.validateAgentName(lessPriorAgent, newData);
+					    String nameValidations2 = AgentPriorityValidations.validateAgentName(lessPriorAgent, newData);
 					    if(!nameValidations2.equals("OK")) throw new AgentPriorityError(nameValidations2);
 					    
-						ParticipantsPriority newParticipantsPriority = new ParticipantsPriority(morePriorAgent, lessPriorAgent);
+						AgentPriority newParticipantsPriority = new AgentPriority(morePriorAgent, lessPriorAgent);
 						String validPrior = newParticipantsPriority.isValid(newData);
 					    
 					    if(validPrior.equals("OK")) {
 					    	newData.addParticipantsPriority(newParticipantsPriority);
-					    	ParticipantsPriorityValidations.ifNotExistAddNewAgent(morePriorAgent, newData);
-					    	ParticipantsPriorityValidations.ifNotExistAddNewAgent(lessPriorAgent, newData);
+					    	AgentPriorityValidations.ifNotExistAddNewAgent(morePriorAgent, newData);
+					    	AgentPriorityValidations.ifNotExistAddNewAgent(lessPriorAgent, newData);
 					    }else {
 					    	throw new AgentPriorityError(validPrior);
 					    }

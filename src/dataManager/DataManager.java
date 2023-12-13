@@ -3,21 +3,21 @@ package dataManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import agent.AgentPriority;
+import alternative.Alternative;
 import criteria.Criteria;
-import evidence.Alternative;
-import evidence.ParticipantsPriority;
 
 public class DataManager {
 
 	protected List<Criteria> criterias;
 	protected List<String> participants;
-	protected List<ParticipantsPriority> participantsPriority;
+	protected List<AgentPriority> participantsPriority;
 	protected List<Alternative> alternatives;
 	
 	public DataManager() {
 		criterias = new ArrayList<Criteria>();
 		participants = new ArrayList<String>();
-		participantsPriority = new ArrayList<ParticipantsPriority>();
+		participantsPriority = new ArrayList<AgentPriority>();
 		alternatives = new ArrayList<Alternative>();
 	}
 	
@@ -83,11 +83,11 @@ public class DataManager {
 		}
 	}
 	
-	public void addParticipantsPriority(ParticipantsPriority newParticipantsPriority) {
+	public void addParticipantsPriority(AgentPriority newParticipantsPriority) {
 		participantsPriority.add(newParticipantsPriority);
 	}
 	
-	public List<ParticipantsPriority> getParticipantsPriority(){
+	public List<AgentPriority> getParticipantsPriority(){
 		return participantsPriority;
 	}
 	
@@ -95,7 +95,7 @@ public class DataManager {
 	public void updateData(DataManager newData) {
 		criterias = new ArrayList<Criteria>();
 		participants = new ArrayList<String>();
-		participantsPriority = new ArrayList<ParticipantsPriority>();
+		participantsPriority = new ArrayList<AgentPriority>();
 		alternatives = new ArrayList<Alternative>();
 
 		criterias = newData.getCriterias();
@@ -133,7 +133,7 @@ public class DataManager {
 		this.participants = participants;
 	}
 	
-	public void setParticipantsPriority(List<ParticipantsPriority> participantsPriority) {
+	public void setParticipantsPriority(List<AgentPriority> participantsPriority) {
 		this.participantsPriority = participantsPriority;
 	}
 	
