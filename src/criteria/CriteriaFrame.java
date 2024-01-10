@@ -96,8 +96,8 @@ public class CriteriaFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String path = FileChooser.showFileChooser();
 				try {
-					CSVreader.readCriteriasCSV(path, data);
-					CriteriaFrame.this.checkData(data);
+					CSVreader.readCriteriasCSV(path, CriteriaFrame.this.data);
+					CriteriaFrame.this.checkData(CriteriaFrame.this.data);
 				} catch (CriteriaFileError e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
 					e1.printStackTrace();
@@ -110,7 +110,7 @@ public class CriteriaFrame extends JFrame {
 		panelButtons_1.add(btnAddCriteria);
 		btnAddCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CriteriaCreation frame = new CriteriaCreation(CriteriaFrame.this, data, null);
+				CriteriaCreation frame = new CriteriaCreation(CriteriaFrame.this, CriteriaFrame.this.data, null);
 				frame.setVisible(true);
 			}
 		});
@@ -123,15 +123,15 @@ public class CriteriaFrame extends JFrame {
 				if(table.getSelectedRow() != -1) {
 					// remove selected row from the model
 					DefaultTableModel model = (DefaultTableModel) table.getModel();
-					String criteriaName = (String) model.getDataVector().elementAt(table.getSelectedRow()).elementAt(0);
+					String criteriaName = (String) model.getValueAt(table.getSelectedRow(), 0);
 					int option = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que deseas eliminar el criterio seleccionado ("+criteriaName+")?", "Confirmación", JOptionPane.YES_NO_OPTION);
 					
 					if (option == JOptionPane.YES_OPTION) {
 						// user want to delete selected criteria
 						int index = table.getSelectedRow();
 						model.removeRow(index);
-						data.removeCriteria(criteriaName);
-						for(Alternative alt: data.getAlternatives()) {
+						CriteriaFrame.this.data.removeCriteria(criteriaName);
+						for(Alternative alt: CriteriaFrame.this.data.getAlternatives()) {
 							alt.removeValue(index);
 						}
 						JOptionPane.showMessageDialog(null, "El criterio seleccionado fue correctamente removido");
@@ -150,17 +150,17 @@ public class CriteriaFrame extends JFrame {
 		btnEditCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				String criteriaName = (String) model.getDataVector().elementAt(table.getSelectedRow()).elementAt(0);
+				String criteriaName = (String) model.getValueAt(table.getSelectedRow(), 0);
 				
 				Criteria criteriaSelected = null;
-				for(Criteria auxCriteria: data.getCriterias()) {
+				for(Criteria auxCriteria: CriteriaFrame.this.data.getCriterias()) {
 					if(auxCriteria.getName().equals(criteriaName)) {
 						criteriaSelected = auxCriteria;
 						break;
 					}
 				}
 				
-				CriteriaCreation frame = new CriteriaCreation(CriteriaFrame.this, data, criteriaSelected);
+				CriteriaCreation frame = new CriteriaCreation(CriteriaFrame.this, CriteriaFrame.this.data, criteriaSelected);
 				frame.setVisible(true);
 			}
 		});
@@ -171,7 +171,7 @@ public class CriteriaFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String path = FileChooser.showFileChooser();
 		        
-				CSVwriter.saveCriteriaTableToCSV(path, data);
+				CSVwriter.saveCriteriaTableToCSV(path, CriteriaFrame.this.data);
 			}
 		});
 		

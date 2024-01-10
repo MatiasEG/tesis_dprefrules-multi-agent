@@ -36,11 +36,15 @@ public class EvidenceFrame extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
 	private DefaultTableModel model;
+	
+	private DataManager data;
 
 	/**
 	 * Create the frame.
 	 */
-	public EvidenceFrame(DataManager data) {		
+	public EvidenceFrame(DataManager data) {
+		this.data = data;
+		
 		setTitle("Datos del problema - evidencia");
 		setBounds(100, 100, 760, 300);
 		contentPane = new JPanel();
@@ -105,12 +109,12 @@ public class EvidenceFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String path = FileChooser.showFileChooser();
 				try {
-					CSVreader.readEvidenceCSV(path, data);
+					CSVreader.readEvidenceCSV(path, EvidenceFrame.this.data);
 				} catch (EvidenceFileError e1) {
 					JOptionPane.showMessageDialog(null, "Error. "+e1.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
 					e1.printStackTrace();
 				}
-				checkData(data);
+				checkData(EvidenceFrame.this.data);
 			}
 		});
 		panel.add(btnLoadFile);
@@ -118,7 +122,7 @@ public class EvidenceFrame extends JFrame {
 		JButton btnNewAlternative = new JButton("Nueva alternativa");
 		btnNewAlternative.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				addAlternative(data);
+				addAlternative(EvidenceFrame.this.data);
 			}
 		});
 		panel.add(btnNewAlternative);
@@ -129,13 +133,13 @@ public class EvidenceFrame extends JFrame {
 				 int selectedRow = table.getSelectedRow();
                  if (selectedRow != -1) {
                 	 DefaultTableModel model = (DefaultTableModel) table.getModel();
-                	 String alternativeName = (String) model.getDataVector().elementAt(table.getSelectedRow()).elementAt(0);
+                	 String alternativeName = (String) model.getValueAt(table.getSelectedRow(), 0);
                 	 int option = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que deseas eliminar la alternativa seleccionada ("+alternativeName+")?", "Confirmación", JOptionPane.YES_NO_OPTION);
                 	 
                 	 if (option == JOptionPane.YES_OPTION) {
                 		 // user want to delete selected alternative
                 		 model.removeRow(selectedRow);
-                		 data.removeAlternative(alternativeName);
+                		 EvidenceFrame.this.data.removeAlternative(alternativeName);
                 		 JOptionPane.showMessageDialog(null, "La alternativa seleccionada fue correctamente removido");
                 	 }else {
                 		 // user do not want to delete selected alternative
@@ -154,10 +158,10 @@ public class EvidenceFrame extends JFrame {
 				if (table.isEditing()) {
 		            table.getCellEditor().stopCellEditing();
 		        }
-				validateEvidence(data);
+				validateEvidence(EvidenceFrame.this.data);
 				
 				String path = FileChooser.showFileChooser();
-				CSVwriter.saveEvidenceToCSV(path, data);
+				CSVwriter.saveEvidenceToCSV(path, EvidenceFrame.this.data);
 				
 				EvidenceFrame.this.dispose();
 			}
@@ -170,7 +174,7 @@ public class EvidenceFrame extends JFrame {
 				if (table.isEditing()) {
 		            table.getCellEditor().stopCellEditing();
 		        }
-				validateEvidence(data);
+				validateEvidence(EvidenceFrame.this.data);
 				EvidenceFrame.this.dispose();
 			}
 		});

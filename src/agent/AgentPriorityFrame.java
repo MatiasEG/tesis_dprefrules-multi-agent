@@ -108,7 +108,7 @@ public class AgentPriorityFrame extends JFrame {
 					String worstAgent = (String) comboBoxWorst.getSelectedItem();
 					if(!bestAgent.equals(worstAgent)) {
 						AgentPriority pprior = new AgentPriority(bestAgent, worstAgent);
-						String validation = pprior.isValid(data);
+						String validation = pprior.isValid(AgentPriorityFrame.this.data);
 						if(validation.equals("OK")) {
 							AgentPriorityFrame.this.data.addParticipantsPriority(pprior);
 							listModelParticipantsPriority.addElement("El participante "+bestAgent+" tiene mayor prioridad que el participante "+worstAgent);
@@ -128,14 +128,14 @@ public class AgentPriorityFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int selectedIndex = listPriority.getSelectedIndex();
 		        if (selectedIndex != -1) {
-		        	AgentPriority participantPriorityToRemove= data.getParticipantsPriority().get(selectedIndex);
+		        	AgentPriority participantPriorityToRemove = AgentPriorityFrame.this.data.getParticipantsPriority().get(selectedIndex);
 		        	int option = JOptionPane.showConfirmDialog(AgentPriorityFrame.this,
 		                    "¿Seguro que desea eliminar la regla seleccionada: ( "+participantPriorityToRemove.getMorePriority()+" > "+participantPriorityToRemove.getLessPriority()+" )?",
 		                    "Confirmar Eliminación",
 		                    JOptionPane.YES_NO_OPTION);
 		            if (option == JOptionPane.YES_OPTION) {
 		            	listModelParticipantsPriority.remove(selectedIndex);
-			        	data.getParticipantsPriority().remove(selectedIndex);
+		            	AgentPriorityFrame.this.data.getParticipantsPriority().remove(selectedIndex);
 		            }
 		        }
 			}

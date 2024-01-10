@@ -88,8 +88,8 @@ public class Criteria {
 			if(isNumeric) {
 	    		try {
 	    			int x = Integer.parseInt(value);
-	    			int max = Integer.max(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
-	    			int min = Integer.min(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+	    			int max = Math.max(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+	    			int min = Math.min(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
 	    			
 	    			if(x>max || x<min) return false;
 	    			
