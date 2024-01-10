@@ -29,6 +29,8 @@ public class AgentPriorityFrame extends JFrame {
 	private JComboBox<String> comboBoxWorst;
     private DefaultListModel<String> listModelParticipantsPriority;
     private JList<String> listPriority;
+    private DefaultListModel<String> listModelParticipantsPriorityTransitive;
+    private JList<String> listPriorityTransitive;
 
 	private DataManager data;
 
@@ -40,7 +42,7 @@ public class AgentPriorityFrame extends JFrame {
 		
 		setTitle("Prioridades entre agentes");
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 699, 400);
+		setBounds(100, 100, 699, 420);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -112,6 +114,7 @@ public class AgentPriorityFrame extends JFrame {
 						if(validation.equals("OK")) {
 							AgentPriorityFrame.this.data.addParticipantsPriority(pprior);
 							listModelParticipantsPriority.addElement("El participante "+bestAgent+" tiene mayor prioridad que el participante "+worstAgent);
+							updateParticipantsPriorityTransitiveList();
 						}else {
 							JOptionPane.showMessageDialog(null, validation, "Advertencia", JOptionPane.WARNING_MESSAGE);
 						}
@@ -136,6 +139,7 @@ public class AgentPriorityFrame extends JFrame {
 		            if (option == JOptionPane.YES_OPTION) {
 		            	listModelParticipantsPriority.remove(selectedIndex);
 		            	AgentPriorityFrame.this.data.getParticipantsPriority().remove(selectedIndex);
+		            	updateParticipantsPriorityTransitiveList();
 		            }
 		        }
 			}
@@ -151,6 +155,35 @@ public class AgentPriorityFrame extends JFrame {
 		}
 		listPriority = new JList<String>(listModelParticipantsPriority);
 		scrollPane.setViewportView(listPriority);
+		
+		Component verticalStrut_2 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_2);
+		
+		JPanel panel_5 = new JPanel();
+		contentPane.add(panel_5);
+		panel_5.setLayout(new BoxLayout(panel_5, BoxLayout.X_AXIS));
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		panel_5.add(scrollPane_1);
+		
+		listModelParticipantsPriorityTransitive = new DefaultListModel<>();
+		for(AgentPriority pprior: data.getParticipantsPriorityTransitive()) {
+			listModelParticipantsPriorityTransitive.addElement("El participante "+pprior.getMorePriority()+" tiene mayor prioridad que el participante "+pprior.getLessPriority());
+		}
+		listPriorityTransitive = new JList<String>(listModelParticipantsPriorityTransitive);
+		scrollPane_1.setViewportView(listPriorityTransitive);
+		
+		JLabel lblNewLabel_6 = new JLabel("A continuacion puede ver las relaciones transitivas implicitas.");
+		scrollPane_1.setColumnHeaderView(lblNewLabel_6);
 	}
 
+	private void updateParticipantsPriorityTransitiveList() {
+		data.checkParticipantsPriorityTransitivity();
+		
+		listModelParticipantsPriorityTransitive = new DefaultListModel<>();
+		for(AgentPriority pprior: data.getParticipantsPriorityTransitive()) {
+			listModelParticipantsPriorityTransitive.addElement("El participante "+pprior.getMorePriority()+" tiene mayor prioridad que el participante "+pprior.getLessPriority());
+		}
+		listPriorityTransitive.setModel(listModelParticipantsPriorityTransitive);
+	}
 }

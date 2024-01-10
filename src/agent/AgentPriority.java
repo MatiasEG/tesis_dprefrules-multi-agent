@@ -45,6 +45,16 @@ public class AgentPriority {
 			}
 		}
 		
+		List<AgentPriority> participantsTransitive = data.getParticipantsPriorityTransitive();
+		for(AgentPriority pprior: participantsTransitive) {
+			if(pprior.getLessPriority().equals(lessPriority) && pprior.getMorePriority().equals(morePriority)) {
+				return "Ya existe una regla de prioridad entre participantes que contempla ( "+morePriority+" > "+lessPriority+" ).";
+			}
+			if(pprior.getLessPriority().equals(morePriority) && pprior.getMorePriority().equals(lessPriority)) {
+				return "No puede existir una prioridad entre participantes simetrica, usted define ( "+morePriority+" > "+lessPriority+" ), pero ya existe ( "+lessPriority+" > "+morePriority+" ).";
+			}
+		}
+		
 		return "OK";
 	}
 }

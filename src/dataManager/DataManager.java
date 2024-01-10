@@ -12,12 +12,14 @@ public class DataManager {
 	protected List<Criteria> criterias;
 	protected List<String> participants;
 	protected List<AgentPriority> participantsPriority;
+	protected List<AgentPriority> participantsPriorityTransitive;
 	protected List<Alternative> alternatives;
 	
 	public DataManager() {
 		criterias = new ArrayList<Criteria>();
 		participants = new ArrayList<String>();
 		participantsPriority = new ArrayList<AgentPriority>();
+		participantsPriorityTransitive = new ArrayList<AgentPriority>();
 		alternatives = new ArrayList<Alternative>();
 	}
 	
@@ -91,6 +93,25 @@ public class DataManager {
 		return participantsPriority;
 	}
 	
+	public void addParticipantsPriorityTransitive(AgentPriority newParticipantsPriority) {
+		participantsPriorityTransitive.add(newParticipantsPriority);
+	}
+	
+	public List<AgentPriority> getParticipantsPriorityTransitive(){
+		return participantsPriorityTransitive;
+	}
+	
+	public void checkParticipantsPriorityTransitivity() {
+		participantsPriorityTransitive = new ArrayList<AgentPriority>();
+		List<Relation> relations = new ArrayList<>();
+		for(AgentPriority pprior: participantsPriority) {
+			relations.add(new Relation(pprior.getMorePriority(), pprior.getLessPriority()));
+		}
+		List<Relation> transitiveRelations = TransitivityCheck.getTransitivityRelations(relations);
+		for(Relation r: transitiveRelations) {
+			participantsPriorityTransitive.add(new AgentPriority(r.getFirstString(), r.getSecondString()));
+		}
+	}
 	
 	public void updateData(DataManager newData) {
 		criterias = new ArrayList<Criteria>();
