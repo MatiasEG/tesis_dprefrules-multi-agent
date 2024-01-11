@@ -175,6 +175,8 @@ public class AgentPriorityFrame extends JFrame {
 		
 		JLabel lblNewLabel_6 = new JLabel("A continuacion puede ver las relaciones transitivas implicitas.");
 		scrollPane_1.setColumnHeaderView(lblNewLabel_6);
+		
+		updateParticipantsPriorityTransitiveList();
 	}
 
 	private void updateParticipantsPriorityTransitiveList() {

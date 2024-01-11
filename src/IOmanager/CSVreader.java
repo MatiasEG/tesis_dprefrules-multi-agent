@@ -21,7 +21,7 @@ import errors.EvidenceFileError;
 public class CSVreader {
 
 	public static void readCriteriasCSV(String csvFile, DataManager oldData) throws CriteriaFileError{
-		DataManager newData = new DataManager(oldData.getProyectName(), oldData.getSaveFolder());
+		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
 		newData.setParticipants(oldData.getParticipants());
 		newData.setParticipantsPriority(oldData.getParticipantsPriority());
 		
@@ -85,7 +85,7 @@ public class CSVreader {
 	
 	
 	public static void readAgentPriorityCSV(String csvFile, DataManager oldData) throws AgentPriorityError {
-		DataManager newData = new DataManager(oldData.getProyectName(), oldData.getSaveFolder());
+		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
 		newData.setCriterias(oldData.getCriterias());
 		newData.setAlternatives(oldData.getAlternatives());
 		
@@ -128,7 +128,7 @@ public class CSVreader {
 	}
 	
 	public static void readEvidenceCSV(String csvFile, DataManager oldData) throws EvidenceFileError {
-		DataManager newData = new DataManager(oldData.getProyectName(), oldData.getSaveFolder());
+		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
 		newData.setCriterias(oldData.getCriterias());
 		newData.setParticipants(oldData.getParticipants());
 		newData.setParticipantsPriority(oldData.getParticipantsPriority());
