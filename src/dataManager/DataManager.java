@@ -15,12 +15,34 @@ public class DataManager {
 	protected List<AgentPriority> participantsPriorityTransitive;
 	protected List<Alternative> alternatives;
 	
-	public DataManager() {
+	protected String projectName;
+	protected String folderPath;
+	
+	public DataManager(String projectName, String folderPath) {
+		this.projectName = projectName;
+		this.folderPath = folderPath;
+		
 		criterias = new ArrayList<Criteria>();
 		participants = new ArrayList<String>();
 		participantsPriority = new ArrayList<AgentPriority>();
 		participantsPriorityTransitive = new ArrayList<AgentPriority>();
 		alternatives = new ArrayList<Alternative>();
+	}
+	
+	public void setSaveFolder(String newSaveFolder) {
+		this.folderPath = newSaveFolder;
+	}
+	
+	public void setProjectName(String newProjectName) {
+		this.projectName = newProjectName;
+	}
+	
+	public String getSaveFolder() {
+		return this.folderPath;
+	}
+	
+	public String getProjectName() {
+		return this.projectName;
 	}
 	
 	public void addCriteria(Criteria criteria) {

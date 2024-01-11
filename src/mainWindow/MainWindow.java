@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import IOmanager.CSVreader;
 import IOmanager.CSVwriter;
 import IOmanager.FileChooser;
+import IOmanager.NameAndFolderFrame;
 import agent.AgentPriorityFrame;
 import agent.AgentPriorityValidations;
 import alternative.EvidenceFrame;
@@ -27,7 +28,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
-import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.swing.Box;
 import javax.swing.SwingConstants;
@@ -64,7 +64,7 @@ public class MainWindow extends JFrame {
 	 */
 	public MainWindow() {
 		setTitle("Sistema de Decision Multi-Agente");
-		data = new DataManager();
+		data = new DataManager("", "");
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 407);
@@ -73,6 +73,24 @@ public class MainWindow extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
+		
+		JPanel panelSaveFolder = new JPanel();
+		contentPane.add(panelSaveFolder);
+		panelSaveFolder.setLayout(new BoxLayout(panelSaveFolder, BoxLayout.Y_AXIS));
+		
+		JLabel lblNewLabel_5 = new JLabel("A continuacion por favor ingrese un nombre para el problema y selecciones una carpeta donde desea guardar los datos.");
+		lblNewLabel_5.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panelSaveFolder.add(lblNewLabel_5);
+		
+		JButton btnNameAndFolder = new JButton("Definir nombre y carpeta");
+		btnNameAndFolder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				NameAndFolderFrame frame = new NameAndFolderFrame(data);
+				frame.setVisible(true);
+			}
+		});
+		btnNameAndFolder.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panelSaveFolder.add(btnNameAndFolder);
 		
 		JPanel panelAgents = new JPanel();
 		contentPane.add(panelAgents);
@@ -83,17 +101,16 @@ public class MainWindow extends JFrame {
 		
 		listModelParticipants = new DefaultListModel<>();
 		
-		JPanel panel_1 = new JPanel();
-		panelAgents.add(panel_1, BorderLayout.NORTH);
-		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
+		Component verticalStrut_2_1 = Box.createVerticalStrut(20);
+		panelAgents.add(verticalStrut_2_1);
 		
 		JLabel lblNewLabel = new JLabel("Personas que participan del problema de eleccion");
 		lblNewLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panel_1.add(lblNewLabel);
+		panelAgents.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("- Una vez que todos los participantes esten definidos, puede establecer la prioridad que hay entre ellos -");
 		lblNewLabel_1.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panel_1.add(lblNewLabel_1);
+		panelAgents.add(lblNewLabel_1);
 		
 		JButton btnNewButton = new JButton("Cargar archivo");
 		btnNewButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -108,44 +125,40 @@ public class MainWindow extends JFrame {
 				}
 			}
 		});
-		panel_1.add(btnNewButton);
+		panelAgents.add(btnNewButton);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		panel_1.add(scrollPane);
+		panelAgents.add(scrollPane);
 		listParticipants = new JList<String>(listModelParticipants);
 		listParticipants.setValueIsAdjusting(true);
 		scrollPane.setViewportView(listParticipants);
 		
-		JPanel panel = new JPanel();
-		panel_1.add(panel);
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		
 		Component verticalStrut_2 = Box.createVerticalStrut(20);
-		panel.add(verticalStrut_2);
+		panelAgents.add(verticalStrut_2);
 		
 		JLabel lblNewLabel_2 = new JLabel("Recuerde guardar los cambios para que estos se vean reflejados");
 		lblNewLabel_2.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(lblNewLabel_2);
+		panelAgents.add(lblNewLabel_2);
 		
-		JPanel panel_2 = new JPanel();
-		panel.add(panel_2);
-		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		JPanel panelAgentsButtons = new JPanel();
+		panelAgents.add(panelAgentsButtons);
+		panelAgentsButtons.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JButton btnAddUser = new JButton("Agregar participante");
-		panel_2.add(btnAddUser);
+		panelAgentsButtons.add(btnAddUser);
 		btnAddUser.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		JButton btnDeleteUser = new JButton("Eliminar participante seleccionado");
-		panel_2.add(btnDeleteUser);
+		panelAgentsButtons.add(btnDeleteUser);
 		btnDeleteUser.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		JButton btnUpdateParticipantsFile = new JButton("Guardar archivo");
-		panel_2.add(btnUpdateParticipantsFile);
+		panelAgentsButtons.add(btnUpdateParticipantsFile);
 		btnUpdateParticipantsFile.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		JButton btnEditParticipantsPriority = new JButton("Editar prioridad entre participantes");
-		panel_2.add(btnEditParticipantsPriority);
+		panelAgentsButtons.add(btnEditParticipantsPriority);
 		btnEditParticipantsPriority.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnEditParticipantsPriority.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
