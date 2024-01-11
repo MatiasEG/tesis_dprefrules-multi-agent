@@ -124,8 +124,9 @@ public class AgentFrame extends JFrame {
 		btnSaveParticipantsFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(AgentFrame.this.data.getParticipants().size()>0) {
-					String path = FileChooser.showFileChooser();
-					CSVwriter.saveAgentPriorityToCSV(path, AgentFrame.this.data);
+					// TODO borrar
+					//String path = FileChooser.showFileChooser();
+					CSVwriter.saveAgentPriorityToCSV(AgentFrame.this.data);
 				}
 			}
 		});

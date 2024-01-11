@@ -10,7 +10,8 @@ import dataManager.DataManager;
 
 public class CSVwriter {
 
-	public static void saveCriteriaTableToCSV(String filePath, DataManager data) {
+	public static void saveCriteriaTableToCSV(DataManager data) {
+		String filePath = data.getSaveFolder()+"\\"+data.getProjectName()+"_criterias.csv";
 		filePath = checkCSVextension(filePath);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
 
@@ -48,7 +49,8 @@ public class CSVwriter {
 		return values.substring(0, values.length() - 1);
 	}
 	
-	public static void saveAgentPriorityToCSV(String filePath, DataManager data) {
+	public static void saveAgentPriorityToCSV(DataManager data) {
+		String filePath = data.getSaveFolder()+"\\"+data.getProjectName()+"_participantPriority.csv";
 		filePath = checkCSVextension(filePath);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
 
@@ -67,7 +69,8 @@ public class CSVwriter {
         }
     }
 	
-	public static void saveEvidenceToCSV(String filePath, DataManager data) {
+	public static void saveEvidenceToCSV(DataManager data) {
+		String filePath = data.getSaveFolder()+"/"+data.getProjectName()+"_evidence.csv";
 		filePath = checkCSVextension(filePath);
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
 

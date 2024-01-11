@@ -20,6 +20,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import java.awt.Component;
 import javax.swing.Box;
+import java.awt.FlowLayout;
 
 public class MainWindow extends JFrame {
 
@@ -54,7 +55,7 @@ public class MainWindow extends JFrame {
 		data = new DataManager("", "");
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 700, 375);
+		setBounds(100, 100, 700, 325);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -69,7 +70,12 @@ public class MainWindow extends JFrame {
 		lblNewLabel_5.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panelSaveFolder.add(lblNewLabel_5);
 		
+		JPanel panelBtnSaveFolder = new JPanel();
+		panelSaveFolder.add(panelBtnSaveFolder);
+		panelBtnSaveFolder.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
 		JButton btnEditNameAndFolder = new JButton("Definir nombre y carpeta");
+		panelBtnSaveFolder.add(btnEditNameAndFolder);
 		btnEditNameAndFolder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				NameAndFolderFrame frame = new NameAndFolderFrame(data);
@@ -77,27 +83,31 @@ public class MainWindow extends JFrame {
 			}
 		});
 		btnEditNameAndFolder.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panelSaveFolder.add(btnEditNameAndFolder);
 		
 		JButton btnViewNameAndFolder = new JButton("Ver nombre y carpeta");
+		panelBtnSaveFolder.add(btnViewNameAndFolder);
 		btnViewNameAndFolder.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panelSaveFolder.add(btnViewNameAndFolder);
 		
-		Component verticalStrut_2_1 = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut_2_1);
+		Component verticalStrut_1 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_1);
 		
 		JPanel panelAgents = new JPanel();
 		contentPane.add(panelAgents);
 		panelAgents.setLayout(new BoxLayout(panelAgents, BoxLayout.Y_AXIS));
 		
-		Component verticalStrut = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut);
+		Component verticalStrut_2 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_2);
 		
 		JLabel lblNewLabel = new JLabel("Defina los participantes involucrados en el problema de eleccion");
 		lblNewLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panelAgents.add(lblNewLabel);
 		
+		JPanel panelBtnAgents = new JPanel();
+		panelAgents.add(panelBtnAgents);
+		panelBtnAgents.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
 		JButton btnEditParticipants = new JButton("Definir participantes y prioridades");
+		panelBtnAgents.add(btnEditParticipants);
 		btnEditParticipants.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				AgentFrame frame = new AgentFrame(data);
@@ -105,11 +115,10 @@ public class MainWindow extends JFrame {
 			}
 		});
 		btnEditParticipants.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panelAgents.add(btnEditParticipants);
 		
 		JButton btnViewParticipants = new JButton("Ver participantes y prioridades");
+		panelBtnAgents.add(btnViewParticipants);
 		btnViewParticipants.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panelAgents.add(btnViewParticipants);
 		
 		JPanel panelCriterias = new JPanel();
 		contentPane.add(panelCriterias);
@@ -119,13 +128,17 @@ public class MainWindow extends JFrame {
 		panelCriterias.add(lblNewLabel_4);
 		lblNewLabel_4.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
+		JPanel panelBtnCriterias = new JPanel();
+		panelCriterias.add(panelBtnCriterias);
+		panelBtnCriterias.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
 		JButton btnEditCriteria = new JButton("Establecer criterios");
+		panelBtnCriterias.add(btnEditCriteria);
 		btnEditCriteria.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panelCriterias.add(btnEditCriteria);
 		
 		JButton btnViewCriteria = new JButton("Ver criterios");
+		panelBtnCriterias.add(btnViewCriteria);
 		btnViewCriteria.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panelCriterias.add(btnViewCriteria);
 		btnEditCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String validation = canDefineCriterias(data);
@@ -139,8 +152,8 @@ public class MainWindow extends JFrame {
 			}
 		});
 		
-		Component verticalStrut_1 = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut_1);
+		Component verticalStrut_3 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_3);
 		
 		JPanel panelAlternatives = new JPanel();
 		contentPane.add(panelAlternatives);
@@ -150,13 +163,17 @@ public class MainWindow extends JFrame {
 		lblNewLabel_3.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panelAlternatives.add(lblNewLabel_3);
 		
+		JPanel panelBtnAlternatives = new JPanel();
+		panelAlternatives.add(panelBtnAlternatives);
+		panelBtnAlternatives.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
 		JButton btnEditEvidence = new JButton("Definir evidencia");
+		panelBtnAlternatives.add(btnEditEvidence);
 		btnEditEvidence.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panelAlternatives.add(btnEditEvidence);
 		
 		JButton btnViewEvidence = new JButton("Ver evidencia");
+		panelBtnAlternatives.add(btnViewEvidence);
 		btnViewEvidence.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panelAlternatives.add(btnViewEvidence);
 		btnEditEvidence.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String validation = canDefineEvidence(data);

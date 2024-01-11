@@ -53,21 +53,17 @@ public class EvidenceFrame extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 		
-		JPanel panel_2 = new JPanel();
-		contentPane.add(panel_2);
-		panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.Y_AXIS));
-		
 		JLabel lblNewLabel = new JLabel("- A continuacion puede ver una tabla con los datos propuestos hasta ahora -");
+		contentPane.add(lblNewLabel);
 		lblNewLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panel_2.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("- Si lo desea puede modificarla haciendo click directamente en los casilleros de la misma -");
+		contentPane.add(lblNewLabel_1);
 		lblNewLabel_1.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panel_2.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("- Recuerde que el nombre no puede contener espacios ni caracteres especiales -");
+		contentPane.add(lblNewLabel_2);
 		lblNewLabel_2.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panel_2.add(lblNewLabel_2);
 		
 		
 		List<Criteria> criterias = data.getCriterias();
@@ -160,25 +156,13 @@ public class EvidenceFrame extends JFrame {
 		        }
 				validateEvidence(EvidenceFrame.this.data);
 				
-				String path = FileChooser.showFileChooser();
-				CSVwriter.saveEvidenceToCSV(path, EvidenceFrame.this.data);
-				
+				// TODO borrar
+				//String path = FileChooser.showFileChooser();
+				CSVwriter.saveEvidenceToCSV(EvidenceFrame.this.data);
 				EvidenceFrame.this.dispose();
 			}
 		});
 		panel.add(btnAcept);
-		
-		JButton btnConfirmChanges = new JButton("Confirmar cambios");
-		btnConfirmChanges.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (table.isEditing()) {
-		            table.getCellEditor().stopCellEditing();
-		        }
-				validateEvidence(EvidenceFrame.this.data);
-				EvidenceFrame.this.dispose();
-			}
-		});
-		panel.add(btnConfirmChanges);
 		
 		for(int i=0; i<criterias.size(); i++) {
 			if(!criterias.get(i).isNumeric()) {

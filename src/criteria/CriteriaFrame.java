@@ -169,9 +169,9 @@ public class CriteriaFrame extends JFrame {
 		panelButtons_1.add(btnSaveFile);
 		btnSaveFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String path = FileChooser.showFileChooser();
-		        
-				CSVwriter.saveCriteriaTableToCSV(path, CriteriaFrame.this.data);
+				// TODO borrar
+				//String path = FileChooser.showFileChooser();
+				CSVwriter.saveCriteriaTableToCSV(CriteriaFrame.this.data);
 			}
 		});
 		
