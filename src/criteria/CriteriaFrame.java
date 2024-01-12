@@ -10,7 +10,6 @@ import IOmanager.FileChooser;
 import alternative.Alternative;
 import dataManager.DataManager;
 import errors.CriteriaFileError;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
@@ -44,7 +43,7 @@ public class CriteriaFrame extends JFrame {
 	private JButton btnEditCriteria;
 	private DataManager data;
 	private JButton btnLoadFile;
-
+	
 	/**
 	 * Create the frame.
 	 */
@@ -169,8 +168,6 @@ public class CriteriaFrame extends JFrame {
 		panelButtons_1.add(btnSaveFile);
 		btnSaveFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO borrar
-				//String path = FileChooser.showFileChooser();
 				CSVwriter.saveCriteriaTableToCSV(CriteriaFrame.this.data);
 			}
 		});

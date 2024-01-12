@@ -9,7 +9,6 @@ import javax.swing.border.EmptyBorder;
 import dataManager.DataManager;
 import dataManager.DataValidations;
 import errors.SintacticStringError;
-
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -25,8 +24,9 @@ public class NameAndFolderFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField textFieldFolderName;
-
+	private JTextField textFieldProjectName;
+	private JLabel lblFolderPath;
+	
 	private DataManager data;
 	private String folderPath;
 	
@@ -53,7 +53,6 @@ public class NameAndFolderFrame extends JFrame {
 		this.data = data;
 		
 		setTitle("Nombre y Carpeta destino");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 500, 240);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -68,9 +67,10 @@ public class NameAndFolderFrame extends JFrame {
 		Component verticalStrut_1 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_1);
 		
-		textFieldFolderName = new JTextField();
-		contentPane.add(textFieldFolderName);
-		textFieldFolderName.setColumns(10);
+		textFieldProjectName = new JTextField();
+		textFieldProjectName.setText(data.getProjectName());
+		contentPane.add(textFieldProjectName);
+		textFieldProjectName.setColumns(10);
 		
 		Component verticalStrut_2 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_2);
@@ -86,10 +86,15 @@ public class NameAndFolderFrame extends JFrame {
 		btnSelectFolder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				folderPath = FileChooser.showFolderChooser();
+				lblFolderPath.setText("Ruta actual: "+folderPath);
 			}
 		});
 		btnSelectFolder.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(btnSelectFolder);
+		
+		lblFolderPath = new JLabel("Ruta actual:"+data.getSaveFolder());
+		lblFolderPath.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblFolderPath);
 		
 		Component verticalStrut_4 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_4);
@@ -98,7 +103,7 @@ public class NameAndFolderFrame extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(validateInput()) {
-					NameAndFolderFrame.this.dispose();
+					JOptionPane.showMessageDialog(null, "Datos validados y guardados, ya puede cerrar esta ventana", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});
@@ -108,10 +113,10 @@ public class NameAndFolderFrame extends JFrame {
 	
 	private boolean validateInput() {
 		if(FileChooser.isValidFolder(folderPath)) {
-			SintacticStringError error = DataValidations.validateStringWithOnlyLettersAndNumbers(textFieldFolderName.getText());
+			SintacticStringError error = DataValidations.validateStringWithOnlyLettersAndNumbers(textFieldProjectName.getText());
 			if(error == null){
 				NameAndFolderFrame.this.data.setSaveFolder(folderPath);
-				NameAndFolderFrame.this.data.setProjectName(textFieldFolderName.getText());
+				NameAndFolderFrame.this.data.setProjectName(textFieldProjectName.getText());
 				return true;
 			}else {
 				JOptionPane.showMessageDialog(null, error.getMsg(), "Advertencia", JOptionPane.WARNING_MESSAGE);

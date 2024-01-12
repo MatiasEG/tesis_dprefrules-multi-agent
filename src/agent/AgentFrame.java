@@ -59,7 +59,6 @@ public class AgentFrame extends JFrame {
 		this.data = data;
 		
 		setTitle("Definir participantes");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -124,9 +123,8 @@ public class AgentFrame extends JFrame {
 		btnSaveParticipantsFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(AgentFrame.this.data.getParticipants().size()>0) {
-					// TODO borrar
-					//String path = FileChooser.showFileChooser();
 					CSVwriter.saveAgentPriorityToCSV(AgentFrame.this.data);
+					JOptionPane.showMessageDialog(null, "Datos validados y guardados, ya puede cerrar esta ventana", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});
@@ -164,7 +162,7 @@ public class AgentFrame extends JFrame {
 			}
 		});
 	}
-
+	
 	private void deleteSelectedParticipant() {
         int selectedIndex = listParticipants.getSelectedIndex();
 
