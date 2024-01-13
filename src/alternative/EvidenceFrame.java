@@ -154,19 +154,22 @@ public class EvidenceFrame extends JFrame {
 				if (table.isEditing()) {
 		            table.getCellEditor().stopCellEditing();
 		        }
-				validateEvidence(EvidenceFrame.this.data);
 				
-				// TODO borrar
-				//String path = FileChooser.showFileChooser();
-				CSVwriter.saveEvidenceToCSV(EvidenceFrame.this.data);
-				EvidenceFrame.this.dispose();
+				if(table.getRowCount()>1) {
+					if(validateEvidence(EvidenceFrame.this.data)) {
+						CSVwriter.saveEvidenceToCSV(EvidenceFrame.this.data);
+						JOptionPane.showMessageDialog(null, "Alternativas guardadas correctamente, ya puede cerrar esta ventana.","Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}else {
+                	JOptionPane.showMessageDialog(null, "Debe definir al menos dos alternativas para poder realizar una comparacion.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+				}
 			}
 		});
 		panel.add(btnAcept);
 		
 		for(int i=0; i<criterias.size(); i++) {
 			if(!criterias.get(i).isNumeric()) {
-				TableColumn comboBoxColumn = table.getColumnModel().getColumn(1);
+				TableColumn comboBoxColumn = table.getColumnModel().getColumn(i+1);
 	            comboBoxColumn.setCellEditor(new DefaultCellEditor(criterias.get(i).getComboValues()));
 			}
 		}
@@ -202,6 +205,7 @@ public class EvidenceFrame extends JFrame {
 		    		data.getAlternatives().get(row).addValue(value);
 		    	}else {
 		    		JOptionPane.showMessageDialog(null, "Error, ingreso un valor no valido para la alternativa ("+data.getAlternatives().get(row).getName()+") en el criterio ("+data.getCriterias().get(col-1).getName()+")", "Advertencia", JOptionPane.WARNING_MESSAGE);
+		    		data.getAlternatives().clear();
 		    		return false;
 		    	}
 		    }

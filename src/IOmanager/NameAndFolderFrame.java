@@ -103,6 +103,8 @@ public class NameAndFolderFrame extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(validateInput()) {
+					btnSelectFolder.setEnabled(false);
+					textFieldProjectName.setEnabled(false);
 					JOptionPane.showMessageDialog(null, "Datos validados y guardados, ya puede cerrar esta ventana", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}

@@ -62,6 +62,11 @@ public class CSVwriter {
             	writer.write(pprior.getPriorityFormatted());
             	writer.newLine();
             }
+            
+            for(AgentPriority pprior: data.getParticipantsPriorityTransitive()) {
+            	writer.write(pprior.getPriorityFormatted());
+            	writer.newLine();
+            }
 
             System.out.println("Archivo CSV creado con éxito.");
         } catch (IOException e) {

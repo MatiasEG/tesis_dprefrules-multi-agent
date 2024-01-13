@@ -161,6 +161,7 @@ public class AgentFrame extends JFrame {
 				addParticipantName(AgentFrame.this.data);
 			}
 		});
+		this.updateVisualComponents(data);
 	}
 	
 	private void deleteSelectedParticipant() {

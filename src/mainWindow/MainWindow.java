@@ -23,9 +23,6 @@ import javax.swing.Box;
 import java.awt.FlowLayout;
 
 public class MainWindow extends JFrame {
-
-	// TODO ver que hacer con el estado de los botones cuando se elimina informacion que ya habia sido definida
-	
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
     private JButton btnEditNameAndFolder;
@@ -219,7 +216,12 @@ public class MainWindow extends JFrame {
 			                	JOptionPane.showMessageDialog(null, "Debe definir al menos un criterio de comparacion para poder seguir con el problema y definir las alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 			                }
 			            }else {
-			            	checkState(false);
+			            	if(data.getCriterias().size()>0) {
+			            		checkState(false);
+			            	}else {
+			            		setState2(false);
+			                	JOptionPane.showMessageDialog(null, "Debe definir al menos un criterio de comparacion para poder seguir con el problema y definir las alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+			            	}
 			            }
 		            }
 		        });
