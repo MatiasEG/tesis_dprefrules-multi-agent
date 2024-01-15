@@ -6,7 +6,6 @@ import errors.SintacticStringError;
 
 public class DataValidations {
 	
-	// TODO consultar si puede haber simbolos, no deberia afectar en nada si los hay (puede afectar con las llaves)
 	public static SintacticStringError validateStringWithOnlyLettersAndNumbers(String s) {
 		if(s == null || s.equals("")) return new SintacticStringError(s, "", "Cadena de caracteres vacia.");
 		
