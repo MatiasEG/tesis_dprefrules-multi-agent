@@ -2,28 +2,10 @@ package prefRules;
 
 import criteria.Criteria;
 
-public class EPremise {
-
-	private Criteria criteria;
-	private int minValueForX;
-	private int maxValueForY;
+public class EPremise extends Premise{
 	
 	public EPremise(Criteria criteria) {
-		this.criteria = criteria;
-		minValueForX = -1;
-		maxValueForY = -1;
-	}
-
-	public Criteria getCriteria() {
-		return criteria;
-	}
-
-	public void setCriteria(Criteria criteria) {
-		this.criteria = criteria;
-	}
-
-	public int getMinValueForX() {
-		return minValueForX;
+		super(criteria);
 	}
 
 	public void setMinValueForX(int minValueForX) {
@@ -32,15 +14,10 @@ public class EPremise {
 		}
 	}
 
-	public int getMaxValueForY() {
-		return maxValueForY;
-	}
-
 	public void setMaxValueForY(int maxValueForY) {
 		if(minValueForX == -1) {
 			this.maxValueForY = maxValueForY;
 		}
 	}
-	
 	
 }

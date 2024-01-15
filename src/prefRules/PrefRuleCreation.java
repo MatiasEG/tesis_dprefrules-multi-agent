@@ -10,6 +10,7 @@ import dataManager.DataValidations;
 import errors.SintacticStringError;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -21,6 +22,10 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JScrollPane;
+import javax.swing.JList;
+import java.awt.GridLayout;
+import javax.swing.JTextPane;
 
 public class PrefRuleCreation extends JFrame {
 
@@ -30,6 +35,8 @@ public class PrefRuleCreation extends JFrame {
 	private JLabel lblRuleName;
 	
 	private Rule rule;
+	private DefaultListModel<String> listModelRuleConditions;
+	private JList<String> listRuleConditions;
 
 	/**
 	 * Launch the application.
@@ -54,7 +61,7 @@ public class PrefRuleCreation extends JFrame {
 		rule = null;
 		setTitle("Especificacion de la regla");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 300);
+		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -94,6 +101,75 @@ public class PrefRuleCreation extends JFrame {
 		lblRuleName = new JLabel("Nombre establecido:");
 		lblRuleName.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(lblRuleName);
+		
+		Component verticalStrut_1 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_1);
+		
+		JLabel lblNewLabel_4 = new JLabel("Condiciones");
+		lblNewLabel_4.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblNewLabel_4);
+		
+		JLabel lblNewLabel_5 = new JLabel("Prefiero la alternativa X por sobre la alternativa Y cuando:");
+		lblNewLabel_5.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblNewLabel_5);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		Dimension scrollPaneDimensions = new Dimension(800, 150);
+		scrollPane.setPreferredSize(scrollPaneDimensions);
+		scrollPane.setMaximumSize(scrollPaneDimensions);
+		contentPane.add(scrollPane);
+		
+		listModelRuleConditions = new DefaultListModel<>();
+		listRuleConditions = new JList<String>(listModelRuleConditions);
+		scrollPane.setViewportView(listRuleConditions);
+		
+		Component verticalStrut_2 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_2);
+		
+		JPanel panelButtons1 = new JPanel();
+		contentPane.add(panelButtons1);
+		panelButtons1.setLayout(new GridLayout(1, 0, 0, 0));
+		
+		JButton btnNewBPremise = new JButton("Agregar X mejor que Y");
+		panelButtons1.add(btnNewBPremise);
+		
+		JButton btnNewWPremise = new JButton("Agregar X peor que Y");
+		panelButtons1.add(btnNewWPremise);
+		
+		JButton btnNewEPremise = new JButton("Agregar X igual a Y");
+		panelButtons1.add(btnNewEPremise);
+		
+		Component verticalStrut_3 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_3);
+		
+		JPanel panelButtons2 = new JPanel();
+		contentPane.add(panelButtons2);
+		panelButtons2.setLayout(new GridLayout(1, 0, 0, 0));
+		
+		JButton btnEditPremise = new JButton("Editar condicion");
+		panelButtons2.add(btnEditPremise);
+		
+		JButton btnDeletePremise = new JButton("Eliminar condicion");
+		panelButtons2.add(btnDeletePremise);
+		
+		JButton btnViewDescription = new JButton("Descripcion");
+		panelButtons2.add(btnViewDescription);
+		
+		Dimension panelButtonsDimensions = new Dimension(800, 25);
+		panelButtons1.setPreferredSize(panelButtonsDimensions);
+		panelButtons1.setMaximumSize(panelButtonsDimensions);
+		panelButtons2.setPreferredSize(panelButtonsDimensions);
+		panelButtons2.setMaximumSize(panelButtonsDimensions);
+		
+		
+		Component verticalStrut_4 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_4);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		contentPane.add(scrollPane_1);
+		
+		JTextPane textPane = new JTextPane();
+		scrollPane_1.setViewportView(textPane);
 		
 		btnSaveRuleName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
