@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import criteria.Criteria;
+import dataManager.DataManager;
 import dataManager.DataValidations;
 import errors.SintacticStringError;
 
@@ -21,6 +23,10 @@ import javax.swing.Box;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
@@ -35,8 +41,9 @@ public class PrefRuleCreation extends JFrame {
 	private JLabel lblRuleName;
 	
 	private Rule rule;
-	private DefaultListModel<String> listModelRuleConditions;
+	private DefaultListModel<String> listModelRuleContent;
 	private JList<String> listRuleConditions;
+	private DataManager data;
 
 	/**
 	 * Launch the application.
@@ -45,7 +52,22 @@ public class PrefRuleCreation extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					PrefRuleCreation frame = new PrefRuleCreation();
+					
+					DataManager data = new DataManager("ruleTest","C:\\Users\\Matia\\Desktop\\tesis_dprefrules-multi-agent\\src\\files");
+					data.addParticipant("Matias");
+					
+					Criteria entretenimiento = new Criteria("Entretenimiento", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
+					Criteria clima = new Criteria("Clima", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
+					Criteria costo = new Criteria("Costo", new String[]{"caro", "medio", "normal", "economico"}, false);
+					Criteria dias = new Criteria("Dias", new String[]{"1", "30"}, true);
+					data.addCriteria(entretenimiento);
+					data.addCriteria(clima);
+					data.addCriteria(costo);
+					data.addCriteria(dias);
+					
+					
+					
+					PrefRuleCreation frame = new PrefRuleCreation(data);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -57,11 +79,12 @@ public class PrefRuleCreation extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public PrefRuleCreation() {
+	public PrefRuleCreation(DataManager data) {
+		this.data = data;
 		rule = null;
 		setTitle("Especificacion de la regla");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 600);
+		setBounds(100, 100, 850, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -109,18 +132,18 @@ public class PrefRuleCreation extends JFrame {
 		lblNewLabel_4.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(lblNewLabel_4);
 		
-		JLabel lblNewLabel_5 = new JLabel("Prefiero la alternativa X por sobre la alternativa Y cuando:");
+		JLabel lblNewLabel_5 = new JLabel("Prefiero la alternativa X por sobre la alternativa Y si ...");
 		lblNewLabel_5.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(lblNewLabel_5);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		Dimension scrollPaneDimensions = new Dimension(800, 150);
+		Dimension scrollPaneDimensions = new Dimension(850, 150);
 		scrollPane.setPreferredSize(scrollPaneDimensions);
 		scrollPane.setMaximumSize(scrollPaneDimensions);
 		contentPane.add(scrollPane);
 		
-		listModelRuleConditions = new DefaultListModel<>();
-		listRuleConditions = new JList<String>(listModelRuleConditions);
+		listModelRuleContent = new DefaultListModel<>();
+		listRuleConditions = new JList<String>(listModelRuleContent);
 		scrollPane.setViewportView(listRuleConditions);
 		
 		Component verticalStrut_2 = Box.createVerticalStrut(20);
@@ -131,6 +154,20 @@ public class PrefRuleCreation extends JFrame {
 		panelButtons1.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		JButton btnNewBPremise = new JButton("Agregar X mejor que Y");
+		btnNewBPremise.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				BPremiseFrame frame = new BPremiseFrame(PrefRuleCreation.this.data, rule);
+				frame.setVisible(true);
+				
+				// WindowListener for detect when the frame is closed
+		        frame.addWindowListener(new WindowAdapter() {
+		            @Override
+		            public void windowClosing(WindowEvent e) {
+		            	updateRuleContent();
+		            }
+		        });
+			}
+		});
 		panelButtons1.add(btnNewBPremise);
 		
 		JButton btnNewWPremise = new JButton("Agregar X peor que Y");
@@ -150,6 +187,30 @@ public class PrefRuleCreation extends JFrame {
 		panelButtons2.add(btnEditPremise);
 		
 		JButton btnDeletePremise = new JButton("Eliminar condicion");
+		btnDeletePremise.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				 int selectedIndex = listRuleConditions.getSelectedIndex();
+			        if (selectedIndex != -1) {
+			        	int option = JOptionPane.showConfirmDialog(PrefRuleCreation.this,
+			                    "¿Seguro que desea eliminar la condicion de la regla seleccionada?",
+			                    "Confirmar Eliminación",
+			                    JOptionPane.YES_NO_OPTION);
+			            if (option == JOptionPane.YES_OPTION) {
+			            	String listContent = listRuleConditions.getSelectedValue();
+			            	Pattern pattern = Pattern.compile("-([^\\s]+)-");
+			                Matcher matcher = pattern.matcher(listContent);
+			                if (matcher.find()) {
+			                	rule.removeCondition(matcher.group(1));
+			                } else {
+			                	JOptionPane.showMessageDialog(PrefRuleCreation.this, "Error: No se pudo eliminar el contenido de la regla.", "Error", JOptionPane.ERROR_MESSAGE);
+			                }
+			                updateRuleContent();
+			            }
+			        } else {
+			            JOptionPane.showMessageDialog(PrefRuleCreation.this, "Debe seleccionar a un participante para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+			        }
+			}
+		});
 		panelButtons2.add(btnDeletePremise);
 		
 		JButton btnViewDescription = new JButton("Descripcion");
@@ -187,6 +248,14 @@ public class PrefRuleCreation extends JFrame {
 				}
 			}
 		});
+	}
+	
+	private void updateRuleContent() {
+		listModelRuleContent.removeAllElements();
+		for(BPremise bPremise : rule.getBetterP()) {
+			
+			listModelRuleContent.addElement(bPremise.getDescription());
+		}
 	}
 
 }

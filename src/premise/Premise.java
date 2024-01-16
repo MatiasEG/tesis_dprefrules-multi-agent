@@ -14,8 +14,8 @@ public abstract class Premise {
 	public Premise(Criteria evaluatedCriteria) {
 		minValueXIsDefined = false;
 		maxValueYIsDefined = false;
-		minValueX = 0;
-		maxValueY = 0;
+		minValueX = -1;
+		maxValueY = -1;
 		this.evaluatedCriteria = evaluatedCriteria;
 	}
 	
