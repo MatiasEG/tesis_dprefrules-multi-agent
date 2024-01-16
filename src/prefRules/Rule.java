@@ -5,6 +5,9 @@ import java.util.List;
 
 import criteria.Criteria;
 import dataManager.DataManager;
+import premises.BPremise;
+import premises.EPremise;
+import premises.WPremise;
 
 public class Rule {
 

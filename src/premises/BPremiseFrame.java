@@ -1,4 +1,4 @@
-package prefRules;
+package premises;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -7,6 +7,7 @@ import javax.swing.border.EmptyBorder;
 
 import criteria.Criteria;
 import dataManager.DataManager;
+import prefRules.Rule;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -331,6 +332,7 @@ public class BPremiseFrame extends JFrame {
 						minDist = Integer.parseInt(minDistString);
 					}catch(NumberFormatException e) {
 						JOptionPane.showMessageDialog(null, "Error: La distancia minima entre los valores que pueden tomar X e Y en el criterio "+criteria.getName()+" es invalida.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+						return;
 					}
 					if(!criteria.isNumeric()) {
 						if(minDist>criteria.getValues().length || minDist<0) {
@@ -347,93 +349,71 @@ public class BPremiseFrame extends JFrame {
 					if(minDist!=-1) {
 						// Defined: minDist & minValueX & maxValueY
 						if(minXIndex!=-1 && maxYIndex!=-1) {
-							if((minXIndex-maxYIndex)>=minDist) {
-								BPremise bPremise = new BPremise(criteria);
-								bPremise.setMinDist(minDist);
-								bPremise.setMinValueForX(minXIndex);
-								bPremise.setMaxValueForY(maxYIndex);
-								BPremiseFrame.this.rule.addBetterP(bPremise);
-								btnValidateDataAndSave.setEnabled(false);
-								JOptionPane.showMessageDialog(null, "Exito: Los datos se han guardado correctamente, ya puede cerrar esta ventana.", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+							if((minXIndex-maxYIndex)>=minDist) {	// If min(X)<max(Y) this condition will work correctly
+								saveData(minDist, minXIndex, maxYIndex);
 							}else {
 								JOptionPane.showMessageDialog(null, "Error: Los valores min(X)="+minX+" y max(Y)="+maxY+" en el criterio "+criteria.getName()+" no respetan la minima distancia indicada (minDist = "+minDist+").", "Advertencia", JOptionPane.WARNING_MESSAGE);
+								return;
 							}
 						// Defined: minDist
 						}else if(minXIndex==-1 && maxYIndex==-1) {
-							BPremise bPremise = new BPremise(criteria);
-							bPremise.setMinDist(minDist);
-							BPremiseFrame.this.rule.addBetterP(bPremise);
-							btnValidateDataAndSave.setEnabled(false);
-							JOptionPane.showMessageDialog(null, "Exito: Los datos se han guardado correctamente, ya puede cerrar esta ventana.", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+							saveData(minDist, minXIndex, maxYIndex);
 						// Defined: minDist & minValueX
 						}else if(minXIndex!=-1 && maxYIndex==-1) {
 							if(minXIndex > minDist) {
-								BPremise bPremise = new BPremise(criteria);
-								bPremise.setMinDist(minDist);
-								bPremise.setMinValueForX(minXIndex);
-								BPremiseFrame.this.rule.addBetterP(bPremise);
-								btnValidateDataAndSave.setEnabled(false);
-								JOptionPane.showMessageDialog(null, "Exito: Los datos se han guardado correctamente, ya puede cerrar esta ventana.", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+								saveData(minDist, minXIndex, maxYIndex);
 							}else {
 								JOptionPane.showMessageDialog(null, "Error: El valor min(X)="+minX+" en el criterio "+criteria.getName()+" no respetan la minima distancia indicada (minDist = "+minDist+").", "Advertencia", JOptionPane.WARNING_MESSAGE);
+								return;
 							}
 						// Defined: minDist & maxValueY
 						}else if(minXIndex==-1 && maxYIndex!=-1) {
 							if(!criteria.isNumeric()) {
 								if((criteria.getValues().length-maxYIndex) > minDist) {
-									BPremise bPremise = new BPremise(criteria);
-									bPremise.setMinDist(minDist);
-									bPremise.setMaxValueForY(maxYIndex);
-									BPremiseFrame.this.rule.addBetterP(bPremise);
-									btnValidateDataAndSave.setEnabled(false);
-									JOptionPane.showMessageDialog(null, "Exito: Los datos se han guardado correctamente, ya puede cerrar esta ventana.", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+									saveData(minDist, minXIndex, maxYIndex);
 								}else {
 									JOptionPane.showMessageDialog(null, "Error: El valor max(Y)="+maxY+" en el criterio "+criteria.getName()+" no respetan la minima distancia indicada (minDist = "+minDist+").", "Advertencia", JOptionPane.WARNING_MESSAGE);
+									return;
 								}
 							}else {
 								if(Integer.parseInt(criteria.getValues()[1])-maxYIndex > minDist) {
-									BPremise bPremise = new BPremise(criteria);
-									bPremise.setMinDist(minDist);
-									bPremise.setMaxValueForY(maxYIndex);
-									BPremiseFrame.this.rule.addBetterP(bPremise);
-									btnValidateDataAndSave.setEnabled(false);
-									JOptionPane.showMessageDialog(null, "Exito: Los datos se han guardado correctamente, ya puede cerrar esta ventana.", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+									saveData(minDist, minXIndex, maxYIndex);
 								}else {
 									JOptionPane.showMessageDialog(null, "Error: El valor max(Y)="+maxY+" en el criterio "+criteria.getName()+" no respetan la minima distancia indicada (minDist = "+minDist+").", "Advertencia", JOptionPane.WARNING_MESSAGE);
+									return;
 								}
 							}
-							
 						}else {
 							JOptionPane.showMessageDialog(null, "Error: Situacion inesperada, no se puede proceder con el proceso.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+							return;
 						}
 					}else {
 						JOptionPane.showMessageDialog(null, "Error: El valor asignado a distancia minima entre X e Y es invalido.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+						return;
 					}
 				}else if(minDistString.equals("-")) {
 					if(minXIndex!=-1 && maxYIndex!=-1) {
 						// TODO si minX = maxY no seria como una premisa equals?
 						if(minXIndex<maxYIndex) {
 							JOptionPane.showMessageDialog(null, "Error: El valor para X en en el criterio evaluado no puede ser menor que el valor de Y en este caso.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-						}else {
-							BPremise bPremise = new BPremise(criteria);
-							bPremise.setMinValueForX(minXIndex);
-							bPremise.setMaxValueForY(maxYIndex);
-							BPremiseFrame.this.rule.addBetterP(bPremise);
-							btnValidateDataAndSave.setEnabled(false);
-							JOptionPane.showMessageDialog(null, "Exito: Los datos se han guardado correctamente, ya puede cerrar esta ventana.", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+							return;
 						}
-					}else {
-						BPremise bPremise = new BPremise(criteria);
-						bPremise.setMinValueForX(minXIndex);
-						bPremise.setMaxValueForY(maxYIndex);
-						BPremiseFrame.this.rule.addBetterP(bPremise);
-						btnValidateDataAndSave.setEnabled(false);
-						JOptionPane.showMessageDialog(null, "Exito: Los datos se han guardado correctamente, ya puede cerrar esta ventana.", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 					}
+					saveData(minDist, minXIndex, maxYIndex);
 				}
 			}
 		});
 		btnValidateDataAndSave.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(btnValidateDataAndSave);
+	}
+	
+	private void saveData(int minDist, int minXIndex, int maxYIndex) {
+		BPremise bPremise = new BPremise(criteria);
+		bPremise.setMinDist(minDist);
+		bPremise.setMinValueForX(minXIndex);
+		bPremise.setMaxValueForY(maxYIndex);
+		BPremiseFrame.this.rule.addBetterP(bPremise);
+		btnValidateDataAndSave.setEnabled(false);
+		JOptionPane.showMessageDialog(null, "Exito: Los datos se han guardado correctamente, ya puede cerrar esta ventana.", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 	}
 }

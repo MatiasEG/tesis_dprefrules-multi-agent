@@ -1,4 +1,4 @@
-package prefRules;
+package premises;
 
 import criteria.Criteria;
 

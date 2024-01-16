@@ -10,6 +10,8 @@ import criteria.Criteria;
 import dataManager.DataManager;
 import dataManager.DataValidations;
 import errors.SintacticStringError;
+import premises.BPremise;
+import premises.BPremiseFrame;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
