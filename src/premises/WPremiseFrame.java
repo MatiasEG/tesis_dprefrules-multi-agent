@@ -25,15 +25,15 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class BPremiseFrame extends JFrame {
+public class WPremiseFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JButton btnConfirmCriteria;
 	private JComboBox<String> comboBoxAvailableCriterias;
-	private JTextField textFieldMinDist;
-	private JLabel lblMinDist;
-	private JLabel lblMinDistMaxValue;
+	private JTextField textFieldMaxDist;
+	private JLabel lblMaxDist;
+	private JLabel lblMaxDistMaxValue;
 	private JComboBox<String> comboBoxXMinValue;
 	private JComboBox<String> comboBoxYMaxValue;
 	private DefaultComboBoxModel<String> comboBoxModelXMinValue;
@@ -58,7 +58,7 @@ public class BPremiseFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					BPremiseFrame frame = new BPremiseFrame(null, null);
+					WPremiseFrame frame = new WPremiseFrame(null, null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -70,7 +70,7 @@ public class BPremiseFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public BPremiseFrame(DataManager data, Rule rule) {
+	public WPremiseFrame(DataManager data, Rule rule) {
 		this.data = data;
 		this.rule = rule;
 		setBounds(100, 100, 800, 500);
@@ -80,7 +80,7 @@ public class BPremiseFrame extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 		
-		JLabel lblNewLabel_5 = new JLabel("- Seleccione el criterio con el cual usted prefiera a X cuando es mejor que Y -");
+		JLabel lblNewLabel_5 = new JLabel("- Seleccione el criterio con el cual usted prefiera a X a pesar de ser peor que Y para este caso particular -");
 		lblNewLabel_5.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(lblNewLabel_5);
 		
@@ -95,17 +95,17 @@ public class BPremiseFrame extends JFrame {
 		btnConfirmCriteria = new JButton("Confirmar criterio seleccionado");
 		btnConfirmCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				criteria = BPremiseFrame.this.data.getCriteria((String)BPremiseFrame.this.comboBoxAvailableCriterias.getSelectedItem());
+				criteria = WPremiseFrame.this.data.getCriteria((String)WPremiseFrame.this.comboBoxAvailableCriterias.getSelectedItem());
 				if(criteria != null) {
-					textFieldMinDist.setEnabled(true);
-					lblMinDist.setText("La distancia minima entre los valores posibles para el criterio "+criteria.getName()+" debe ser:");
+					textFieldMaxDist.setEnabled(true);
+					lblMaxDist.setText("La distancia minima entre los valores posibles para el criterio "+criteria.getName()+" debe ser:");
 					lblCriteria1.setText("en el criterio "+criteria.getName()+".");
 					lblCriteria2.setText("en el criterio "+criteria.getName()+".");
 					
 					if(!criteria.isNumeric()) {
 						lblSelectedCriteriaValues.setText("["+criteria.getCriteriaValuesString()+"]");
 
-						lblMinDistMaxValue.setText("(Valor maximo: "+criteria.getValues().length+")");
+						lblMaxDistMaxValue.setText("(Valor maximo: "+criteria.getValues().length+")");
 						
 						comboBoxXMinValue = new JComboBox<String>(comboBoxModelXMinValue);
 						comboBoxXMinValue.setEnabled(false);
@@ -134,7 +134,7 @@ public class BPremiseFrame extends JFrame {
 					}else {
 						lblSelectedCriteriaValues.setText("between("+criteria.getCriteriaValuesString()+")");
 
-						lblMinDistMaxValue.setText("(Valor maximo: "+(Integer.parseInt(criteria.getValues()[1])-Integer.parseInt(criteria.getValues()[0]))+")");
+						lblMaxDistMaxValue.setText("(Valor maximo: "+(Integer.parseInt(criteria.getValues()[1])-Integer.parseInt(criteria.getValues()[0]))+")");
 						
 						textFieldXMinValue = new JTextField();
 						textFieldXMinValue.setText("-");
@@ -175,7 +175,7 @@ public class BPremiseFrame extends JFrame {
 		contentPane.add(panel_1);
 		panel_1.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		
-		JLabel lblNewLabel_1 = new JLabel("La alternativa X debe ser mejor que la alternativa Y bajo el criterio seleccionado.");
+		JLabel lblNewLabel_1 = new JLabel("La alternativa X debe ser peor que la alternativa Y bajo el criterio seleccionado.");
 		panel_1.add(lblNewLabel_1);
 		
 		Component verticalStrut = Box.createVerticalStrut(20);
@@ -185,14 +185,14 @@ public class BPremiseFrame extends JFrame {
 		contentPane.add(panel_2);
 		panel_2.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		
-		lblMinDist = new JLabel("La distancia minima entre los valores posibles para el criterio ... debe ser:");
-		panel_2.add(lblMinDist);
+		lblMaxDist = new JLabel("La distancia maxima entre los valores posibles para el criterio ... debe ser:");
+		panel_2.add(lblMaxDist);
 		
-		textFieldMinDist = new JTextField();
-		textFieldMinDist.setText("-");
-		textFieldMinDist.setEnabled(false);
-		panel_2.add(textFieldMinDist);
-		textFieldMinDist.setColumns(10);
+		textFieldMaxDist = new JTextField();
+		textFieldMaxDist.setText("-");
+		textFieldMaxDist.setEnabled(false);
+		panel_2.add(textFieldMaxDist);
+		textFieldMaxDist.setColumns(10);
 		
 		Component verticalStrut_1 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_1);
@@ -234,8 +234,8 @@ public class BPremiseFrame extends JFrame {
 		panel_2.setPreferredSize(panelDimensions);
 		panel_2.setMaximumSize(panelDimensions);
 		
-		lblMinDistMaxValue = new JLabel("(Valor maximo: ...)");
-		panel_2.add(lblMinDistMaxValue);
+		lblMaxDistMaxValue = new JLabel("(Valor maximo: ...)");
+		panel_2.add(lblMaxDistMaxValue);
 		panel_3.setPreferredSize(panelDimensions);
 		panel_3.setMaximumSize(panelDimensions);
 		
@@ -253,8 +253,8 @@ public class BPremiseFrame extends JFrame {
 		btnValidateDataAndSave = new JButton("Validar datos y guardar");
 		btnValidateDataAndSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int minDist = 0;
-				String minDistString = textFieldMinDist.getText();
+				int maxDist = 0;
+				String maxDistString = textFieldMaxDist.getText();
 				
 				int minXIndex = -1;
 				int maxYIndex = -1;
@@ -287,8 +287,8 @@ public class BPremiseFrame extends JFrame {
 									|| (maxYIndex<Integer.parseInt(criteria.getValues()[0]) || maxYIndex>Integer.parseInt(criteria.getValues()[1]))) {
 								JOptionPane.showMessageDialog(null, "Error: Los valores definidos no estan dentro del rango permitido para el criterio.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 								return;
-							}else if(maxYIndex > minXIndex) {
-								JOptionPane.showMessageDialog(null, "Error: El valor maximo de X no puede ser inverior al valor minimo de Y, ya que en este caso estamos evaluando suponiendo que X es mejor que Y.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+							}else if(minXIndex > maxYIndex) {
+								JOptionPane.showMessageDialog(null, "Error: El valor maximo de Y no puede ser inverior al valor minimo de X, ya que en este caso estamos evaluando suponiendo que X es peor que Y.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 								return;
 							}
 							
@@ -327,61 +327,59 @@ public class BPremiseFrame extends JFrame {
 					}
 				}
 				
-				if(!minDistString.equals("-")) {
+				if(!maxDistString.equals("-")) {
 					try {
-						minDist = Integer.parseInt(minDistString);
+						maxDist = Integer.parseInt(maxDistString);
 					}catch(NumberFormatException e) {
 						JOptionPane.showMessageDialog(null, "Error: La distancia minima entre los valores que pueden tomar X e Y en el criterio "+criteria.getName()+" es invalida.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 						return;
 					}
 					if(!criteria.isNumeric()) {
-						if(minDist>criteria.getValues().length || minDist<0) {
+						if(maxDist>criteria.getValues().length || maxDist<0) {
 							JOptionPane.showMessageDialog(null, "Error: La distancia minima para los valores de X e Y no es correcta.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 							return;
 						}
 					}else {
-						if(minDist>(Integer.parseInt(criteria.getValues()[1])-Integer.parseInt(criteria.getValues()[0])) || minDist<0) {
+						if(maxDist>(Integer.parseInt(criteria.getValues()[1])-Integer.parseInt(criteria.getValues()[0])) || maxDist<0) {
 							JOptionPane.showMessageDialog(null, "Error: La distancia minima para los valores de X e Y no es correcta.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 							return;
 						}
 					}
 					
-					if(minDist!=0) {
-						// Defined: minDist & minValueX & maxValueY
+					if(maxDist!=-0) {
+						// Defined: maxDist & minValueX & maxValueY
 						if(minXIndex!=-1 && maxYIndex!=-1) {
-							if((minXIndex-maxYIndex)>=minDist) {	// If min(X)<max(Y) this condition will work correctly
-								saveData(minDist, minXIndex, maxYIndex);
+							if((maxYIndex-minXIndex)>=maxDist) {	// If max(Y)<min(X) this condition will work correctly
+								saveData(maxDist, minXIndex, maxYIndex);
 							}else {
-								JOptionPane.showMessageDialog(null, "Error: Los valores min(X)="+minX+" y max(Y)="+maxY+" en el criterio "+criteria.getName()+" no respetan la minima distancia indicada (minDist = "+minDist+").", "Advertencia", JOptionPane.WARNING_MESSAGE);
+								JOptionPane.showMessageDialog(null, "Error: Los valores min(X)="+minX+" y max(Y)="+maxY+" en el criterio "+criteria.getName()+" no respetan la minima distancia indicada (minDist = "+maxDist+").", "Advertencia", JOptionPane.WARNING_MESSAGE);
 								return;
 							}
 						// Defined: minDist
 						}else if(minXIndex==-1 && maxYIndex==-1) {
-							saveData(minDist, minXIndex, maxYIndex);
+							saveData(maxDist, minXIndex, maxYIndex);
 						// Defined: minDist & minValueX
 						}else if(minXIndex!=-1 && maxYIndex==-1) {
-							if(minXIndex > minDist) {
-								saveData(minDist, minXIndex, maxYIndex);
+							if(!criteria.isNumeric()) {
+								if((criteria.getValues().length-minXIndex) > maxDist) {
+									saveData(maxDist, minXIndex, maxYIndex);
+								}else {
+									JOptionPane.showMessageDialog(null, "Error: El valor min(X)="+minX+" en el criterio "+criteria.getName()+" no respetan la minima distancia indicada (minDist = "+maxDist+").", "Advertencia", JOptionPane.WARNING_MESSAGE);
+									return;
+								}
+							}else if((Integer.parseInt(criteria.getValues()[1])-minXIndex) > maxDist) {
+								saveData(maxDist, minXIndex, maxYIndex);
 							}else {
-								JOptionPane.showMessageDialog(null, "Error: El valor min(X)="+minX+" en el criterio "+criteria.getName()+" no respetan la minima distancia indicada (minDist = "+minDist+").", "Advertencia", JOptionPane.WARNING_MESSAGE);
+								JOptionPane.showMessageDialog(null, "Error: El valor min(X)="+minX+" en el criterio "+criteria.getName()+" no respetan la minima distancia indicada (minDist = "+maxDist+").", "Advertencia", JOptionPane.WARNING_MESSAGE);
 								return;
 							}
 						// Defined: minDist & maxValueY
 						}else if(minXIndex==-1 && maxYIndex!=-1) {
-							if(!criteria.isNumeric()) {
-								if((criteria.getValues().length-maxYIndex) > minDist) {
-									saveData(minDist, minXIndex, maxYIndex);
-								}else {
-									JOptionPane.showMessageDialog(null, "Error: El valor max(Y)="+maxY+" en el criterio "+criteria.getName()+" no respetan la minima distancia indicada (minDist = "+minDist+").", "Advertencia", JOptionPane.WARNING_MESSAGE);
-									return;
-								}
+							if(maxYIndex > maxDist) {
+								saveData(maxDist, minXIndex, maxYIndex);
 							}else {
-								if(Integer.parseInt(criteria.getValues()[1])-maxYIndex > minDist) {
-									saveData(minDist, minXIndex, maxYIndex);
-								}else {
-									JOptionPane.showMessageDialog(null, "Error: El valor max(Y)="+maxY+" en el criterio "+criteria.getName()+" no respetan la minima distancia indicada (minDist = "+minDist+").", "Advertencia", JOptionPane.WARNING_MESSAGE);
-									return;
-								}
+								JOptionPane.showMessageDialog(null, "Error: El valor max(Y)="+maxY+" en el criterio "+criteria.getName()+" no respetan la minima distancia indicada (minDist = "+maxDist+").", "Advertencia", JOptionPane.WARNING_MESSAGE);
+								return;
 							}
 						}else {
 							JOptionPane.showMessageDialog(null, "Error: Situacion inesperada, no se puede proceder con el proceso.", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -391,15 +389,15 @@ public class BPremiseFrame extends JFrame {
 						JOptionPane.showMessageDialog(null, "Error: El valor asignado a distancia minima entre X e Y es invalido.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 						return;
 					}
-				}else if(minDistString.equals("-")) {
+				}else if(maxDistString.equals("-")) {
 					if(minXIndex!=-1 && maxYIndex!=-1) {
 						// TODO si minX = maxY no seria como una premisa equals?
-						if(minXIndex<maxYIndex) {
+						if(maxYIndex<minXIndex) {
 							JOptionPane.showMessageDialog(null, "Error: El valor para X en en el criterio evaluado no puede ser menor que el valor de Y en este caso.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 							return;
 						}
 					}
-					saveData(minDist, minXIndex, maxYIndex);
+					saveData(maxDist, minXIndex, maxYIndex);
 				}
 			}
 		});
@@ -408,11 +406,11 @@ public class BPremiseFrame extends JFrame {
 	}
 	
 	private void saveData(int minDist, int minXIndex, int maxYIndex) {
-		BPremise bPremise = new BPremise(criteria);
-		bPremise.setMinDist(minDist);
-		bPremise.setMinValueForX(minXIndex);
-		bPremise.setMaxValueForY(maxYIndex);
-		BPremiseFrame.this.rule.addBetterP(bPremise);
+		WPremise wPremise = new WPremise(criteria);
+		wPremise.setMaxDist(minDist);
+		wPremise.setMinValueForX(minXIndex);
+		wPremise.setMaxValueForY(maxYIndex);
+		WPremiseFrame.this.rule.addWorstP(wPremise);
 		btnValidateDataAndSave.setEnabled(false);
 		JOptionPane.showMessageDialog(null, "Exito: Los datos se han guardado correctamente, ya puede cerrar esta ventana.", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 	}

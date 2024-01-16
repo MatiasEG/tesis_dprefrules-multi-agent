@@ -12,6 +12,8 @@ import dataManager.DataValidations;
 import errors.SintacticStringError;
 import premises.BPremise;
 import premises.BPremiseFrame;
+import premises.WPremise;
+import premises.WPremiseFrame;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -173,6 +175,20 @@ public class PrefRuleCreation extends JFrame {
 		panelButtons1.add(btnNewBPremise);
 		
 		JButton btnNewWPremise = new JButton("Agregar X peor que Y");
+		btnNewWPremise.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				WPremiseFrame frame = new WPremiseFrame(PrefRuleCreation.this.data, rule);
+				frame.setVisible(true);
+				
+				// WindowListener for detect when the frame is closed
+		        frame.addWindowListener(new WindowAdapter() {
+		            @Override
+		            public void windowClosing(WindowEvent e) {
+		            	updateRuleContent();
+		            }
+		        });
+			}
+		});
 		panelButtons1.add(btnNewWPremise);
 		
 		JButton btnNewEPremise = new JButton("Agregar X igual a Y");
@@ -255,8 +271,10 @@ public class PrefRuleCreation extends JFrame {
 	private void updateRuleContent() {
 		listModelRuleContent.removeAllElements();
 		for(BPremise bPremise : rule.getBetterP()) {
-			
 			listModelRuleContent.addElement(bPremise.getDescription());
+		}
+		for(WPremise wPremise : rule.getWorstP()) {
+			listModelRuleContent.addElement(wPremise.getDescription());
 		}
 	}
 
