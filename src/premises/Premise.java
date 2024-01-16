@@ -38,4 +38,5 @@ public abstract class Premise {
 		this.maxValueForY = maxValueForY;
 	}
 	
+	public abstract String getDescription();
 }
