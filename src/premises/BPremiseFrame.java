@@ -253,7 +253,7 @@ public class BPremiseFrame extends JFrame {
 		btnValidateDataAndSave = new JButton("Validar datos y guardar");
 		btnValidateDataAndSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int minDist = -1;
+				int minDist = 0;
 				String minDistString = textFieldMinDist.getText();
 				
 				int minXIndex = -1;
