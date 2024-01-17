@@ -19,6 +19,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import java.awt.Component;
+import java.awt.Dimension;
+
 import javax.swing.Box;
 import java.awt.FlowLayout;
 
@@ -63,7 +65,7 @@ public class MainWindow extends JFrame {
 		state = -1;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 700, 325);
+		setBounds(100, 100, 700, 506);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -282,6 +284,60 @@ public class MainWindow extends JFrame {
 				checkState(true);
 			}
 		});
+		
+		Component verticalStrut = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut);
+		
+		JPanel panelRules = new JPanel();
+		contentPane.add(panelRules);
+		panelRules.setLayout(new BoxLayout(panelRules, BoxLayout.Y_AXIS));
+		
+		JLabel lblNewLabel_1 = new JLabel("Defina las reglas que utilizara para comparar las alternativas en base a los criterios definidos");
+		lblNewLabel_1.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panelRules.add(lblNewLabel_1);
+		
+		JPanel panelBtnRules = new JPanel();
+		panelRules.add(panelBtnRules);
+		
+		JButton btnEditRules = new JButton("Definir reglas");
+		panelBtnRules.add(btnEditRules);
+		
+		JButton btnViewRules = new JButton("Ver reglas");
+		panelBtnRules.add(btnViewRules);
+		
+		Component verticalStrut_4 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_4);
+		
+		JPanel panelRulePreference = new JPanel();
+		contentPane.add(panelRulePreference);
+		panelRulePreference.setLayout(new BoxLayout(panelRulePreference, BoxLayout.Y_AXIS));
+		
+		JLabel lblNewLabel_2 = new JLabel("A continuacion defina la preferencia que tienen los participantes sobre las reglas definidas");
+		lblNewLabel_2.setAlignmentX(0.5f);
+		panelRulePreference.add(lblNewLabel_2);
+		
+		JPanel panelBtnRulePreference = new JPanel();
+		panelRulePreference.add(panelBtnRulePreference);
+		
+		JButton btnEditRulePreference = new JButton("Editar preferencias entre reglas");
+		panelBtnRulePreference.add(btnEditRulePreference);
+		
+		JButton btnViewRulePreference = new JButton("Ver preferencias entre reglas");
+		panelBtnRulePreference.add(btnViewRulePreference);
+		
+		Dimension panelDimensions = new Dimension(700, 40);
+		panelBtnSaveFolder.setPreferredSize(panelDimensions);
+		panelBtnSaveFolder.setMaximumSize(panelDimensions);
+		panelBtnAgents.setPreferredSize(panelDimensions);
+		panelBtnAgents.setMaximumSize(panelDimensions);
+		panelBtnCriterias.setPreferredSize(panelDimensions);
+		panelBtnCriterias.setMaximumSize(panelDimensions);
+		panelBtnAlternatives.setPreferredSize(panelDimensions);
+		panelBtnAlternatives.setMaximumSize(panelDimensions);
+		panelBtnRules.setPreferredSize(panelDimensions);
+		panelBtnRules.setMaximumSize(panelDimensions);
+		panelBtnRulePreference.setPreferredSize(panelDimensions);
+		panelBtnRulePreference.setMaximumSize(panelDimensions);
 		
 		setState0(false);
 	}

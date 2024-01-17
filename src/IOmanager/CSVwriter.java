@@ -3,10 +3,10 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import agent.AgentPriority;
 import alternative.Alternative;
 import criteria.Criteria;
 import dataManager.DataManager;
+import dataManager.Priority;
 
 public class CSVwriter {
 
@@ -58,13 +58,13 @@ public class CSVwriter {
             writer.newLine();
 
             // write data
-            for(AgentPriority pprior: data.getParticipantsPriority()) {
-            	writer.write(pprior.getPriorityFormatted());
+            for(Priority prior: data.getParticipantsPriority()) {
+            	writer.write(prior.getPriorityFormatted());
             	writer.newLine();
             }
             
-            for(AgentPriority pprior: data.getParticipantsPriorityTransitive()) {
-            	writer.write(pprior.getPriorityFormatted());
+            for(Priority prior: data.getParticipantsPriorityTransitive()) {
+            	writer.write(prior.getPriorityFormatted());
             	writer.newLine();
             }
 

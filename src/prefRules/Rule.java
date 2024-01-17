@@ -142,4 +142,24 @@ public class Rule {
 			}
 		}
 	}
+	
+	public String getRuleDescription() {
+		String description = "Para preferir la alternativa X por sobre la alternativa Y, ";
+		
+		for(int i=0; i<betterP.size(); i++) {
+			description +=  betterP.get(i).getDescription();
+			if(i<betterP.size()-1) description += ", ademas ";
+		}
+		for(int i=0; i<equalP.size(); i++) {
+			if(i==0) description += ". Por otro lado, ";
+			description += equalP.get(i).getDescription();
+			if(i<equalP.size()-1) description += ", tambien ";
+		}
+		for(int i=0; i<worstP.size(); i++) {
+			if(i==0) description += ". Por ultimo, estoy dispuesto a sacrificar ";
+			description += worstP.get(i).getDescription();
+			if(i<worstP.size()-1) description += ", ademas puedo sacrificar ";
+		}
+		return description;
+	}
 }

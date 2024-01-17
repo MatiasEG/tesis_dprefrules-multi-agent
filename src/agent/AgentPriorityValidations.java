@@ -21,12 +21,12 @@ public class AgentPriorityValidations {
 	
 	public static void ifNotExistAddNewAgent(String agent, DataManager data) {
 		boolean exist = false;
-		for(String ag: data.getParticipants()) {
-			if(ag.equals(agent)) {
+		for(Agent ag: data.getParticipants()) {
+			if(ag.getName().equals(agent)) {
 				exist = true;
 				break;
 			}
 		}
-		if(!exist) data.addParticipant(agent);
+		if(!exist) data.addParticipant(new Agent(agent));
 	}
 }

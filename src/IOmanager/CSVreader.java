@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import agent.AgentPriority;
 import agent.AgentPriorityValidations;
 import alternative.Alternative;
 import criteria.Criteria;
 import dataManager.CriteriaManager;
 import dataManager.DataManager;
+import dataManager.Priority;
 import errors.AgentPriorityError;
 import errors.CriteriaFileError;
 import errors.EvidenceFileError;
@@ -104,7 +104,7 @@ public class CSVreader {
 					    String nameValidations2 = AgentPriorityValidations.validateAgentName(lessPriorAgent, newData);
 					    if(!nameValidations2.equals("OK")) throw new AgentPriorityError(nameValidations2);
 					    
-						AgentPriority newParticipantsPriority = new AgentPriority(morePriorAgent, lessPriorAgent);
+						Priority newParticipantsPriority = new Priority(morePriorAgent, lessPriorAgent);
 						String validPrior = newParticipantsPriority.isValid(newData);
 					    
 					    if(validPrior.equals("OK")) {

@@ -3,17 +3,19 @@ package dataManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import agent.AgentPriority;
+import agent.Agent;
 import alternative.Alternative;
 import criteria.Criteria;
+import prefRules.Rule;
 
 public class DataManager {
 
 	protected List<Criteria> criterias;
-	protected List<String> participants;
-	protected List<AgentPriority> participantsPriority;
-	protected List<AgentPriority> participantsPriorityTransitive;
+	protected List<Agent> participants;
+	protected List<Priority> participantsPriority;
+	protected List<Priority> participantsPriorityTransitive;
 	protected List<Alternative> alternatives;
+	protected List<Rule> rules;
 	
 	protected String projectName;
 	protected String folderPath;
@@ -23,10 +25,11 @@ public class DataManager {
 		this.folderPath = folderPath;
 		
 		criterias = new ArrayList<Criteria>();
-		participants = new ArrayList<String>();
-		participantsPriority = new ArrayList<AgentPriority>();
-		participantsPriorityTransitive = new ArrayList<AgentPriority>();
+		participants = new ArrayList<Agent>();
+		participantsPriority = new ArrayList<Priority>();
+		participantsPriorityTransitive = new ArrayList<Priority>();
 		alternatives = new ArrayList<Alternative>();
+		rules = new ArrayList<Rule>();
 	}
 	
 	public void setSaveFolder(String newSaveFolder) {
@@ -43,6 +46,22 @@ public class DataManager {
 	
 	public String getProjectName() {
 		return this.projectName;
+	}
+	
+	public void addRule(Rule rule) {
+		rules.add(rule);
+	}
+	
+	public List<Rule> getRules(){
+		return rules;
+	}
+	
+	public String[] getRulesNames() {
+		String[] arrayRulesNames = new String[rules.size()];
+		for(int i=0; i<rules.size(); i++) {
+			arrayRulesNames[i] = rules.get(i).getName();
+		}
+		return arrayRulesNames;
 	}
 	
 	public void addCriteria(Criteria criteria) {
@@ -75,18 +94,43 @@ public class DataManager {
 		}
 	}
 	
-	public void addParticipant(String newParticipant) {
+	public void addParticipant(Agent newParticipant) {
 		participants.add(newParticipant);
 	}
 	
-	public List<String> getParticipants(){
+	public Agent getParticipant(String name) {
+		for(Agent agent : participants) {
+			if(agent.getName().equals(name)) {
+				return agent;
+			}
+		}
+		return null;
+	}
+	
+	public List<Agent> getParticipants(){
 		return participants;
+	}
+	
+	public List<String> getParticipantsNames() {
+		List<String> names = new ArrayList<String>();
+		for(Agent participant : participants) {
+			names.add(participant.getName());
+		}
+		return names;
+	}
+	
+	public List<String> getRuleNames() {
+		List<String> names = new ArrayList<String>();
+		for(Rule rule : rules) {
+			names.add(rule.getName());
+		}
+		return names;
 	}
 	
 	public String[] getParticipantsArrayString() {
 		String[] arrayParticipants = new String[participants.size()];
 		for(int i=0; i<participants.size(); i++) {
-			arrayParticipants[i] = participants.get(i);
+			arrayParticipants[i] = participants.get(i).getName();
 		}
 		return arrayParticipants;
 	}
@@ -107,38 +151,38 @@ public class DataManager {
 		}
 	}
 	
-	public void addParticipantsPriority(AgentPriority newParticipantsPriority) {
+	public void addParticipantsPriority(Priority newParticipantsPriority) {
 		participantsPriority.add(newParticipantsPriority);
 	}
 	
-	public List<AgentPriority> getParticipantsPriority(){
+	public List<Priority> getParticipantsPriority(){
 		return participantsPriority;
 	}
 	
-	public void addParticipantsPriorityTransitive(AgentPriority newParticipantsPriority) {
+	public void addParticipantsPriorityTransitive(Priority newParticipantsPriority) {
 		participantsPriorityTransitive.add(newParticipantsPriority);
 	}
 	
-	public List<AgentPriority> getParticipantsPriorityTransitive(){
+	public List<Priority> getParticipantsPriorityTransitive(){
 		return participantsPriorityTransitive;
 	}
 	
 	public void checkParticipantsPriorityTransitivity() {
-		participantsPriorityTransitive = new ArrayList<AgentPriority>();
+		participantsPriorityTransitive = new ArrayList<Priority>();
 		List<Relation> relations = new ArrayList<>();
-		for(AgentPriority pprior: participantsPriority) {
+		for(Priority pprior: participantsPriority) {
 			relations.add(new Relation(pprior.getMorePriority(), pprior.getLessPriority()));
 		}
 		List<Relation> transitiveRelations = TransitivityCheck.getTransitivityRelations(relations);
 		for(Relation r: transitiveRelations) {
-			participantsPriorityTransitive.add(new AgentPriority(r.getFirstString(), r.getSecondString()));
+			participantsPriorityTransitive.add(new Priority(r.getFirstString(), r.getSecondString()));
 		}
 	}
 	
 	public void updateData(DataManager newData) {
 		criterias = new ArrayList<Criteria>();
-		participants = new ArrayList<String>();
-		participantsPriority = new ArrayList<AgentPriority>();
+		participants = new ArrayList<Agent>();
+		participantsPriority = new ArrayList<Priority>();
 		alternatives = new ArrayList<Alternative>();
 
 		criterias = newData.getCriterias();
@@ -172,11 +216,11 @@ public class DataManager {
 		}
 	}
 	
-	public void setParticipants(List<String> participants) {
+	public void setParticipants(List<Agent> participants) {
 		this.participants = participants;
 	}
 	
-	public void setParticipantsPriority(List<AgentPriority> participantsPriority) {
+	public void setParticipantsPriority(List<Priority> participantsPriority) {
 		this.participantsPriority = participantsPriority;
 	}
 	

@@ -184,9 +184,9 @@ public class AgentFrame extends JFrame {
         String name = JOptionPane.showInputDialog(this, "Ingrese el nombre del participante que desea agregar:");
         String validation = AgentPriorityValidations.validateAgentName(name, data);
         if(validation.equals("OK")) {
-        	if(DataValidations.validateStringListNotContainNewElement(data.getParticipants(), name)) {
+        	if(DataValidations.validateStringListNotContainNewElement(data.getParticipantsNames(), name)) {
     			listModelParticipants.addElement(name);
-    			data.addParticipant(name);
+    			data.addParticipant(new Agent(name));
     		}else {
     			JOptionPane.showMessageDialog(null, "Error, el nombre \""+name+"\" ya se encuentra en la lista de participantes.", "Advertencia", JOptionPane.WARNING_MESSAGE);
     		}
@@ -197,7 +197,7 @@ public class AgentFrame extends JFrame {
 	
 	private void updateVisualComponents(DataManager data) {		
 		listModelParticipants.clear();
-		for(String agent: data.getParticipants()) {
+		for(String agent: data.getParticipantsNames()) {
 			listModelParticipants.addElement(agent);
 		}
 	}

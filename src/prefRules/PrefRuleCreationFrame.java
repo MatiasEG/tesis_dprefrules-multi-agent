@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import agent.Agent;
 import criteria.Criteria;
 import dataManager.DataManager;
 import dataManager.DataValidations;
@@ -36,7 +37,7 @@ import javax.swing.JList;
 import java.awt.GridLayout;
 import javax.swing.JTextPane;
 
-public class PrefRuleCreation extends JFrame {
+public class PrefRuleCreationFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -58,7 +59,7 @@ public class PrefRuleCreation extends JFrame {
 				try {
 					
 					DataManager data = new DataManager("ruleTest","C:\\Users\\Matia\\Desktop\\tesis_dprefrules-multi-agent\\src\\files");
-					data.addParticipant("Matias");
+					data.addParticipant(new Agent("Matias"));
 					
 					Criteria entretenimiento = new Criteria("Entretenimiento", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
 					Criteria clima = new Criteria("Clima", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
@@ -71,7 +72,7 @@ public class PrefRuleCreation extends JFrame {
 					
 					
 					
-					PrefRuleCreation frame = new PrefRuleCreation(data);
+					PrefRuleCreationFrame frame = new PrefRuleCreationFrame(data, null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -83,11 +84,10 @@ public class PrefRuleCreation extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public PrefRuleCreation(DataManager data) {
+	public PrefRuleCreationFrame(DataManager data, Rule rule) {
 		this.data = data;
-		rule = null;
+		this.rule = rule;
 		setTitle("Especificacion de la regla");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 850, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -160,14 +160,14 @@ public class PrefRuleCreation extends JFrame {
 		JButton btnNewBPremise = new JButton("Agregar X mejor que Y");
 		btnNewBPremise.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				BPremiseFrame frame = new BPremiseFrame(PrefRuleCreation.this.data, rule);
+				BPremiseFrame frame = new BPremiseFrame(PrefRuleCreationFrame.this.data, PrefRuleCreationFrame.this.rule);
 				frame.setVisible(true);
 				
 				// WindowListener for detect when the frame is closed
 		        frame.addWindowListener(new WindowAdapter() {
 		            @Override
 		            public void windowClosing(WindowEvent e) {
-		            	updateRuleContent();
+		            	updateRuleDescription();
 		            }
 		        });
 			}
@@ -177,14 +177,14 @@ public class PrefRuleCreation extends JFrame {
 		JButton btnNewWPremise = new JButton("Agregar X peor que Y");
 		btnNewWPremise.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				WPremiseFrame frame = new WPremiseFrame(PrefRuleCreation.this.data, rule);
+				WPremiseFrame frame = new WPremiseFrame(PrefRuleCreationFrame.this.data, PrefRuleCreationFrame.this.rule);
 				frame.setVisible(true);
 				
 				// WindowListener for detect when the frame is closed
 		        frame.addWindowListener(new WindowAdapter() {
 		            @Override
 		            public void windowClosing(WindowEvent e) {
-		            	updateRuleContent();
+		            	updateRuleDescription();
 		            }
 		        });
 			}
@@ -194,14 +194,14 @@ public class PrefRuleCreation extends JFrame {
 		JButton btnNewEPremise = new JButton("Agregar X igual a Y");
 		btnNewEPremise.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				EPremiseFrame frame = new EPremiseFrame(PrefRuleCreation.this.data, rule);
+				EPremiseFrame frame = new EPremiseFrame(PrefRuleCreationFrame.this.data, PrefRuleCreationFrame.this.rule);
 				frame.setVisible(true);
 				
 				// WindowListener for detect when the frame is closed
 		        frame.addWindowListener(new WindowAdapter() {
 		            @Override
 		            public void windowClosing(WindowEvent e) {
-		            	updateRuleContent();
+		            	updateRuleDescription();
 		            }
 		        });
 			}
@@ -219,26 +219,26 @@ public class PrefRuleCreation extends JFrame {
 		panelButtons1.add(btnDeletePremise);
 		btnDeletePremise.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				 int selectedIndex = listRuleConditions.getSelectedIndex();
-			        if (selectedIndex != -1) {
-			        	int option = JOptionPane.showConfirmDialog(PrefRuleCreation.this,
-			                    "¿Seguro que desea eliminar la condicion de la regla seleccionada?",
-			                    "Confirmar Eliminación",
-			                    JOptionPane.YES_NO_OPTION);
-			            if (option == JOptionPane.YES_OPTION) {
-			            	String listContent = listRuleConditions.getSelectedValue();
-			            	Pattern pattern = Pattern.compile("<([^\\s]+)>");
-			                Matcher matcher = pattern.matcher(listContent);
-			                if (matcher.find()) {
-			                	rule.removeCondition(matcher.group(1));
-			                } else {
-			                	JOptionPane.showMessageDialog(PrefRuleCreation.this, "Error: No se pudo eliminar el contenido de la regla.", "Error", JOptionPane.ERROR_MESSAGE);
-			                }
-			                updateRuleContent();
-			            }
-			        } else {
-			            JOptionPane.showMessageDialog(PrefRuleCreation.this, "Debe seleccionar a un participante para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
-			        }
+				int selectedIndex = listRuleConditions.getSelectedIndex();
+		        if (selectedIndex != -1) {
+		        	int option = JOptionPane.showConfirmDialog(PrefRuleCreationFrame.this,
+		                    "¿Seguro que desea eliminar la condicion de la regla seleccionada?",
+		                    "Confirmar Eliminación",
+		                    JOptionPane.YES_NO_OPTION);
+		            if (option == JOptionPane.YES_OPTION) {
+		            	String listContent = listRuleConditions.getSelectedValue();
+		            	Pattern pattern = Pattern.compile("<([^\\s]+)>");
+		                Matcher matcher = pattern.matcher(listContent);
+		                if (matcher.find()) {
+		                	PrefRuleCreationFrame.this.rule.removeCondition(matcher.group(1));
+		                } else {
+		                	JOptionPane.showMessageDialog(PrefRuleCreationFrame.this, "Error: No se pudo eliminar el contenido de la regla.", "Error", JOptionPane.ERROR_MESSAGE);
+		                }
+		                updateRuleDescription();
+		            }
+		        } else {
+		            JOptionPane.showMessageDialog(PrefRuleCreationFrame.this, "Debe seleccionar a una condicion de la regla para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+		        }
 			}
 		});
 		
@@ -252,21 +252,32 @@ public class PrefRuleCreation extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				SintacticStringError validation = DataValidations.validateStringWithOnlyLettersAndNumbers(textFieldRuleName.getText());
 				if(validation == null) {
-					lblRuleName.setText("Nombre establecido: "+textFieldRuleName.getText());
-					if(rule==null) {
-						rule = new Rule(textFieldRuleName.getText());
+					if(DataValidations.validateStringListNotContainNewElement(PrefRuleCreationFrame.this.data.getRuleNames(), textFieldRuleName.getText())) {
+						lblRuleName.setText("Nombre establecido: "+textFieldRuleName.getText());
+						if(PrefRuleCreationFrame.this.rule==null) {
+							PrefRuleCreationFrame.this.rule = new Rule(textFieldRuleName.getText());
+							PrefRuleCreationFrame.this.data.addRule(PrefRuleCreationFrame.this.rule);
+						}else {
+							PrefRuleCreationFrame.this.rule.setName(textFieldRuleName.getText());
+						}
+						textFieldRuleName.setText("");
 					}else {
-						rule.setName(textFieldRuleName.getText());
+						JOptionPane.showMessageDialog(null, "Por favor, revise que el nombre ya que este esta siendo utilizado por otra regla.", "Nombre repetido", JOptionPane.WARNING_MESSAGE);
 					}
-					textFieldRuleName.setText("");
 				}else {
 					JOptionPane.showMessageDialog(null, "Por favor, revise que el nombre solo contenga letras y/o digitos.", validation.getMsg(), JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});
+		
+		if(rule!=null) {
+			textFieldRuleName.setText(this.rule.getName());
+			lblRuleName.setText("Nombre establecido: "+this.rule.getName());
+			updateRuleDescription();
+		}
 	}
 	
-	private void updateRuleContent() {
+	private void updateRuleDescription() {
 		listModelRuleContent.removeAllElements();
 		String description = "Para preferir la alternativa X por sobre la alternativa Y, ";
 		

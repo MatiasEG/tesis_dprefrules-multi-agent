@@ -1,15 +1,13 @@
-package agent;
+package dataManager;
 
 import java.util.List;
 
-import dataManager.DataManager;
-
-public class AgentPriority {
+public class Priority {
 
 	protected String morePriority;
 	protected String lessPriority;
 	
-	public AgentPriority(String morePriority, String lessPriority) {
+	public Priority(String morePriority, String lessPriority) {
 		this.lessPriority = lessPriority;
 		this.morePriority = morePriority;
 	}
@@ -35,23 +33,23 @@ public class AgentPriority {
 	}
 	
 	public String isValid(DataManager data) {
-		List<AgentPriority> participants = data.getParticipantsPriority();
-		for(AgentPriority pprior: participants) {
+		List<Priority> participants = data.getParticipantsPriority();
+		for(Priority pprior: participants) {
 			if(pprior.getLessPriority().equals(lessPriority) && pprior.getMorePriority().equals(morePriority)) {
-				return "Ya existe una regla de prioridad entre participantes que contempla ( "+morePriority+" > "+lessPriority+" ).";
+				return "Ya existe una regla de prioridad que contempla ( "+morePriority+" > "+lessPriority+" ).";
 			}
 			if(pprior.getLessPriority().equals(morePriority) && pprior.getMorePriority().equals(lessPriority)) {
-				return "No puede existir una prioridad entre participantes simetrica, usted define ( "+morePriority+" > "+lessPriority+" ), pero ya existe ( "+lessPriority+" > "+morePriority+" ).";
+				return "No puede existir una prioridad simetrica, usted define ( "+morePriority+" > "+lessPriority+" ), pero ya existe ( "+lessPriority+" > "+morePriority+" ).";
 			}
 		}
 		
-		List<AgentPriority> participantsTransitive = data.getParticipantsPriorityTransitive();
-		for(AgentPriority pprior: participantsTransitive) {
+		List<Priority> participantsTransitive = data.getParticipantsPriorityTransitive();
+		for(Priority pprior: participantsTransitive) {
 			if(pprior.getLessPriority().equals(lessPriority) && pprior.getMorePriority().equals(morePriority)) {
-				return "Ya existe una regla de prioridad entre participantes que contempla ( "+morePriority+" > "+lessPriority+" ).";
+				return "Ya existe una regla de prioridad que contempla ( "+morePriority+" > "+lessPriority+" ).";
 			}
 			if(pprior.getLessPriority().equals(morePriority) && pprior.getMorePriority().equals(lessPriority)) {
-				return "No puede existir una prioridad entre participantes simetrica, usted define ( "+morePriority+" > "+lessPriority+" ), pero ya existe ( "+lessPriority+" > "+morePriority+" ).";
+				return "No puede existir una prioridad simetrica, usted define ( "+morePriority+" > "+lessPriority+" ), pero ya existe ( "+lessPriority+" > "+morePriority+" ).";
 			}
 		}
 		
