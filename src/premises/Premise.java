@@ -39,4 +39,6 @@ public abstract class Premise {
 	}
 	
 	public abstract String getDescription();
+	
+	public abstract String getPremise();
 }

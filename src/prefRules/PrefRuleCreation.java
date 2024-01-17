@@ -10,11 +10,8 @@ import criteria.Criteria;
 import dataManager.DataManager;
 import dataManager.DataValidations;
 import errors.SintacticStringError;
-import premises.BPremise;
 import premises.BPremiseFrame;
-import premises.EPremise;
 import premises.EPremiseFrame;
-import premises.WPremise;
 import premises.WPremiseFrame;
 
 import javax.swing.BoxLayout;
@@ -45,6 +42,7 @@ public class PrefRuleCreation extends JFrame {
 	private JPanel contentPane;
 	private JTextField textFieldRuleName;
 	private JLabel lblRuleName;
+	private JTextPane textPaneDescription;
 	
 	private Rule rule;
 	private DefaultListModel<String> listModelRuleContent;
@@ -213,14 +211,12 @@ public class PrefRuleCreation extends JFrame {
 		Component verticalStrut_3 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_3);
 		
-		JPanel panelButtons2 = new JPanel();
-		contentPane.add(panelButtons2);
-		panelButtons2.setLayout(new GridLayout(1, 0, 0, 0));
-		
-		JButton btnEditPremise = new JButton("Editar condicion");
-		panelButtons2.add(btnEditPremise);
+		Dimension panelButtonsDimensions = new Dimension(800, 25);
+		panelButtons1.setPreferredSize(panelButtonsDimensions);
+		panelButtons1.setMaximumSize(panelButtonsDimensions);
 		
 		JButton btnDeletePremise = new JButton("Eliminar condicion");
+		panelButtons1.add(btnDeletePremise);
 		btnDeletePremise.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				 int selectedIndex = listRuleConditions.getSelectedIndex();
@@ -231,7 +227,7 @@ public class PrefRuleCreation extends JFrame {
 			                    JOptionPane.YES_NO_OPTION);
 			            if (option == JOptionPane.YES_OPTION) {
 			            	String listContent = listRuleConditions.getSelectedValue();
-			            	Pattern pattern = Pattern.compile("-([^\\s]+)-");
+			            	Pattern pattern = Pattern.compile("<([^\\s]+)>");
 			                Matcher matcher = pattern.matcher(listContent);
 			                if (matcher.find()) {
 			                	rule.removeCondition(matcher.group(1));
@@ -245,26 +241,12 @@ public class PrefRuleCreation extends JFrame {
 			        }
 			}
 		});
-		panelButtons2.add(btnDeletePremise);
-		
-		JButton btnViewDescription = new JButton("Descripcion");
-		panelButtons2.add(btnViewDescription);
-		
-		Dimension panelButtonsDimensions = new Dimension(800, 25);
-		panelButtons1.setPreferredSize(panelButtonsDimensions);
-		panelButtons1.setMaximumSize(panelButtonsDimensions);
-		panelButtons2.setPreferredSize(panelButtonsDimensions);
-		panelButtons2.setMaximumSize(panelButtonsDimensions);
-		
-		
-		Component verticalStrut_4 = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut_4);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		contentPane.add(scrollPane_1);
 		
-		JTextPane textPane = new JTextPane();
-		scrollPane_1.setViewportView(textPane);
+		textPaneDescription = new JTextPane();
+		scrollPane_1.setViewportView(textPaneDescription);
 		
 		btnSaveRuleName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -286,15 +268,26 @@ public class PrefRuleCreation extends JFrame {
 	
 	private void updateRuleContent() {
 		listModelRuleContent.removeAllElements();
-		for(BPremise bPremise : rule.getBetterP()) {
-			listModelRuleContent.addElement(bPremise.getDescription());
+		String description = "Para preferir la alternativa X por sobre la alternativa Y, ";
+		
+		for(int i=0; i<rule.getBetterP().size(); i++) {
+			listModelRuleContent.addElement(rule.getBetterP().get(i).getPremise());
+			description +=  rule.getBetterP().get(i).getDescription();
+			if(i<rule.getBetterP().size()-1) description += ", ademas ";
 		}
-		for(WPremise wPremise : rule.getWorstP()) {
-			listModelRuleContent.addElement(wPremise.getDescription());
+		for(int i=0; i<rule.getEqualP().size(); i++) {
+			if(i==0) description += ". Por otro lado, ";
+			listModelRuleContent.addElement(rule.getEqualP().get(i).getPremise());
+			description += rule.getEqualP().get(i).getDescription();
+			if(i<rule.getEqualP().size()-1) description += ", tambien ";
 		}
-		for(EPremise ePremise : rule.getEqualP()) {
-			listModelRuleContent.addElement(ePremise.getDescription());
+		for(int i=0; i<rule.getWorstP().size(); i++) {
+			if(i==0) description += ". Por ultimo, estoy dispuesto a sacrificar ";
+			listModelRuleContent.addElement(rule.getWorstP().get(i).getPremise());
+			description += rule.getWorstP().get(i).getDescription();
+			if(i<rule.getWorstP().size()-1) description += ", ademas puedo sacrificar ";
 		}
+		textPaneDescription.setText(description);
 	}
 
 }
