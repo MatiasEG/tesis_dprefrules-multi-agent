@@ -50,4 +50,59 @@ public class EPremise extends Premise{
 				premise += ", max(Y, "+criteria.getName()+", "+maxValueForY+")";
 		return premise;
 	}
+
+	
+	public boolean validMinXValue(String minX) {
+		int minXIndex = -1;
+		
+		if(maxValueForY!=-1) return false;
+		
+		if(!criteria.isNumeric()) {
+			for(int i=0; i<criteria.getValues().length; i++) {
+				if(criteria.getValues()[i].equals(minX)) {
+					minXIndex = i;
+				}
+				if(minXIndex!=-1) break;
+			}
+			if(minXIndex==-1) return false;
+		}else {
+			try {
+				minXIndex = Integer.parseInt(minX);
+				
+				if((minXIndex<Integer.parseInt(criteria.getValues()[0]) || minXIndex>Integer.parseInt(criteria.getValues()[1]))) {
+					return false;
+				}
+			}catch(NumberFormatException e) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean validMaxYValue(String maxY) {
+		int maxYIndex = -1;
+		
+		if(minValueForX!=-1) return false;
+		
+		if(!criteria.isNumeric()) {
+			for(int i=0; i<criteria.getValues().length; i++) {
+				if(criteria.getValues()[i].equals(maxY)) {
+					maxYIndex = i;
+				}
+				if(maxYIndex!=-1) break;
+			}
+			if(maxYIndex==-1) return false;
+		}else {
+			try {
+				maxYIndex = Integer.parseInt(maxY);
+				
+				if((maxYIndex<Integer.parseInt(criteria.getValues()[0]) || maxYIndex>Integer.parseInt(criteria.getValues()[1]))) {
+					return false;
+				}
+			}catch(NumberFormatException e) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

@@ -80,30 +80,28 @@ public class BPremise extends Premise{
 				
 				if((maxYIndex<Integer.parseInt(criteria.getValues()[0]) || maxYIndex>Integer.parseInt(criteria.getValues()[1]))) {
 					return false;
-				}else if(minValueForX!=-1 && maxYIndex > minValueForX) {
-					return false;
 				}
 			}catch(NumberFormatException e) {
 				return false;
 			}
 		}
 		
+		if(maxYIndex!=-1 && minValueForX!=-1 && minValueForX<maxYIndex) return false;
+		
 		if(minDistBetweenXY!=0) {
 			// Defined: minDistBetweenXY & minValueX & maxValueY
 			if(minValueForX!=-1) {
-				if(!(minValueForX-maxYIndex >= minDistBetweenXY)) {	// If min(X)<max(Y) this condition will work correctly
+				if(!(minValueForX-maxYIndex >= minDistBetweenXY)) {
 					return false;
 				}
 				// Defined: minDistBetweenXY & maxValueY
-			}else if(minValueForX==-1) {
-				if(!criteria.isNumeric()) {
-					if(!(criteria.getValues().length-maxYIndex > minDistBetweenXY)) {
-						return false;
-					}
-				}else {
-					if(!(Integer.parseInt(criteria.getValues()[1])-maxYIndex > minDistBetweenXY)) {
-						return false;
-					}
+			}else if(!criteria.isNumeric()) {
+				if(!(criteria.getValues().length-maxYIndex > minDistBetweenXY)) {
+					return false;
+				}
+			}else {
+				if(!(Integer.parseInt(criteria.getValues()[1])-maxYIndex > minDistBetweenXY)) {
+					return false;
 				}
 			}
 		}

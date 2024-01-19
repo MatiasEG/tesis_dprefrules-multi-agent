@@ -119,13 +119,13 @@ public class WPremise extends Premise{
 				
 				if((maxYIndex<Integer.parseInt(criteria.getValues()[0]) || maxYIndex>Integer.parseInt(criteria.getValues()[1]))) {
 					return false;
-				}else if(minValueForX!=-1 && maxYIndex > minValueForX) {
-					return false;
 				}
 			}catch(NumberFormatException e) {
 				return false;
 			}
 		}
+		
+		if(maxYIndex!=-1 && minValueForX!=-1 && maxYIndex<minValueForX) return false;
 		
 		if(maxDistBetweenXY!=0) {
 			// Defined: minDistBetweenXY & minValueX & maxValueY
