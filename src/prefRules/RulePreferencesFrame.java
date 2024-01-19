@@ -138,6 +138,7 @@ public class RulePreferencesFrame extends JFrame {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, BorderLayout.CENTER);
+		listModelRulePriority = new DefaultListModel<>();
 		listPriority = new JList<String>(listModelRulePriority);
 		scrollPane.setViewportView(listPriority);
 		
@@ -166,20 +167,17 @@ public class RulePreferencesFrame extends JFrame {
 		});
 		contentPane.add(btnDeletePriority, BorderLayout.SOUTH);
 		
-		listModelRulePriority = new DefaultListModel<>();
-		
 		Component verticalStrut_2 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_2);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		contentPane.add(scrollPane_1);
+		listModelParticipantsPriorityTransitive = new DefaultListModel<>();
 		listPriorityTransitive = new JList<String>(listModelParticipantsPriorityTransitive);
 		scrollPane_1.setViewportView(listPriorityTransitive);
 		
 		JLabel lblNewLabel_6 = new JLabel("A continuacion puede ver las relaciones transitivas implicitas.");
 		scrollPane_1.setColumnHeaderView(lblNewLabel_6);
-		
-		listModelParticipantsPriorityTransitive = new DefaultListModel<>();
 		
 		updateIndexRulePriority();
 		updateRulePriorityTransitiveList();
@@ -196,15 +194,13 @@ public class RulePreferencesFrame extends JFrame {
 	}
 	
 	private void updateRulePriorityTransitiveList() {
-		data.checkParticipantsPriorityTransitivity();
-		
 		listModelParticipantsPriorityTransitive.removeAllElements();
 		for(Agent participant : data.getParticipants()) {
+			participant.checkRulePriorityTransitivity();
 			for(Priority prior : participant.getPreferences()) {
 				listModelParticipantsPriorityTransitive.addElement("El participante "+participant.getName()+" considera que la regla "+prior.getMorePriority()+" tiene mayor prioridad que la regla "+prior.getLessPriority());
 			}
 		}
-		//listPriorityTransitive.setModel(listModelParticipantsPriorityTransitive);
 	}
 	
 	private static String[] extraerDatos(String texto) {

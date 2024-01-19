@@ -3,15 +3,17 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import agent.Agent;
 import alternative.Alternative;
 import criteria.Criteria;
 import dataManager.DataManager;
 import dataManager.Priority;
+import prefRules.Rule;
 
 public class CSVwriter {
 
-	public static void saveCriteriaTableToCSV(DataManager data) {
-		String filePath = data.getSaveFolder()+"\\"+data.getProjectName()+"_criterias.csv";
+	public static void saveCriteriasToCSV(DataManager data) {
+		String filePath = data.getSaveFolder()+"\\"+data.getProjectName()+"_criteria.csv";
 		filePath = checkCSVextension(filePath);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
 
@@ -50,7 +52,7 @@ public class CSVwriter {
 	}
 	
 	public static void saveAgentPriorityToCSV(DataManager data) {
-		String filePath = data.getSaveFolder()+"\\"+data.getProjectName()+"_participantPriority.csv";
+		String filePath = data.getSaveFolder()+"\\"+data.getProjectName()+"_participants_priority_order.csv";
 		filePath = checkCSVextension(filePath);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
 
@@ -104,5 +106,51 @@ public class CSVwriter {
 			path += ".csv";
 		}
 		return path;
+	}
+	
+	public static void saveRulesToCSV(DataManager data) {
+		String filePath = data.getSaveFolder()+"/"+data.getProjectName()+"_rules.csv";
+		filePath = checkCSVextension(filePath);
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+
+			String header = "id;rule";
+			
+            writer.write(header);
+            writer.newLine();
+
+            // write data
+            for(Rule rule: data.getRules()) {
+            	writer.write(rule.toString());
+            	writer.newLine();
+            }
+
+            System.out.println("Archivo CSV creado con éxito.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+	
+	public static void saveRulePreferencesToCSV(DataManager data) {
+		String filePath = data.getSaveFolder()+"/"+data.getProjectName()+"_importance_orders.csv";
+		filePath = checkCSVextension(filePath);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+
+            writer.write("agent;importance_order");
+            writer.newLine();
+
+            // write data
+            for(Agent participant : data.getParticipants()) {
+            	writer.write(participant.getName()+";");
+            	for(int i=0; i<participant.getPreferences().size(); i++) {
+            		writer.write(participant.getPreferences().get(i).getPriorityFormatted());
+            		if(i<participant.getPreferences().size()-1) writer.write(",");
+            	}
+            	writer.newLine();
+            }
+            
+            System.out.println("Archivo CSV creado con éxito.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 }

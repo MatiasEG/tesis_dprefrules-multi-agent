@@ -137,7 +137,7 @@ public class DataManager {
 	
 	public void removeParticipant(String participant) {
 		for(int i=0; i<participants.size(); i++) {
-			if(participants.get(i).equals(participant)) {
+			if(participants.get(i).getName().equals(participant)) {
 				participants.remove(i);
 				break;
 			}
@@ -167,6 +167,10 @@ public class DataManager {
 		return participantsPriorityTransitive;
 	}
 	
+	public void setParticipantsPriorityTransitive(List<Priority> participantsPriorityTransitive){
+		this.participantsPriorityTransitive = participantsPriorityTransitive;
+	}
+	
 	public void checkParticipantsPriorityTransitivity() {
 		participantsPriorityTransitive = new ArrayList<Priority>();
 		List<Relation> relations = new ArrayList<>();
@@ -183,12 +187,16 @@ public class DataManager {
 		criterias = new ArrayList<Criteria>();
 		participants = new ArrayList<Agent>();
 		participantsPriority = new ArrayList<Priority>();
+		participantsPriorityTransitive = new ArrayList<Priority>();
 		alternatives = new ArrayList<Alternative>();
+		rules = new ArrayList<Rule>();
 
 		criterias = newData.getCriterias();
 		participants = newData.getParticipants();
 		participantsPriority = newData.getParticipantsPriority();
+		participantsPriorityTransitive = newData.getParticipantsPriorityTransitive();
 		alternatives = newData.getAlternatives();
+		rules = newData.getRules();
 	}
 	
 	public void addAlternative(Alternative newAlternative) {

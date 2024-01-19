@@ -6,9 +6,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import IOmanager.CSVreader;
+import IOmanager.CSVwriter;
+import IOmanager.FileChooser;
 import agent.Agent;
 import criteria.Criteria;
 import dataManager.DataManager;
+import errors.RuleFileError;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -47,14 +51,21 @@ public class PrefRulesFrame extends JFrame {
 					DataManager data = new DataManager("ruleTest","C:\\Users\\Matia\\Desktop\\tesis_dprefrules-multi-agent\\src\\files");
 					data.addParticipant(new Agent("Matias"));
 					
-					Criteria entretenimiento = new Criteria("Entretenimiento", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
-					Criteria clima = new Criteria("Clima", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
-					Criteria costo = new Criteria("Costo", new String[]{"caro", "medio", "normal", "economico"}, false);
-					Criteria dias = new Criteria("Dias", new String[]{"1", "30"}, true);
-					data.addCriteria(entretenimiento);
-					data.addCriteria(clima);
-					data.addCriteria(costo);
-					data.addCriteria(dias);
+					//Criteria entretenimiento = new Criteria("Entretenimiento", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
+					//Criteria clima = new Criteria("Clima", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
+					//Criteria costo = new Criteria("Costo", new String[]{"caro", "medio", "normal", "economico"}, false);
+					//Criteria dias = new Criteria("Dias", new String[]{"1", "30"}, true);
+					//data.addCriteria(entretenimiento);
+					//data.addCriteria(clima);
+					//data.addCriteria(costo);
+					//data.addCriteria(dias);
+					
+					Criteria days = new Criteria("days", new String[]{"1","30"}, true);
+					Criteria entrmnt = new Criteria("entrmnt", new String[]{"vbad","bad","reg","good","vgood"}, false);
+					Criteria service = new Criteria("service", new String[]{"vbad","bad","reg","good","vgood"}, false);
+					data.addCriteria(days);
+					data.addCriteria(entrmnt);
+					data.addCriteria(service);
 					
 					PrefRulesFrame frame = new PrefRulesFrame(data);
 					frame.setVisible(true);
@@ -71,7 +82,7 @@ public class PrefRulesFrame extends JFrame {
 	public PrefRulesFrame(DataManager data) {
 		this.data = data;
 		setTitle("Reglas de preferencia definidas");
-		setBounds(100, 100, 450, 450);
+		setBounds(100, 100, 400, 450);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -86,7 +97,7 @@ public class PrefRulesFrame extends JFrame {
 		contentPane.add(verticalStrut);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		Dimension panelDimensionsScrollPane = new Dimension(450, 200);
+		Dimension panelDimensionsScrollPane = new Dimension(400, 200);
 		scrollPane.setPreferredSize(panelDimensionsScrollPane);
 		scrollPane.setMaximumSize(panelDimensionsScrollPane);
 		contentPane.add(scrollPane);
@@ -95,13 +106,48 @@ public class PrefRulesFrame extends JFrame {
 		listRules = new JList<String>(listModelRules);
 		scrollPane.setViewportView(listRules);
 		
+		Component verticalStrut_4 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_4);
+		
+		Dimension panelBtnDimensions = new Dimension(400, 40);
+		
+		JPanel panelFileButtons = new JPanel();
+		contentPane.add(panelFileButtons);
+		panelFileButtons.setPreferredSize(panelBtnDimensions);
+		panelFileButtons.setMaximumSize(panelBtnDimensions);
+		panelFileButtons.setLayout(new GridLayout(0, 2, 0, 0));
+		
+		JButton btnLoadFile = new JButton("Cargar desde archivo");
+		btnLoadFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String path = FileChooser.showFileChooser();
+				try {
+					CSVreader.readRulesCSV(path, PrefRulesFrame.this.data);
+					PrefRulesFrame.this.updateRules();
+				} catch (RuleFileError e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
+					e1.printStackTrace();
+				}
+			}
+		});
+		panelFileButtons.add(btnLoadFile);
+		btnLoadFile.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		JButton btnNewButton = new JButton("Guardar archivo");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CSVwriter.saveRulesToCSV(PrefRulesFrame.this.data);
+			}
+		});
+		panelFileButtons.add(btnNewButton);
+		
 		Component verticalStrut_1 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_1);
 		
 		JPanel panelButtons = new JPanel();
-		Dimension panelDimensions = new Dimension(450, 40);
-		panelButtons.setPreferredSize(panelDimensions);
-		panelButtons.setMaximumSize(panelDimensions);
+		
+		panelButtons.setPreferredSize(panelBtnDimensions);
+		panelButtons.setMaximumSize(panelBtnDimensions);
 		contentPane.add(panelButtons);
 		panelButtons.setLayout(new GridLayout(1, 0, 0, 0));
 		
@@ -219,6 +265,12 @@ public class PrefRulesFrame extends JFrame {
 		contentPane.add(verticalStrut_3);
 		
 		JButton btnRulePreferences = new JButton("Definir preferencias");
+		btnRulePreferences.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RulePreferencesFrame frame = new RulePreferencesFrame(PrefRulesFrame.this.data);
+				frame.setVisible(true);
+			}
+		});
 		btnRulePreferences.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(btnRulePreferences);
 	}

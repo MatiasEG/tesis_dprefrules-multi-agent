@@ -4,15 +4,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dataManager.Priority;
+import dataManager.Relation;
+import dataManager.TransitivityCheck;
 
 public class Agent {
 
 	protected String name;
 	protected List<Priority> rulePriority;
+	protected List<Priority> rulePriorityTransitive;
 	
 	public Agent(String name) {
 		this.name = name;
 		this.rulePriority = new ArrayList<Priority>();
+		this.rulePriorityTransitive = new ArrayList<Priority>();
+	}
+
+	public List<Priority> getRulePriorityTransitive() {
+		return rulePriorityTransitive;
+	}
+
+	public void setRulePriorityTransitive(List<Priority> rulePriorityTransitive) {
+		this.rulePriorityTransitive = rulePriorityTransitive;
+	}
+	
+	public void addRulePriorityTransitive(Priority prior) {
+		rulePriorityTransitive.add(prior);
+	}
+	
+	public void checkRulePriorityTransitivity() {
+		rulePriorityTransitive = new ArrayList<Priority>();
+		List<Relation> relations = new ArrayList<>();
+		for(Priority prior: rulePriority) {
+			relations.add(new Relation(prior.getMorePriority(), prior.getLessPriority()));
+		}
+		List<Relation> transitiveRelations = TransitivityCheck.getTransitivityRelations(relations);
+		for(Relation r: transitiveRelations) {
+			rulePriorityTransitive.add(new Priority(r.getFirstString(), r.getSecondString()));
+		}
 	}
 
 	public String getName() {

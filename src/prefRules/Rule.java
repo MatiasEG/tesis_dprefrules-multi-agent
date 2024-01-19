@@ -67,6 +67,25 @@ public class Rule {
 		this.equalP.add(ePremise);
 	}
 	
+	public boolean availableCriteria(Criteria criteria) {
+		for(BPremise bPremise : betterP) {
+			if(bPremise.getCriteria().getName().equals(criteria.getName())) {
+				return false;
+			}
+		}
+		for(WPremise wPremise : worstP) {
+			if(wPremise.getCriteria().getName().equals(criteria.getName())) {
+				return false;
+			}
+		}
+		for(EPremise ePremise : equalP) {
+			if(ePremise.getCriteria().getName().equals(criteria.getName())) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	public String[] getAvailableCriterias(DataManager data){
 		List<String> availableCriterias = new ArrayList<String>();
 		availableCriterias.add("-");
@@ -105,10 +124,7 @@ public class Rule {
 		String[] availableCriteriasToReturn = new String[availableCriterias.size()];
 		for(int i=0; i<availableCriterias.size(); i++) {
 			availableCriteriasToReturn[i] = availableCriterias.get(i);
-			System.out.print(availableCriterias.get(i)+" - ");
 		}
-		System.out.println("");
-		System.out.println(" - - - - - - - - ");
 		return availableCriteriasToReturn;
 	}
 	
@@ -161,5 +177,32 @@ public class Rule {
 			if(i<worstP.size()-1) description += ", ademas puedo sacrificar ";
 		}
 		return description;
+	}
+	
+	public String toString() {
+		String toString = name+";";
+		for(int i=0; i<betterP.size(); i++) {
+			toString +=  betterP.get(i).getPremise();
+			if(i<betterP.size()-1) toString += ",";
+		}
+		for(int i=0; i<equalP.size(); i++) {
+			if(i==0) toString += ",";
+			toString += equalP.get(i).getPremise();
+			if(i<equalP.size()-1) toString += ",";
+		}
+		for(int i=0; i<worstP.size(); i++) {
+			if(i==0) toString += ",";
+			toString += worstP.get(i).getPremise();
+			if(i<worstP.size()-1) toString += ",";
+		}
+		toString += " ==> pref(X,Y)";
+		return toString;
+	}
+	
+	public void update(Rule newData) {
+		this.name = newData.getName();
+		this.betterP = newData.getBetterP();
+		this.worstP = newData.getWorstP();
+		this.equalP = newData.getEqualP();
 	}
 }

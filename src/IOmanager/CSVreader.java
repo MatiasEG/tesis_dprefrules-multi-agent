@@ -17,6 +17,8 @@ import dataManager.Priority;
 import errors.AgentPriorityError;
 import errors.CriteriaFileError;
 import errors.EvidenceFileError;
+import errors.RuleFileError;
+import prefRules.Rule;
 
 public class CSVreader {
 
@@ -132,6 +134,7 @@ public class CSVreader {
 		newData.setCriterias(oldData.getCriterias());
 		newData.setParticipants(oldData.getParticipants());
 		newData.setParticipantsPriority(oldData.getParticipantsPriority());
+		newData.setParticipantsPriorityTransitive(oldData.getParticipantsPriorityTransitive());
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 			String header = "alternative";
@@ -163,6 +166,56 @@ public class CSVreader {
 		        oldData.updateData(newData);
 	    	}else {
 	    		throw new EvidenceFileError("El archivo no contiene los criterios definidos anteriormente.");
+	    	}
+	    }catch (IOException e) {
+	    	e.printStackTrace();
+	    }
+	}
+	
+	public static void readRulesCSV(String csvFile, DataManager oldData) throws RuleFileError {
+		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
+		newData.setCriterias(oldData.getCriterias());
+		newData.setParticipants(oldData.getParticipants());
+		newData.setParticipantsPriority(oldData.getParticipantsPriority());
+		newData.setParticipantsPriorityTransitive(oldData.getParticipantsPriorityTransitive());
+		newData.setAlternatives(oldData.getAlternatives());
+		
+		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+			String header = "id;rule";
+			boolean error = false;
+			
+	    	if(br.readLine().equals(header)) {
+	    		String line;
+		        while ((line = br.readLine()) != null) {
+		            String[] parts = line.split(";");
+					if (parts.length == 2) {
+						String ruleName = parts[0].trim();
+						Rule auxRule = new Rule(ruleName);
+						
+						//String[] premises = parts[1].split("==>");
+						String[] premises = parts[1].split("\\s*==>\\s*");
+						if(premises.length==2 && premises[1].equals("pref(X,Y)")) {
+							boolean validation = RuleParser.analizeRule(premises[0], auxRule, newData);
+							System.out.println("Rule final --> "+auxRule.toString());
+							if(validation) {
+								newData.addRule(auxRule);
+							}else {
+								error = true;
+								break;
+							}
+						}else {
+							for(String premise : premises) {
+								System.out.println("p "+premise);
+							}
+							System.out.println("");
+						}
+		            }else {
+		            	throw new RuleFileError("(2) El archivo no contiene la sintaxis correspondiente.");
+		            }
+				}
+		        if(!error) oldData.updateData(newData);
+	    	}else {
+	    		throw new RuleFileError("(3) El archivo no contiene la sintaxis correspondiente.");
 	    	}
 	    }catch (IOException e) {
 	    	e.printStackTrace();
