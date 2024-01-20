@@ -182,7 +182,6 @@ public class CSVreader {
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 			String header = "id;rule";
-			boolean error = false;
 			
 	    	if(br.readLine().equals(header)) {
 	    		String line;
@@ -192,34 +191,34 @@ public class CSVreader {
 						String ruleName = parts[0].trim();
 						Rule auxRule = new Rule(ruleName);
 						
-						//String[] premises = parts[1].split("==>");
 						String[] premises = parts[1].split("\\s*==>\\s*");
 						if(premises.length==2 && premises[1].equals("pref(X,Y)")) {
 							boolean validation = RuleParser.analizeRule(premises[0], auxRule, newData);
 							System.out.println("Rule final --> "+auxRule.toString());
 							if(validation) {
-								newData.addRule(auxRule);
+								if(auxRule.getBetterP().size()>0) {
+									newData.addRule(auxRule);
+								}else {
+									throw new RuleFileError("La regla "+auxRule.getName()+" no contiene al menos una premisa better.");
+								}
 							}else {
-								error = true;
-								break;
+								throw new RuleFileError("El archivo no contiene la sintaxis correspondiente.");
 							}
 						}else {
-							for(String premise : premises) {
-								System.out.println("p "+premise);
-							}
-							System.out.println("");
+							throw new RuleFileError("(No se respeta el ==>) El archivo no contiene la sintaxis correspondiente.");
 						}
 		            }else {
-		            	throw new RuleFileError("(2) El archivo no contiene la sintaxis correspondiente.");
+		            	throw new RuleFileError("(Contiene mas de un ;) El archivo no contiene la sintaxis correspondiente.");
 		            }
 				}
-		        if(!error) oldData.updateData(newData);
 	    	}else {
-	    		throw new RuleFileError("(3) El archivo no contiene la sintaxis correspondiente.");
+	    		throw new RuleFileError("(Header) El archivo no contiene la sintaxis correspondiente.");
 	    	}
 	    }catch (IOException e) {
 	    	e.printStackTrace();
 	    }
+		
+		oldData.updateData(newData);
 	}
 }
 

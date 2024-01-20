@@ -11,6 +11,8 @@ import agent.AgentFrame;
 import alternative.EvidenceFrame;
 import criteria.CriteriaFrame;
 import dataManager.DataManager;
+import prefRules.PrefRulesFrame;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -35,6 +37,8 @@ public class MainWindow extends JFrame {
     private JButton btnViewCriteria;
     private JButton btnEditEvidence;
     private JButton btnViewEvidence;
+    private JButton btnEditRules;
+    private JButton btnViewRules;
 
 	private DataManager data;
 	private boolean modifyingData;
@@ -299,31 +303,48 @@ public class MainWindow extends JFrame {
 		JPanel panelBtnRules = new JPanel();
 		panelRules.add(panelBtnRules);
 		
-		JButton btnEditRules = new JButton("Definir reglas");
+		btnEditRules = new JButton("Definir reglas");
+		btnEditRules.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PrefRulesFrame frame = new PrefRulesFrame(data);
+				frame.setVisible(true);
+				
+				if(state<4) state = 4;
+				MainWindow.this.modifyingData = false;
+				if(data.getRules().size()>0) modifyingData = true;
+				
+				// WindowListener for detect when the frame is closed
+				frame.addWindowListener(new WindowAdapter() {
+		            @Override
+		            public void windowClosing(WindowEvent e) {
+		            	if(!modifyingData) {
+			                if(data.getRules().size()>0) {
+			                	setState5(false);
+			                }else {
+			                	setState4(false);
+			                	JOptionPane.showMessageDialog(null, "Debe definir al menos un criterio de comparacion para poder seguir con el problema y definir las alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+			                }
+			            }else {
+			            	if(data.getRules().size()>0) {
+			            		checkState(false);
+			            	}else {
+			            		setState4(false);
+			                	JOptionPane.showMessageDialog(null, "Debe definir al menos un criterio de comparacion para poder seguir con el problema y definir las alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+			            	}
+			            }
+		            }
+		        });
+				
+				checkState(true);
+			}
+		});
 		panelBtnRules.add(btnEditRules);
 		
-		JButton btnViewRules = new JButton("Ver reglas");
+		btnViewRules = new JButton("Ver reglas");
 		panelBtnRules.add(btnViewRules);
 		
 		Component verticalStrut_4 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_4);
-		
-		JPanel panelRulePreference = new JPanel();
-		contentPane.add(panelRulePreference);
-		panelRulePreference.setLayout(new BoxLayout(panelRulePreference, BoxLayout.Y_AXIS));
-		
-		JLabel lblNewLabel_2 = new JLabel("A continuacion defina la preferencia que tienen los participantes sobre las reglas definidas");
-		lblNewLabel_2.setAlignmentX(0.5f);
-		panelRulePreference.add(lblNewLabel_2);
-		
-		JPanel panelBtnRulePreference = new JPanel();
-		panelRulePreference.add(panelBtnRulePreference);
-		
-		JButton btnEditRulePreference = new JButton("Editar preferencias entre reglas");
-		panelBtnRulePreference.add(btnEditRulePreference);
-		
-		JButton btnViewRulePreference = new JButton("Ver preferencias entre reglas");
-		panelBtnRulePreference.add(btnViewRulePreference);
 		
 		Dimension panelDimensions = new Dimension(700, 40);
 		panelBtnSaveFolder.setPreferredSize(panelDimensions);
@@ -336,8 +357,6 @@ public class MainWindow extends JFrame {
 		panelBtnAlternatives.setMaximumSize(panelDimensions);
 		panelBtnRules.setPreferredSize(panelDimensions);
 		panelBtnRules.setMaximumSize(panelDimensions);
-		panelBtnRulePreference.setPreferredSize(panelDimensions);
-		panelBtnRulePreference.setMaximumSize(panelDimensions);
 		
 		setState0(false);
 	}
@@ -389,6 +408,9 @@ public class MainWindow extends JFrame {
 	    
 	    btnEditEvidence.setEnabled(false);
 	    btnViewEvidence.setEnabled(false);
+	    
+	    btnEditRules.setEnabled(false);
+	    btnViewRules.setEnabled(false);
 	}
 	
 	// The user indicate name and project folder
@@ -412,6 +434,9 @@ public class MainWindow extends JFrame {
 	    
 	    btnEditEvidence.setEnabled(false);
 	    btnViewEvidence.setEnabled(false);
+	    
+	    btnEditRules.setEnabled(false);
+	    btnViewRules.setEnabled(false);
 	}
 	
 	// The user indicate the participants and they priorities
@@ -437,6 +462,9 @@ public class MainWindow extends JFrame {
 	    
 	    btnEditEvidence.setEnabled(false);
 	    btnViewEvidence.setEnabled(false);
+	    
+	    btnEditRules.setEnabled(false);
+	    btnViewRules.setEnabled(false);
 	}
 	
 	// The user indicate the criteria
@@ -463,11 +491,14 @@ public class MainWindow extends JFrame {
 	    btnViewCriteria.setEnabled(true);
 	    
 	    btnViewEvidence.setEnabled(false);
+	    
+	    btnEditRules.setEnabled(false);
+	    btnViewRules.setEnabled(false);
 	}
 	
 	// The user indicate the evidence
 	// > Must indicate the preference rules
-	// [Here the alternatives can be edited but never can be less than 2]
+	// [Here the rules can be edited but never can be less than 1]
 	private void setState4(boolean isEditing) {
 		state = 4;
 		if(isEditing) {
@@ -475,11 +506,13 @@ public class MainWindow extends JFrame {
 			btnEditParticipants.setEnabled(false);
 			btnEditCriteria.setEnabled(false);
 			btnEditEvidence.setEnabled(false);
+			btnEditRules.setEnabled(false);
 		}else {
 			btnEditNameAndFolder.setEnabled(true);
 			btnEditParticipants.setEnabled(true);
 			btnEditCriteria.setEnabled(true);
 			btnEditEvidence.setEnabled(true);
+			btnEditRules.setEnabled(true);
 		}
 		
 	    btnViewNameAndFolder.setEnabled(true);
@@ -489,5 +522,37 @@ public class MainWindow extends JFrame {
 	    btnViewCriteria.setEnabled(true);
 	    
 	    btnViewEvidence.setEnabled(true);
+	    
+	    btnViewRules.setEnabled(false);
+	}
+	
+	// The user indicate the rules
+	// > This is a finish state
+	// [Here you can do something with the files or data?]
+	private void setState5(boolean isEditing) {
+		state = 4;
+		if(isEditing) {
+			btnEditNameAndFolder.setEnabled(false);
+			btnEditParticipants.setEnabled(false);
+			btnEditCriteria.setEnabled(false);
+			btnEditEvidence.setEnabled(false);
+			btnEditRules.setEnabled(false);
+		}else {
+			btnEditNameAndFolder.setEnabled(true);
+			btnEditParticipants.setEnabled(true);
+			btnEditCriteria.setEnabled(true);
+			btnEditEvidence.setEnabled(true);
+			btnEditRules.setEnabled(true);
+		}
+		
+	    btnViewNameAndFolder.setEnabled(true);
+	    
+	    btnViewParticipants.setEnabled(true);
+	    
+	    btnViewCriteria.setEnabled(true);
+	    
+	    btnViewEvidence.setEnabled(true);
+	    
+	    btnViewRules.setEnabled(false);
 	}
 }
