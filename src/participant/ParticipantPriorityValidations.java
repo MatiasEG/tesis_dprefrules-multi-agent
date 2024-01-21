@@ -1,9 +1,9 @@
-package agent;
+package participant;
 
 import dataManager.DataManager;
 import dataManager.DataValidations;
 
-public class AgentPriorityValidations {
+public class ParticipantPriorityValidations {
 
 	public static String validateAgentName(String name, DataManager data) {
 		if (name != null && !name.trim().isEmpty()) {
@@ -21,12 +21,12 @@ public class AgentPriorityValidations {
 	
 	public static void ifNotExistAddNewAgent(String agent, DataManager data) {
 		boolean exist = false;
-		for(Agent ag: data.getParticipants()) {
+		for(Participant ag: data.getParticipants()) {
 			if(ag.getName().equals(agent)) {
 				exist = true;
 				break;
 			}
 		}
-		if(!exist) data.addParticipant(new Agent(agent));
+		if(!exist) data.addParticipant(new Participant(agent));
 	}
 }

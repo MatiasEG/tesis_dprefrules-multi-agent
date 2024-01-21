@@ -1,4 +1,4 @@
-package agent;
+package participant;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -22,7 +22,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 
-public class AgentPriorityFrame extends JFrame {
+public class ParticipantPriorityFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -40,7 +40,7 @@ public class AgentPriorityFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AgentPriorityFrame(DataManager data, boolean onlyView) {
+	public ParticipantPriorityFrame(DataManager data, boolean onlyView) {
 		this.data = data;
 		
 		setTitle("Prioridades entre agentes");
@@ -113,9 +113,9 @@ public class AgentPriorityFrame extends JFrame {
 					String worstAgent = (String) comboBoxWorst.getSelectedItem();
 					if(!bestAgent.equals(worstAgent)) {
 						Priority pprior = new Priority(bestAgent, worstAgent);
-						String validation = pprior.isValid(AgentPriorityFrame.this.data);
+						String validation = pprior.isValid(ParticipantPriorityFrame.this.data);
 						if(validation.equals("OK")) {
-							AgentPriorityFrame.this.data.addParticipantsPriority(pprior);
+							ParticipantPriorityFrame.this.data.addParticipantsPriority(pprior);
 							listModelParticipantsPriority.addElement("El participante "+bestAgent+" tiene mayor prioridad que el participante "+worstAgent);
 							updateParticipantsPriorityTransitiveList();
 						}else {
@@ -134,14 +134,14 @@ public class AgentPriorityFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int selectedIndex = listPriority.getSelectedIndex();
 		        if (selectedIndex != -1) {
-		        	Priority participantPriorityToRemove = AgentPriorityFrame.this.data.getParticipantsPriority().get(selectedIndex);
-		        	int option = JOptionPane.showConfirmDialog(AgentPriorityFrame.this,
+		        	Priority participantPriorityToRemove = ParticipantPriorityFrame.this.data.getParticipantsPriority().get(selectedIndex);
+		        	int option = JOptionPane.showConfirmDialog(ParticipantPriorityFrame.this,
 		                    "¿Seguro que desea eliminar la regla seleccionada: ( "+participantPriorityToRemove.getMorePriority()+" > "+participantPriorityToRemove.getLessPriority()+" )?",
 		                    "Confirmar Eliminación",
 		                    JOptionPane.YES_NO_OPTION);
 		            if (option == JOptionPane.YES_OPTION) {
 		            	listModelParticipantsPriority.remove(selectedIndex);
-		            	AgentPriorityFrame.this.data.getParticipantsPriority().remove(selectedIndex);
+		            	ParticipantPriorityFrame.this.data.getParticipantsPriority().remove(selectedIndex);
 		            	updateParticipantsPriorityTransitiveList();
 		            }
 		        }

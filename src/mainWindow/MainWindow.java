@@ -7,10 +7,10 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import IOmanager.NameAndFolderFrame;
-import agent.AgentFrame;
 import alternative.EvidenceFrame;
 import criteria.CriteriaFrame;
 import dataManager.DataManager;
+import participant.ParticipantFrame;
 import prefRules.PrefRulesFrame;
 
 import javax.swing.JButton;
@@ -154,7 +154,7 @@ public class MainWindow extends JFrame {
 		panelBtnAgents.add(btnEditParticipants);
 		btnEditParticipants.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AgentFrame frame = new AgentFrame(data, false);
+				ParticipantFrame frame = new ParticipantFrame(data, false);
 		        frame.setVisible(true);
 		        
 		        if(state<1) state = 1;
@@ -186,7 +186,7 @@ public class MainWindow extends JFrame {
 		btnViewParticipants = new JButton("Ver participantes y prioridades");
 		btnViewParticipants.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AgentFrame frame = new AgentFrame(data, true);
+				ParticipantFrame frame = new ParticipantFrame(data, true);
 		        frame.setVisible(true);
 			}
 		});

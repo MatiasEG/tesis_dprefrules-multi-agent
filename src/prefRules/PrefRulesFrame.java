@@ -9,10 +9,10 @@ import javax.swing.border.EmptyBorder;
 import IOmanager.CSVreader;
 import IOmanager.CSVwriter;
 import IOmanager.FileChooser;
-import agent.Agent;
 import criteria.Criteria;
 import dataManager.DataManager;
 import exceptions.RuleFileErrorException;
+import participant.Participant;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -49,7 +49,7 @@ public class PrefRulesFrame extends JFrame {
 			public void run() {
 				try {
 					DataManager data = new DataManager("ruleTest","C:\\Users\\Matia\\Desktop\\tesis_dprefrules-multi-agent\\src\\files");
-					data.addParticipant(new Agent("Matias"));
+					data.addParticipant(new Participant("Matias"));
 					
 					//Criteria entretenimiento = new Criteria("Entretenimiento", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
 					//Criteria clima = new Criteria("Clima", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);

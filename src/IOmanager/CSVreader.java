@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import agent.Agent;
-import agent.AgentPriorityValidations;
 import alternative.Alternative;
 import criteria.Criteria;
 import dataManager.CriteriaManager;
@@ -20,6 +18,8 @@ import exceptions.CriteriaFileException;
 import exceptions.EvidenceFileException;
 import exceptions.RuleFileErrorException;
 import exceptions.RulePriorityException;
+import participant.Participant;
+import participant.ParticipantPriorityValidations;
 import prefRules.Rule;
 
 public class CSVreader {
@@ -102,10 +102,10 @@ public class CSVreader {
 					    String morePriorAgent = parts[0].trim();
 					    String lessPriorAgent = parts[1].trim();
 					    
-					    String nameValidations1 = AgentPriorityValidations.validateAgentName(morePriorAgent, newData);
+					    String nameValidations1 = ParticipantPriorityValidations.validateAgentName(morePriorAgent, newData);
 					    if(!nameValidations1.equals("OK")) throw new AgentPriorityException(nameValidations1);
 					    
-					    String nameValidations2 = AgentPriorityValidations.validateAgentName(lessPriorAgent, newData);
+					    String nameValidations2 = ParticipantPriorityValidations.validateAgentName(lessPriorAgent, newData);
 					    if(!nameValidations2.equals("OK")) throw new AgentPriorityException(nameValidations2);
 					    
 						Priority newParticipantsPriority = new Priority(morePriorAgent, lessPriorAgent);
@@ -113,8 +113,8 @@ public class CSVreader {
 					    
 					    if(validPrior.equals("OK")) {
 					    	newData.addParticipantsPriority(newParticipantsPriority);
-					    	AgentPriorityValidations.ifNotExistAddNewAgent(morePriorAgent, newData);
-					    	AgentPriorityValidations.ifNotExistAddNewAgent(lessPriorAgent, newData);
+					    	ParticipantPriorityValidations.ifNotExistAddNewAgent(morePriorAgent, newData);
+					    	ParticipantPriorityValidations.ifNotExistAddNewAgent(lessPriorAgent, newData);
 					    }else {
 					    	throw new AgentPriorityException(validPrior);
 					    }
@@ -226,7 +226,7 @@ public class CSVreader {
 	public static void readRulePriorityCSV(String csvFile, DataManager oldData) throws RulePriorityException {
 		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
 		newData.updateData(oldData);
-		for(Agent participant : newData.getParticipants()) {
+		for(Participant participant : newData.getParticipants()) {
 			participant.setRulePriority(new ArrayList<Priority>());
 		}
 		
@@ -239,7 +239,7 @@ public class CSVreader {
 		        		String participantName = namePref[0].trim();
 						String rulePreferences = namePref[1].trim();
 						
-						Agent participant = newData.getParticipant(participantName);
+						Participant participant = newData.getParticipant(participantName);
 						if(participant!=null) {
 							String[] preferences = rulePreferences.split(",");
 							for(String preference : preferences) {

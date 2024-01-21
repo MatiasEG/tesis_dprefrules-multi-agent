@@ -3,15 +3,15 @@ package dataManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import agent.Agent;
 import alternative.Alternative;
 import criteria.Criteria;
+import participant.Participant;
 import prefRules.Rule;
 
 public class DataManager {
 
 	protected List<Criteria> criterias;
-	protected List<Agent> participants;
+	protected List<Participant> participants;
 	protected List<Priority> participantsPriority;
 	protected List<Priority> participantsPriorityTransitive;
 	protected List<Alternative> alternatives;
@@ -25,7 +25,7 @@ public class DataManager {
 		this.folderPath = folderPath;
 		
 		criterias = new ArrayList<Criteria>();
-		participants = new ArrayList<Agent>();
+		participants = new ArrayList<Participant>();
 		participantsPriority = new ArrayList<Priority>();
 		participantsPriorityTransitive = new ArrayList<Priority>();
 		alternatives = new ArrayList<Alternative>();
@@ -98,12 +98,12 @@ public class DataManager {
 		}
 	}
 	
-	public void addParticipant(Agent newParticipant) {
+	public void addParticipant(Participant newParticipant) {
 		participants.add(newParticipant);
 	}
 	
-	public Agent getParticipant(String name) {
-		for(Agent agent : participants) {
+	public Participant getParticipant(String name) {
+		for(Participant agent : participants) {
 			if(agent.getName().equals(name)) {
 				return agent;
 			}
@@ -111,13 +111,13 @@ public class DataManager {
 		return null;
 	}
 	
-	public List<Agent> getParticipants(){
+	public List<Participant> getParticipants(){
 		return participants;
 	}
 	
 	public List<String> getParticipantsNames() {
 		List<String> names = new ArrayList<String>();
-		for(Agent participant : participants) {
+		for(Participant participant : participants) {
 			names.add(participant.getName());
 		}
 		return names;
@@ -196,7 +196,7 @@ public class DataManager {
 	
 	public void updateData(DataManager newData) {
 		criterias = new ArrayList<Criteria>();
-		participants = new ArrayList<Agent>();
+		participants = new ArrayList<Participant>();
 		participantsPriority = new ArrayList<Priority>();
 		participantsPriorityTransitive = new ArrayList<Priority>();
 		alternatives = new ArrayList<Alternative>();
@@ -235,7 +235,7 @@ public class DataManager {
 		}
 	}
 	
-	public void setParticipants(List<Agent> participants) {
+	public void setParticipants(List<Participant> participants) {
 		this.participants = participants;
 	}
 	

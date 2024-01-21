@@ -1,4 +1,4 @@
-package agent;
+package participant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,13 +7,13 @@ import dataManager.Priority;
 import dataManager.Relation;
 import dataManager.TransitivityCheck;
 
-public class Agent {
+public class Participant {
 
 	protected String name;
 	protected List<Priority> rulePriority;
 	protected List<Priority> rulePriorityTransitive;
 	
-	public Agent(String name) {
+	public Participant(String name) {
 		this.name = name;
 		this.rulePriority = new ArrayList<Priority>();
 		this.rulePriorityTransitive = new ArrayList<Priority>();

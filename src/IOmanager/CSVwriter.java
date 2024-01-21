@@ -3,11 +3,11 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import agent.Agent;
 import alternative.Alternative;
 import criteria.Criteria;
 import dataManager.DataManager;
 import dataManager.Priority;
+import participant.Participant;
 import prefRules.Rule;
 
 public class CSVwriter {
@@ -139,7 +139,7 @@ public class CSVwriter {
             writer.newLine();
 
             // write data
-            for(Agent participant : data.getParticipants()) {
+            for(Participant participant : data.getParticipants()) {
             	writer.write(participant.getName()+";");
             	for(int i=0; i<participant.getPreferences().size(); i++) {
             		writer.write(participant.getPreferences().get(i).getPriorityFormatted());

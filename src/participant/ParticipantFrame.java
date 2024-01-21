@@ -1,4 +1,4 @@
-package agent;
+package participant;
 
 import java.awt.EventQueue;
 
@@ -28,7 +28,7 @@ import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class AgentFrame extends JFrame {
+public class ParticipantFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -50,7 +50,7 @@ public class AgentFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AgentFrame frame = new AgentFrame(new DataManager("",""), false);
+					ParticipantFrame frame = new ParticipantFrame(new DataManager("",""), false);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -62,7 +62,7 @@ public class AgentFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AgentFrame(DataManager data, boolean viewOnly) {
+	public ParticipantFrame(DataManager data, boolean viewOnly) {
 		this.data = data;
 		
 		setTitle("Definir participantes");
@@ -135,7 +135,7 @@ public class AgentFrame extends JFrame {
 		JButton btnViewParticipantsPriority = new JButton("Ver prioridad entre participantes");
 		btnViewParticipantsPriority.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AgentPriorityFrame frame = new AgentPriorityFrame(AgentFrame.this.data, true);
+				ParticipantPriorityFrame frame = new ParticipantPriorityFrame(ParticipantFrame.this.data, true);
 				frame.setVisible(true);
 			}
 		});
@@ -147,8 +147,8 @@ public class AgentFrame extends JFrame {
 		panelAgentsButtons.add(btnSaveParticipantsFile);
 		btnSaveParticipantsFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(AgentFrame.this.data.getParticipants().size()>0) {
-					CSVwriter.saveAgentPriorityToCSV(AgentFrame.this.data);
+				if(ParticipantFrame.this.data.getParticipants().size()>0) {
+					CSVwriter.saveAgentPriorityToCSV(ParticipantFrame.this.data);
 					JOptionPane.showMessageDialog(null, "Datos validados y guardados, ya puede cerrar esta ventana", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 					viewOnlyMod(true);
 				}
@@ -159,8 +159,8 @@ public class AgentFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String path = FileChooser.showFileChooser();
 				try {
-					CSVreader.readAgentPriorityCSV(path, AgentFrame.this.data);
-					AgentFrame.this.updateVisualComponents(AgentFrame.this.data);
+					CSVreader.readAgentPriorityCSV(path, ParticipantFrame.this.data);
+					ParticipantFrame.this.updateVisualComponents(ParticipantFrame.this.data);
 				} catch (AgentPriorityException e1) {
 	    			JOptionPane.showMessageDialog(null, e1.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
 				}
@@ -168,9 +168,9 @@ public class AgentFrame extends JFrame {
 		});
 		btnEditParticipantsPriority.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String validation = canDefineAgentPriority(AgentFrame.this.data);
+				String validation = canDefineAgentPriority(ParticipantFrame.this.data);
 				if(validation.equals("OK")) {
-					AgentPriorityFrame frame = new AgentPriorityFrame(AgentFrame.this.data, false);
+					ParticipantPriorityFrame frame = new ParticipantPriorityFrame(ParticipantFrame.this.data, false);
 					frame.setVisible(true);
 				}else {
 					JOptionPane.showMessageDialog(null, validation, "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -179,7 +179,7 @@ public class AgentFrame extends JFrame {
 		});
 		btnAddUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				addParticipantName(AgentFrame.this.data);
+				addParticipantName(ParticipantFrame.this.data);
 			}
 		});
 		updateVisualComponents(data);
@@ -214,11 +214,11 @@ public class AgentFrame extends JFrame {
 	
 	private void addParticipantName(DataManager data) {
         String name = JOptionPane.showInputDialog(this, "Ingrese el nombre del participante que desea agregar:");
-        String validation = AgentPriorityValidations.validateAgentName(name, data);
+        String validation = ParticipantPriorityValidations.validateAgentName(name, data);
         if(validation.equals("OK")) {
         	if(DataValidations.validateStringListNotContainNewElement(data.getParticipantsNames(), name)) {
     			listModelParticipants.addElement(name);
-    			data.addParticipant(new Agent(name));
+    			data.addParticipant(new Participant(name));
     		}else {
     			JOptionPane.showMessageDialog(null, "Error, el nombre \""+name+"\" ya se encuentra en la lista de participantes.", "Advertencia", JOptionPane.WARNING_MESSAGE);
     		}

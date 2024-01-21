@@ -7,10 +7,10 @@ import javax.swing.border.EmptyBorder;
 import IOmanager.CSVreader;
 import IOmanager.CSVwriter;
 import IOmanager.FileChooser;
-import agent.Agent;
 import dataManager.DataManager;
 import dataManager.Priority;
 import exceptions.RulePriorityException;
+import participant.Participant;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -182,7 +182,7 @@ public class RulePreferencesFrame extends JFrame {
 				int selectedIndex = listPriority.getSelectedIndex();
 		        if (selectedIndex != -1) {
 		        	String[] participantAndIndex =  extraerDatos(listPriority.getSelectedValue());
-		        	Agent participant = RulePreferencesFrame.this.data.getParticipant(participantAndIndex[0]);
+		        	Participant participant = RulePreferencesFrame.this.data.getParticipant(participantAndIndex[0]);
 		        	Priority prior = participant.getPreferences().get(Integer.parseInt(participantAndIndex[1]));
 		        	
 		        	int option = JOptionPane.showConfirmDialog(RulePreferencesFrame.this,
@@ -219,7 +219,7 @@ public class RulePreferencesFrame extends JFrame {
 	private void updateIndexRulePriority() {
 		listModelRulePriority.removeAllElements();
 		for(int i=0; i<data.getParticipants().size(); i++) {
-			Agent participant = data.getParticipants().get(i);
+			Participant participant = data.getParticipants().get(i);
 			for(Priority prior : participant.getPreferences()) {
 				listModelRulePriority.addElement("El participante <"+participant.getName()+"("+i+")> considera que la regla "+prior.getMorePriority()+" tiene mayor prioridad que la regla "+prior.getLessPriority());
 			}
@@ -228,7 +228,7 @@ public class RulePreferencesFrame extends JFrame {
 	
 	private void updateRulePriorityTransitiveList() {
 		listModelParticipantsPriorityTransitive.removeAllElements();
-		for(Agent participant : data.getParticipants()) {
+		for(Participant participant : data.getParticipants()) {
 			participant.checkRulePriorityTransitivity();
 			for(Priority prior : participant.getPreferences()) {
 				listModelParticipantsPriorityTransitive.addElement("El participante "+participant.getName()+" considera que la regla "+prior.getMorePriority()+" tiene mayor prioridad que la regla "+prior.getLessPriority());

@@ -6,11 +6,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import agent.Agent;
 import criteria.Criteria;
 import dataManager.DataManager;
 import dataManager.DataValidations;
 import exceptions.SintacticStringError;
+import participant.Participant;
 import premises.BPremiseFrame;
 import premises.EPremiseFrame;
 import premises.WPremiseFrame;
@@ -59,7 +59,7 @@ public class PrefRuleCreationFrame extends JFrame {
 				try {
 					
 					DataManager data = new DataManager("ruleTest","C:\\Users\\Matia\\Desktop\\tesis_dprefrules-multi-agent\\src\\files");
-					data.addParticipant(new Agent("Matias"));
+					data.addParticipant(new Participant("Matias"));
 					
 					Criteria entretenimiento = new Criteria("Entretenimiento", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
 					Criteria clima = new Criteria("Clima", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
