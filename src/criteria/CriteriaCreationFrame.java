@@ -24,7 +24,7 @@ import javax.swing.JFormattedTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class CriteriaCreation extends JFrame {
+public class CriteriaCreationFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -43,7 +43,7 @@ public class CriteriaCreation extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public CriteriaCreation(CriteriaFrame criteriaTable, DataManager data, Criteria criteria) {
+	public CriteriaCreationFrame(CriteriaFrame criteriaTable, DataManager data, Criteria criteria) {
 		this.data = data;
 		criteriaFrame = criteriaTable;
 		criteriaToUpdate = criteria;
@@ -227,13 +227,13 @@ public class CriteriaCreation extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				SintacticStringError sintacticError;
 				if((!textFieldNumericValue1.getText().equals("") && !textFieldNumericValue2.getText().equals("")) || !textFieldSimbolicValues.getText().equals("")) {
-					sintacticError = CriteriaManager.checkValidCriteriaName(textFieldCriteriaName.getText(), criteriaToUpdate, CriteriaCreation.this.data.getCriterias());
+					sintacticError = CriteriaManager.checkValidCriteriaName(textFieldCriteriaName.getText(), criteriaToUpdate, CriteriaCreationFrame.this.data.getCriterias());
 					if(sintacticError==null) {
 						if(!isNumericEnabled) {
 							sintacticError = CriteriaManager.checkValidCriteriaValues(textFieldSimbolicValues.getText(), isNumericEnabled);
 							if(sintacticError==null) {
 								criteriaFrame.addCriteria(textFieldCriteriaName.getText(), textFieldSimbolicValues.getText(), isNumericEnabled, criteriaToUpdate);
-								CriteriaCreation.this.dispose();
+								CriteriaCreationFrame.this.dispose();
 							}else {
 								JOptionPane.showMessageDialog(null, "Por favor, revise los valores simbolicos del criterio y y siga las instrucciones solicitadas", sintacticError.getMsg(), JOptionPane.WARNING_MESSAGE);
 							}
@@ -241,7 +241,7 @@ public class CriteriaCreation extends JFrame {
 							sintacticError = CriteriaManager.checkValidCriteriaValues(textFieldNumericValue1.getText()+","+textFieldNumericValue2.getText(), isNumericEnabled);
 							if(sintacticError==null){
 								criteriaFrame.addCriteria(textFieldCriteriaName.getText(), textFieldNumericValue1.getText()+","+textFieldNumericValue2.getText(), isNumericEnabled, criteriaToUpdate);
-								CriteriaCreation.this.dispose();
+								CriteriaCreationFrame.this.dispose();
 							}else {
 								JOptionPane.showMessageDialog(null, "Por favor, revise los valores numericos del criterio y y siga las instrucciones solicitadas", sintacticError.getMsg(), JOptionPane.WARNING_MESSAGE);
 							}
@@ -261,7 +261,7 @@ public class CriteriaCreation extends JFrame {
 		JButton btnCancel = new JButton("Cancelar y Descartar criterio");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CriteriaCreation.this.dispose();
+				CriteriaCreationFrame.this.dispose();
 			}
 		});
 		panel_3.add(btnCancel, BorderLayout.EAST);

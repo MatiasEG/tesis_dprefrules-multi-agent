@@ -110,7 +110,7 @@ public class CriteriaFrame extends JFrame {
 		panelButtons_1.add(btnAddCriteria);
 		btnAddCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CriteriaCreation frame = new CriteriaCreation(CriteriaFrame.this, CriteriaFrame.this.data, null);
+				CriteriaCreationFrame frame = new CriteriaCreationFrame(CriteriaFrame.this, CriteriaFrame.this.data, null);
 				frame.setVisible(true);
 			}
 		});
@@ -160,7 +160,7 @@ public class CriteriaFrame extends JFrame {
 					}
 				}
 				
-				CriteriaCreation frame = new CriteriaCreation(CriteriaFrame.this, CriteriaFrame.this.data, criteriaSelected);
+				CriteriaCreationFrame frame = new CriteriaCreationFrame(CriteriaFrame.this, CriteriaFrame.this.data, criteriaSelected);
 				frame.setVisible(true);
 			}
 		});

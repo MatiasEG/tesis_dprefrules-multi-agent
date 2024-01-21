@@ -278,7 +278,7 @@ public class PrefRulesFrame extends JFrame {
 		panelPreferences.add(btnEditRulePreferences);
 		btnEditRulePreferences.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RulePreferencesFrame frame = new RulePreferencesFrame(PrefRulesFrame.this.data, false);
+				PrefRulePreferencesFrame frame = new PrefRulePreferencesFrame(PrefRulesFrame.this.data, false);
 				frame.setVisible(true);
 			}
 		});
@@ -287,7 +287,7 @@ public class PrefRulesFrame extends JFrame {
 		JButton btnViewRulePreferences = new JButton("Ver preferencias");
 		btnViewRulePreferences.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RulePreferencesFrame frame = new RulePreferencesFrame(PrefRulesFrame.this.data, true);
+				PrefRulePreferencesFrame frame = new PrefRulePreferencesFrame(PrefRulesFrame.this.data, true);
 				frame.setVisible(true);
 			}
 		});

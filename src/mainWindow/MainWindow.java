@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import IOmanager.NameAndFolderFrame;
-import alternative.EvidenceFrame;
+import alternative.AlternativesFrame;
 import criteria.CriteriaFrame;
 import dataManager.DataManager;
 import participant.ParticipantFrame;
@@ -275,7 +275,7 @@ public class MainWindow extends JFrame {
 		btnViewEvidence = new JButton("Ver evidencia");
 		btnViewEvidence.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				EvidenceFrame frame = new EvidenceFrame(data, true);
+				AlternativesFrame frame = new AlternativesFrame(data, true);
 				frame.setVisible(true);
 			}
 		});
@@ -283,7 +283,7 @@ public class MainWindow extends JFrame {
 		btnViewEvidence.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnEditEvidence.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				EvidenceFrame frame = new EvidenceFrame(data, false);
+				AlternativesFrame frame = new AlternativesFrame(data, false);
 				frame.setVisible(true);
 				
 				if(state<3) state = 3;

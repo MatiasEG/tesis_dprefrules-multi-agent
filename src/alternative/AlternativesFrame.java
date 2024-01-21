@@ -30,7 +30,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.BoxLayout;
 import java.awt.Component;
 
-public class EvidenceFrame extends JFrame {
+public class AlternativesFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -46,7 +46,7 @@ public class EvidenceFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public EvidenceFrame(DataManager data, boolean onlyView) {
+	public AlternativesFrame(DataManager data, boolean onlyView) {
 		this.data = data;
 		
 		setTitle("Datos del problema - evidencia");
@@ -109,12 +109,12 @@ public class EvidenceFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String path = FileChooser.showFileChooser();
 				try {
-					CSVreader.readEvidenceCSV(path, EvidenceFrame.this.data);
+					CSVreader.readEvidenceCSV(path, AlternativesFrame.this.data);
 				} catch (EvidenceFileException e1) {
 					JOptionPane.showMessageDialog(null, "Error. "+e1.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
 					e1.printStackTrace();
 				}
-				checkData(EvidenceFrame.this.data);
+				checkData(AlternativesFrame.this.data);
 			}
 		});
 		panel.add(btnLoadFile);
@@ -122,7 +122,7 @@ public class EvidenceFrame extends JFrame {
 		btnNewAlternative = new JButton("Nueva alternativa");
 		btnNewAlternative.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				addAlternative(EvidenceFrame.this.data);
+				addAlternative(AlternativesFrame.this.data);
 			}
 		});
 		panel.add(btnNewAlternative);
@@ -139,7 +139,7 @@ public class EvidenceFrame extends JFrame {
                 	 if (option == JOptionPane.YES_OPTION) {
                 		 // user want to delete selected alternative
                 		 model.removeRow(selectedRow);
-                		 EvidenceFrame.this.data.removeAlternative(alternativeName);
+                		 AlternativesFrame.this.data.removeAlternative(alternativeName);
                 		 JOptionPane.showMessageDialog(null, "La alternativa seleccionada fue correctamente removido");
                 	 }else {
                 		 // user do not want to delete selected alternative
@@ -160,8 +160,8 @@ public class EvidenceFrame extends JFrame {
 		        }
 				
 				if(table.getRowCount()>1) {
-					if(validateEvidence(EvidenceFrame.this.data)) {
-						CSVwriter.saveEvidenceToCSV(EvidenceFrame.this.data);
+					if(validateEvidence(AlternativesFrame.this.data)) {
+						CSVwriter.saveEvidenceToCSV(AlternativesFrame.this.data);
 						JOptionPane.showMessageDialog(null, "Alternativas guardadas correctamente, ya puede cerrar esta ventana.","Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 						onlyViewMod(true);
 					}

@@ -30,7 +30,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import java.awt.FlowLayout;
 
-public class RulePreferencesFrame extends JFrame {
+public class PrefRulePreferencesFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -53,7 +53,7 @@ public class RulePreferencesFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public RulePreferencesFrame(DataManager data, boolean onlyView) {
+	public PrefRulePreferencesFrame(DataManager data, boolean onlyView) {
 		this.data = data;
 		
 		setTitle("Prioridades entre agentes");
@@ -92,9 +92,9 @@ public class RulePreferencesFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				String path = FileChooser.showFileChooser();
 				try {
-					CSVreader.readRulePriorityCSV(path, RulePreferencesFrame.this.data);
-					RulePreferencesFrame.this.updateIndexRulePriority();
-					RulePreferencesFrame.this.updateRulePriorityTransitiveList();;
+					CSVreader.readRulePriorityCSV(path, PrefRulePreferencesFrame.this.data);
+					PrefRulePreferencesFrame.this.updateIndexRulePriority();
+					PrefRulePreferencesFrame.this.updateRulePriorityTransitiveList();;
 				} catch (RulePriorityException e1) {
 	    			JOptionPane.showMessageDialog(null, e1.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
 				}
@@ -106,7 +106,7 @@ public class RulePreferencesFrame extends JFrame {
 		btnSaveRulePreferenes = new JButton("Guardar archivo de preferencias");
 		btnSaveRulePreferenes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				CSVwriter.saveRulePriorityToCSV(RulePreferencesFrame.this.data);
+				CSVwriter.saveRulePriorityToCSV(PrefRulePreferencesFrame.this.data);
 				JOptionPane.showMessageDialog(null, "Datos validados y guardados, ya puede cerrar esta ventana", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
@@ -155,10 +155,10 @@ public class RulePreferencesFrame extends JFrame {
 					String worstRule = (String) comboBoxBest.getSelectedItem();
 					if(!bestRule.equals(worstRule)) {
 						Priority prior = new Priority(bestRule, worstRule);
-						String validation = prior.isValid(RulePreferencesFrame.this.data);
+						String validation = prior.isValid(PrefRulePreferencesFrame.this.data);
 						if(validation.equals("OK")) {
-							RulePreferencesFrame.this.data.getParticipant(participantName).addPreference(prior);
-							int index = RulePreferencesFrame.this.data.getParticipant(participantName).getPreferences().size()-1;
+							PrefRulePreferencesFrame.this.data.getParticipant(participantName).addPreference(prior);
+							int index = PrefRulePreferencesFrame.this.data.getParticipant(participantName).getPreferences().size()-1;
 							listModelRulePriority.addElement("El participante <"+participantName+"("+index+")> considera que la regla "+bestRule+" tiene mayor prioridad que la regla "+worstRule);
 							updateRulePriorityTransitiveList();
 						}else {
@@ -188,10 +188,10 @@ public class RulePreferencesFrame extends JFrame {
 				int selectedIndex = listPriority.getSelectedIndex();
 		        if (selectedIndex != -1) {
 		        	String[] participantAndIndex =  extraerDatos(listPriority.getSelectedValue());
-		        	Participant participant = RulePreferencesFrame.this.data.getParticipant(participantAndIndex[0]);
+		        	Participant participant = PrefRulePreferencesFrame.this.data.getParticipant(participantAndIndex[0]);
 		        	Priority prior = participant.getPreferences().get(Integer.parseInt(participantAndIndex[1]));
 		        	
-		        	int option = JOptionPane.showConfirmDialog(RulePreferencesFrame.this,
+		        	int option = JOptionPane.showConfirmDialog(PrefRulePreferencesFrame.this,
 		                    "¿Seguro que desea eliminar la regla seleccionada: ( "+prior.getMorePriority()+" > "+prior.getLessPriority()+" ) definida por "+participant.getName()+"?",
 		                    "Confirmar Eliminación",
 		                    JOptionPane.YES_NO_OPTION);
