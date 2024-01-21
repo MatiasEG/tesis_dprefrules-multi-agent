@@ -2,7 +2,7 @@ package dataManager;
 
 import java.util.List;
 
-import errors.SintacticStringError;
+import exceptions.SintacticStringError;
 
 public class DataValidations {
 	

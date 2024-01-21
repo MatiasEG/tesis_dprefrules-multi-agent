@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import criteria.Criteria;
-import errors.SintacticStringError;
+import exceptions.SintacticStringError;
 
 public class CriteriaManager {
 

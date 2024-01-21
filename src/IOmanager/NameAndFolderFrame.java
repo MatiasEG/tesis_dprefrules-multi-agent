@@ -8,7 +8,8 @@ import javax.swing.border.EmptyBorder;
 
 import dataManager.DataManager;
 import dataManager.DataValidations;
-import errors.SintacticStringError;
+import exceptions.SintacticStringError;
+
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;

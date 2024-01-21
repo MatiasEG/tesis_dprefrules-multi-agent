@@ -15,16 +15,16 @@ import criteria.Criteria;
 import dataManager.CriteriaManager;
 import dataManager.DataManager;
 import dataManager.Priority;
-import errors.AgentPriorityError;
-import errors.CriteriaFileError;
-import errors.EvidenceFileError;
-import errors.RuleFileError;
-import errors.RulePriorityError;
+import exceptions.AgentPriorityException;
+import exceptions.CriteriaFileException;
+import exceptions.EvidenceFileException;
+import exceptions.RuleFileErrorException;
+import exceptions.RulePriorityException;
 import prefRules.Rule;
 
 public class CSVreader {
 
-	public static void readCriteriasCSV(String csvFile, DataManager oldData) throws CriteriaFileError{
+	public static void readCriteriasCSV(String csvFile, DataManager oldData) throws CriteriaFileException{
 		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
 		newData.setParticipants(oldData.getParticipants());
 		newData.setParticipantsPriority(oldData.getParticipantsPriority());
@@ -58,11 +58,11 @@ public class CSVreader {
 						//newData.addCriteria(criteria);
 						criterias.add(criteria);
 		            }else{
-		            	throw new CriteriaFileError("El archivo no contiene la sintaxis correspondiente.");
+		            	throw new CriteriaFileException("El archivo no contiene la sintaxis correspondiente.");
 		            }
 				}
 	    	}else {
-	    		throw new CriteriaFileError("El archivo no contiene la sintaxis correspondiente.");
+	    		throw new CriteriaFileException("El archivo no contiene la sintaxis correspondiente.");
 	    	}
 	    }catch (IOException e) {
 	    	e.printStackTrace();
@@ -88,7 +88,7 @@ public class CSVreader {
     }
 	
 	
-	public static void readAgentPriorityCSV(String csvFile, DataManager oldData) throws AgentPriorityError {
+	public static void readAgentPriorityCSV(String csvFile, DataManager oldData) throws AgentPriorityException {
 		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
 		newData.setCriterias(oldData.getCriterias());
 		newData.setAlternatives(oldData.getAlternatives());
@@ -103,10 +103,10 @@ public class CSVreader {
 					    String lessPriorAgent = parts[1].trim();
 					    
 					    String nameValidations1 = AgentPriorityValidations.validateAgentName(morePriorAgent, newData);
-					    if(!nameValidations1.equals("OK")) throw new AgentPriorityError(nameValidations1);
+					    if(!nameValidations1.equals("OK")) throw new AgentPriorityException(nameValidations1);
 					    
 					    String nameValidations2 = AgentPriorityValidations.validateAgentName(lessPriorAgent, newData);
-					    if(!nameValidations2.equals("OK")) throw new AgentPriorityError(nameValidations2);
+					    if(!nameValidations2.equals("OK")) throw new AgentPriorityException(nameValidations2);
 					    
 						Priority newParticipantsPriority = new Priority(morePriorAgent, lessPriorAgent);
 						String validPrior = newParticipantsPriority.isValid(newData);
@@ -116,22 +116,22 @@ public class CSVreader {
 					    	AgentPriorityValidations.ifNotExistAddNewAgent(morePriorAgent, newData);
 					    	AgentPriorityValidations.ifNotExistAddNewAgent(lessPriorAgent, newData);
 					    }else {
-					    	throw new AgentPriorityError(validPrior);
+					    	throw new AgentPriorityException(validPrior);
 					    }
 		            }else {
-		            	throw new AgentPriorityError("El archivo no contiene la sintaxis correspondiente.");
+		            	throw new AgentPriorityException("El archivo no contiene la sintaxis correspondiente.");
 		            }
 				}
 		        oldData.updateData(newData);
 	    	}else {
-	    		throw new AgentPriorityError("El archivo no contiene la sintaxis correspondiente.");
+	    		throw new AgentPriorityException("El archivo no contiene la sintaxis correspondiente.");
 	    	}
 	    }catch (IOException e) {
 	    	e.printStackTrace();
 	    }
 	}
 	
-	public static void readEvidenceCSV(String csvFile, DataManager oldData) throws EvidenceFileError {
+	public static void readEvidenceCSV(String csvFile, DataManager oldData) throws EvidenceFileException {
 		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
 		newData.setCriterias(oldData.getCriterias());
 		newData.setParticipants(oldData.getParticipants());
@@ -158,23 +158,23 @@ public class CSVreader {
 							if(newData.getCriterias().get(i-1).valueIsValid(parts[i].trim())) {
 								newData.getAlternatives().get(altIndex).addValue(parts[i].trim());
 							}else {
-				            	throw new EvidenceFileError("El criterio ("+newData.getCriterias().get(i-1).getName()+") contiene una valor no valido ("+parts[i].trim()+") en el archivo de evidencia.");
+				            	throw new EvidenceFileException("El criterio ("+newData.getCriterias().get(i-1).getName()+") contiene una valor no valido ("+parts[i].trim()+") en el archivo de evidencia.");
 							}
 						}
 		            }else {
-		            	throw new EvidenceFileError("El archivo no contiene la sintaxis correspondiente.");
+		            	throw new EvidenceFileException("El archivo no contiene la sintaxis correspondiente.");
 		            }
 				}
 		        oldData.updateData(newData);
 	    	}else {
-	    		throw new EvidenceFileError("El archivo no contiene los criterios definidos anteriormente.");
+	    		throw new EvidenceFileException("El archivo no contiene los criterios definidos anteriormente.");
 	    	}
 	    }catch (IOException e) {
 	    	e.printStackTrace();
 	    }
 	}
 	
-	public static void readRulesCSV(String csvFile, DataManager oldData) throws RuleFileError {
+	public static void readRulesCSV(String csvFile, DataManager oldData) throws RuleFileErrorException {
 		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
 		newData.setCriterias(oldData.getCriterias());
 		newData.setParticipants(oldData.getParticipants());
@@ -201,20 +201,20 @@ public class CSVreader {
 								if(auxRule.getBetterP().size()>0) {
 									newData.addRule(auxRule);
 								}else {
-									throw new RuleFileError("La regla "+auxRule.getName()+" no contiene al menos una premisa better.");
+									throw new RuleFileErrorException("La regla "+auxRule.getName()+" no contiene al menos una premisa better.");
 								}
 							}else {
-								throw new RuleFileError("El archivo no contiene la sintaxis correspondiente.");
+								throw new RuleFileErrorException("El archivo no contiene la sintaxis correspondiente.");
 							}
 						}else {
-							throw new RuleFileError("(No se respeta el ==>) El archivo no contiene la sintaxis correspondiente.");
+							throw new RuleFileErrorException("(No se respeta el ==>) El archivo no contiene la sintaxis correspondiente.");
 						}
 		            }else {
-		            	throw new RuleFileError("(Contiene mas de un ;) El archivo no contiene la sintaxis correspondiente.");
+		            	throw new RuleFileErrorException("(Contiene mas de un ;) El archivo no contiene la sintaxis correspondiente.");
 		            }
 				}
 	    	}else {
-	    		throw new RuleFileError("(Header) El archivo no contiene la sintaxis correspondiente.");
+	    		throw new RuleFileErrorException("(Header) El archivo no contiene la sintaxis correspondiente.");
 	    	}
 	    }catch (IOException e) {
 	    	e.printStackTrace();
@@ -223,7 +223,7 @@ public class CSVreader {
 		oldData.updateData(newData);
 	}
 	
-	public static void readRulePriorityCSV(String csvFile, DataManager oldData) throws RulePriorityError {
+	public static void readRulePriorityCSV(String csvFile, DataManager oldData) throws RulePriorityException {
 		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
 		newData.updateData(oldData);
 		for(Agent participant : newData.getParticipants()) {
@@ -255,18 +255,18 @@ public class CSVreader {
 										 participant.addPreference(new Priority(morePriorRuleString, lessPriorRuleString));
 									 }
 								}else {
-									throw new RulePriorityError("Las reglas de preferencia no contienen la sintaxis correspondiente.");
+									throw new RulePriorityException("Las reglas de preferencia no contienen la sintaxis correspondiente.");
 								}
 							}
 						}else {
-							throw new RulePriorityError("El archivo contiene participantes que no estan definidos en el problema actual.");
+							throw new RulePriorityException("El archivo contiene participantes que no estan definidos en el problema actual.");
 						}
 		        	}else {
-		        		throw new RulePriorityError("El archivo no contiene la sintaxis correspondiente.");
+		        		throw new RulePriorityException("El archivo no contiene la sintaxis correspondiente.");
 		        	}
 		        }
 	    	}else {
-	    		throw new RulePriorityError("El archivo no contiene el header correspondiente.");
+	    		throw new RulePriorityException("El archivo no contiene el header correspondiente.");
 	    	}
 	    }catch (IOException e) {
 	    	e.printStackTrace();

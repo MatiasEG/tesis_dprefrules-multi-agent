@@ -12,7 +12,7 @@ import IOmanager.FileChooser;
 import agent.Agent;
 import criteria.Criteria;
 import dataManager.DataManager;
-import errors.RuleFileError;
+import exceptions.RuleFileErrorException;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -124,7 +124,7 @@ public class PrefRulesFrame extends JFrame {
 				try {
 					CSVreader.readRulesCSV(path, PrefRulesFrame.this.data);
 					PrefRulesFrame.this.updateRules();
-				} catch (RuleFileError e1) {
+				} catch (RuleFileErrorException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
 					e1.printStackTrace();
 				}

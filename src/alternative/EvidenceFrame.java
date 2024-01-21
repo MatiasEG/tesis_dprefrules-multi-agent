@@ -15,8 +15,8 @@ import IOmanager.FileChooser;
 import criteria.Criteria;
 import dataManager.DataManager;
 import dataManager.DataValidations;
-import errors.EvidenceFileError;
-import errors.SintacticStringError;
+import exceptions.EvidenceFileException;
+import exceptions.SintacticStringError;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -106,7 +106,7 @@ public class EvidenceFrame extends JFrame {
 				String path = FileChooser.showFileChooser();
 				try {
 					CSVreader.readEvidenceCSV(path, EvidenceFrame.this.data);
-				} catch (EvidenceFileError e1) {
+				} catch (EvidenceFileException e1) {
 					JOptionPane.showMessageDialog(null, "Error. "+e1.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
 					e1.printStackTrace();
 				}

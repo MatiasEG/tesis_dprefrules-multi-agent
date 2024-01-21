@@ -9,7 +9,8 @@ import IOmanager.CSVwriter;
 import IOmanager.FileChooser;
 import alternative.Alternative;
 import dataManager.DataManager;
-import errors.CriteriaFileError;
+import exceptions.CriteriaFileException;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
@@ -97,7 +98,7 @@ public class CriteriaFrame extends JFrame {
 				try {
 					CSVreader.readCriteriasCSV(path, CriteriaFrame.this.data);
 					CriteriaFrame.this.checkData(CriteriaFrame.this.data);
-				} catch (CriteriaFileError e1) {
+				} catch (CriteriaFileException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
 					e1.printStackTrace();
 				}

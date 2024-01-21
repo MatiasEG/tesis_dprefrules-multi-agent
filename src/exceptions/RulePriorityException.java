@@ -1,13 +1,13 @@
-package errors;
+package exceptions;
 
 @SuppressWarnings("serial")
-public class RulePriorityError extends Exception{
+public class RulePriorityException extends Exception{
 
-	public RulePriorityError() {
+	public RulePriorityException() {
         super("Se produjo un error al intentar cargar el archivo de preferencia entre reglas.");
     }
 
-    public RulePriorityError(String msg) {
+    public RulePriorityException(String msg) {
         super(msg);
     }
 }

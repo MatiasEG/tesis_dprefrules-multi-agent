@@ -10,7 +10,7 @@ import IOmanager.FileChooser;
 import agent.Agent;
 import dataManager.DataManager;
 import dataManager.Priority;
-import errors.RulePriorityError;
+import exceptions.RulePriorityException;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -89,7 +89,7 @@ public class RulePreferencesFrame extends JFrame {
 					CSVreader.readRulePriorityCSV(path, RulePreferencesFrame.this.data);
 					RulePreferencesFrame.this.updateIndexRulePriority();
 					RulePreferencesFrame.this.updateRulePriorityTransitiveList();;
-				} catch (RulePriorityError e1) {
+				} catch (RulePriorityException e1) {
 	    			JOptionPane.showMessageDialog(null, e1.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
 				}
 			}

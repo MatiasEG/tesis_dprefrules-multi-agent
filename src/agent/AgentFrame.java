@@ -11,7 +11,8 @@ import IOmanager.CSVwriter;
 import IOmanager.FileChooser;
 import dataManager.DataManager;
 import dataManager.DataValidations;
-import errors.AgentPriorityError;
+import exceptions.AgentPriorityException;
+
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 
@@ -135,7 +136,7 @@ public class AgentFrame extends JFrame {
 				try {
 					CSVreader.readAgentPriorityCSV(path, AgentFrame.this.data);
 					AgentFrame.this.updateVisualComponents(AgentFrame.this.data);
-				} catch (AgentPriorityError e1) {
+				} catch (AgentPriorityException e1) {
 	    			JOptionPane.showMessageDialog(null, e1.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
 				}
 			}

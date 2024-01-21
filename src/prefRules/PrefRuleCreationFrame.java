@@ -10,7 +10,7 @@ import agent.Agent;
 import criteria.Criteria;
 import dataManager.DataManager;
 import dataManager.DataValidations;
-import errors.SintacticStringError;
+import exceptions.SintacticStringError;
 import premises.BPremiseFrame;
 import premises.EPremiseFrame;
 import premises.WPremiseFrame;

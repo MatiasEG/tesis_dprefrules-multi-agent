@@ -1,13 +1,13 @@
-package errors;
+package exceptions;
 
 @SuppressWarnings("serial")
-public class AgentPriorityError extends Exception{
+public class AgentPriorityException extends Exception{
 
-	public AgentPriorityError() {
+	public AgentPriorityException() {
         super("Se produjo un error al intentar cargar el archivo de preferencia entre agentes.");
     }
 
-    public AgentPriorityError(String msg) {
+    public AgentPriorityException(String msg) {
         super(msg);
     }
 }
