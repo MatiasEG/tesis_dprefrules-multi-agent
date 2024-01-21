@@ -39,16 +39,16 @@ public class CriteriaFrame extends JFrame {
 	private JButton btnSaveFile;
 	private JButton btnAddCriteria;
 	private JButton btnDeleteCriteria;
+	private JButton btnEditCriteria;
+	private JButton btnLoadFile;
 	private JScrollPane scrollPaneCriteria;
 	
-	private JButton btnEditCriteria;
 	private DataManager data;
-	private JButton btnLoadFile;
 	
 	/**
 	 * Create the frame.
 	 */
-	public CriteriaFrame(DataManager data) {
+	public CriteriaFrame(DataManager data, boolean onlyView) {
 		this.data = data;
 		
 		setTitle("Criterios a evaluar");
@@ -170,6 +170,8 @@ public class CriteriaFrame extends JFrame {
 		btnSaveFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CSVwriter.saveCriteriasToCSV(CriteriaFrame.this.data);
+				JOptionPane.showMessageDialog(null, "Criterios guardadas correctamente, ya puede cerrar esta ventana.","Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+				onlyViewMod(true);
 			}
 		});
 		
@@ -186,10 +188,21 @@ public class CriteriaFrame extends JFrame {
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		scrollPaneCriteria.setViewportView(table);
-		
+		checkData(data);
+		onlyViewMod(onlyView);
 	}
 	
-	public void checkData(DataManager data) {
+	private void onlyViewMod(boolean onlyView) {
+		if(onlyView) {
+			btnSaveFile.setEnabled(false);
+			btnLoadFile.setEnabled(false);
+			btnAddCriteria.setEnabled(false);
+			btnDeleteCriteria.setEnabled(false);
+			btnEditCriteria.setEnabled(false);
+		}
+	}
+	
+	private void checkData(DataManager data) {
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.setRowCount(0);
 		table.repaint();

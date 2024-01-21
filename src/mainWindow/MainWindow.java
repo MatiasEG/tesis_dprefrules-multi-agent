@@ -210,13 +210,18 @@ public class MainWindow extends JFrame {
 		btnEditCriteria.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		btnViewCriteria = new JButton("Ver criterios");
+		btnViewCriteria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CriteriaFrame frame = new CriteriaFrame(data, true);
+				frame.setVisible(true);
+			}
+		});
 		panelBtnCriterias.add(btnViewCriteria);
 		btnViewCriteria.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnEditCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CriteriaFrame frame = new CriteriaFrame(data);
+				CriteriaFrame frame = new CriteriaFrame(data, false);
 				frame.setVisible(true);
-				frame.checkData(data);
 				
 				if(state<2) state = 2;
 				MainWindow.this.modifyingData = false;
@@ -268,13 +273,18 @@ public class MainWindow extends JFrame {
 		btnEditEvidence.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		btnViewEvidence = new JButton("Ver evidencia");
+		btnViewEvidence.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				EvidenceFrame frame = new EvidenceFrame(data, true);
+				frame.setVisible(true);
+			}
+		});
 		panelBtnAlternatives.add(btnViewEvidence);
 		btnViewEvidence.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnEditEvidence.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				EvidenceFrame frame = new EvidenceFrame(data);
+				EvidenceFrame frame = new EvidenceFrame(data, false);
 				frame.setVisible(true);
-				frame.checkData(data);
 				
 				if(state<3) state = 3;
 				MainWindow.this.modifyingData = false;

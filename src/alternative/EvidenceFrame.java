@@ -36,13 +36,17 @@ public class EvidenceFrame extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
 	private DefaultTableModel model;
+	private JButton btnAcept;
+	private JButton btnDeleteAlternative;
+	private JButton btnLoadFile;
+	private JButton btnNewAlternative;
 	
 	private DataManager data;
 
 	/**
 	 * Create the frame.
 	 */
-	public EvidenceFrame(DataManager data) {
+	public EvidenceFrame(DataManager data, boolean onlyView) {
 		this.data = data;
 		
 		setTitle("Datos del problema - evidencia");
@@ -100,7 +104,7 @@ public class EvidenceFrame extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JButton btnLoadFile = new JButton("Cargar archivo");
+		btnLoadFile = new JButton("Cargar archivo");
 		btnLoadFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String path = FileChooser.showFileChooser();
@@ -115,7 +119,7 @@ public class EvidenceFrame extends JFrame {
 		});
 		panel.add(btnLoadFile);
 		
-		JButton btnNewAlternative = new JButton("Nueva alternativa");
+		btnNewAlternative = new JButton("Nueva alternativa");
 		btnNewAlternative.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addAlternative(EvidenceFrame.this.data);
@@ -123,7 +127,7 @@ public class EvidenceFrame extends JFrame {
 		});
 		panel.add(btnNewAlternative);
 		
-		JButton btnDeleteAlternative = new JButton("Eliminar alternativa");
+		btnDeleteAlternative = new JButton("Eliminar alternativa");
 		btnDeleteAlternative.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				 int selectedRow = table.getSelectedRow();
@@ -148,7 +152,7 @@ public class EvidenceFrame extends JFrame {
 		});
 		panel.add(btnDeleteAlternative);
 		
-		JButton btnAcept = new JButton("Guardar archivo");
+		btnAcept = new JButton("Guardar archivo");
 		btnAcept.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (table.isEditing()) {
@@ -159,6 +163,7 @@ public class EvidenceFrame extends JFrame {
 					if(validateEvidence(EvidenceFrame.this.data)) {
 						CSVwriter.saveEvidenceToCSV(EvidenceFrame.this.data);
 						JOptionPane.showMessageDialog(null, "Alternativas guardadas correctamente, ya puede cerrar esta ventana.","Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+						onlyViewMod(true);
 					}
 				}else {
                 	JOptionPane.showMessageDialog(null, "Debe definir al menos dos alternativas para poder realizar una comparacion.", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -174,8 +179,21 @@ public class EvidenceFrame extends JFrame {
 			}
 		}
 		table.repaint();
+		checkData(data);
+		onlyViewMod(onlyView);
 	}
 
+	private void onlyViewMod(boolean onlyView) {
+		if(onlyView) {
+			btnAcept.setEnabled(false);
+			btnDeleteAlternative.setEnabled(false);
+			btnLoadFile.setEnabled(false);
+			btnNewAlternative.setEnabled(false);
+			
+			table.setEnabled(false);
+		}
+	}
+	
 	private void addAlternative(DataManager data) {
 		String name = JOptionPane.showInputDialog(this, "Ingrese el nombre de la alternativa que desea agregar:");
         SintacticStringError validation = DataValidations.validateStringWithOnlyLettersAndNumbers(name);
@@ -213,7 +231,7 @@ public class EvidenceFrame extends JFrame {
 		return true;
 	}
 	
-	public void checkData(DataManager data) {
+	private void checkData(DataManager data) {
 		model.setRowCount(0);
 		for(int i=0; i<data.getCriterias().size(); i++) {
 			if(!data.getCriterias().get(i).isNumeric()) {
