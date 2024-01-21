@@ -27,6 +27,8 @@ public class NameAndFolderFrame extends JFrame {
 	private JPanel contentPane;
 	private JTextField textFieldProjectName;
 	private JLabel lblFolderPath;
+	private JButton btnSaveData;
+	private JButton btnSelectFolder;
 	
 	private DataManager data;
 	private String folderPath;
@@ -38,7 +40,7 @@ public class NameAndFolderFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					NameAndFolderFrame frame = new NameAndFolderFrame(null);
+					NameAndFolderFrame frame = new NameAndFolderFrame(new DataManager("",""), false);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -50,11 +52,11 @@ public class NameAndFolderFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public NameAndFolderFrame(DataManager data) {
+	public NameAndFolderFrame(DataManager data, boolean viewOnly) {
 		this.data = data;
 		
 		setTitle("Nombre y Carpeta destino");
-		setBounds(100, 100, 500, 240);
+		setBounds(100, 100, 500, 250);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -83,7 +85,7 @@ public class NameAndFolderFrame extends JFrame {
 		Component verticalStrut_3 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_3);
 		
-		JButton btnSelectFolder = new JButton("Seleccionar carpeta");
+		btnSelectFolder = new JButton("Seleccionar carpeta");
 		btnSelectFolder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				folderPath = FileChooser.showFolderChooser();
@@ -100,16 +102,30 @@ public class NameAndFolderFrame extends JFrame {
 		Component verticalStrut_4 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_4);
 		
-		JButton btnNewButton = new JButton("Guardar");
-		btnNewButton.addActionListener(new ActionListener() {
+		btnSaveData = new JButton("Guardar");
+		btnSaveData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(validateInput()) {
 					JOptionPane.showMessageDialog(null, "Datos validados y guardados, ya puede cerrar esta ventana", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+					viewOnlyMod(true);
 				}
 			}
 		});
-		btnNewButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentPane.add(btnNewButton);
+		btnSaveData.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(btnSaveData);
+		
+		viewOnlyMod(viewOnly);
+	}
+	
+	private void viewOnlyMod(boolean viewOnly) {
+		if(viewOnly) {
+			textFieldProjectName.setText(data.getProjectName());
+			textFieldProjectName.setEnabled(false);
+			
+			btnSelectFolder.setEnabled(false);
+			lblFolderPath.setText("Ruta actual:"+data.getSaveFolder());
+			btnSaveData.setEnabled(false);
+		}
 	}
 	
 	private boolean validateInput() {

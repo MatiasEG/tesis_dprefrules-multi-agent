@@ -33,6 +33,12 @@ public class AgentFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
+	private JButton btnLoadFile;
+	private JButton btnAddUser;
+	private JButton btnDeleteUser;
+	private JButton btnEditParticipantsPriority;
+	private JButton btnSaveParticipantsFile;
+	
 	private DefaultListModel<String> listModelParticipants;
     private JList<String> listParticipants;
     private DataManager data;
@@ -44,7 +50,7 @@ public class AgentFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AgentFrame frame = new AgentFrame(new DataManager("",""));
+					AgentFrame frame = new AgentFrame(new DataManager("",""), false);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -56,11 +62,11 @@ public class AgentFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AgentFrame(DataManager data) {
+	public AgentFrame(DataManager data, boolean viewOnly) {
 		this.data = data;
 		
 		setTitle("Definir participantes");
-		setBounds(100, 100, 800, 300);
+		setBounds(100, 100, 800, 350);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -78,7 +84,7 @@ public class AgentFrame extends JFrame {
 		Component verticalStrut_1 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_1);
 		
-		JButton btnLoadFile = new JButton("Cargar archivo");
+		btnLoadFile = new JButton("Cargar archivo");
 		btnLoadFile.setAlignmentX(0.5f);
 		contentPane.add(btnLoadFile);
 		
@@ -93,6 +99,18 @@ public class AgentFrame extends JFrame {
 		listParticipants.setValueIsAdjusting(true);
 		scrollPane.setViewportView(listParticipants);
 		
+		Component verticalStrut_3 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_3);
+		
+		btnDeleteUser = new JButton("Eliminar participante");
+		contentPane.add(btnDeleteUser);
+		btnDeleteUser.setAlignmentX(0.5f);
+		btnDeleteUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				deleteSelectedParticipant();
+			}
+		});
+		
 		Component verticalStrut_2 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_2);
 		
@@ -106,19 +124,25 @@ public class AgentFrame extends JFrame {
 		FlowLayout fl_panelAgentsButtons = new FlowLayout(FlowLayout.CENTER, 5, 5);
 		panelAgentsButtons.setLayout(fl_panelAgentsButtons);
 		
-		JButton btnAddUser = new JButton("Agregar participante");
+		btnAddUser = new JButton("Agregar participante");
 		btnAddUser.setAlignmentX(0.5f);
 		panelAgentsButtons.add(btnAddUser);
 		
-		JButton btnDeleteUser = new JButton("Eliminar participante seleccionado");
-		btnDeleteUser.setAlignmentX(0.5f);
-		panelAgentsButtons.add(btnDeleteUser);
-		
-		JButton btnEditParticipantsPriority = new JButton("Editar prioridad entre participantes");
+		btnEditParticipantsPriority = new JButton("Editar prioridad entre participantes");
 		btnEditParticipantsPriority.setAlignmentX(0.5f);
 		panelAgentsButtons.add(btnEditParticipantsPriority);
 		
-		JButton btnSaveParticipantsFile = new JButton("Guardar cambios");
+		JButton btnViewParticipantsPriority = new JButton("Ver prioridad entre participantes");
+		btnViewParticipantsPriority.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AgentPriorityFrame frame = new AgentPriorityFrame(AgentFrame.this.data, true);
+				frame.setVisible(true);
+			}
+		});
+		btnViewParticipantsPriority.setAlignmentX(0.5f);
+		panelAgentsButtons.add(btnViewParticipantsPriority);
+		
+		btnSaveParticipantsFile = new JButton("Guardar cambios");
 		btnSaveParticipantsFile.setAlignmentX(0.5f);
 		panelAgentsButtons.add(btnSaveParticipantsFile);
 		btnSaveParticipantsFile.addActionListener(new ActionListener() {
@@ -126,6 +150,7 @@ public class AgentFrame extends JFrame {
 				if(AgentFrame.this.data.getParticipants().size()>0) {
 					CSVwriter.saveAgentPriorityToCSV(AgentFrame.this.data);
 					JOptionPane.showMessageDialog(null, "Datos validados y guardados, ya puede cerrar esta ventana", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+					viewOnlyMod(true);
 				}
 			}
 		});
@@ -145,16 +170,11 @@ public class AgentFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String validation = canDefineAgentPriority(AgentFrame.this.data);
 				if(validation.equals("OK")) {
-					AgentPriorityFrame frame = new AgentPriorityFrame(AgentFrame.this.data);
+					AgentPriorityFrame frame = new AgentPriorityFrame(AgentFrame.this.data, false);
 					frame.setVisible(true);
 				}else {
 					JOptionPane.showMessageDialog(null, validation, "Advertencia", JOptionPane.WARNING_MESSAGE);
 				}
-			}
-		});
-		btnDeleteUser.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				deleteSelectedParticipant();
 			}
 		});
 		btnAddUser.addActionListener(new ActionListener() {
@@ -162,7 +182,18 @@ public class AgentFrame extends JFrame {
 				addParticipantName(AgentFrame.this.data);
 			}
 		});
-		this.updateVisualComponents(data);
+		updateVisualComponents(data);
+		viewOnlyMod(viewOnly);
+	}
+	
+	private void viewOnlyMod(boolean viewOnly) {
+		if(viewOnly) {
+			btnLoadFile.setEnabled(false);
+			btnAddUser.setEnabled(false);;
+			btnDeleteUser.setEnabled(false);;
+			btnEditParticipantsPriority.setEnabled(false);;
+			btnSaveParticipantsFile.setEnabled(false);
+		}
 	}
 	
 	private void deleteSelectedParticipant() {

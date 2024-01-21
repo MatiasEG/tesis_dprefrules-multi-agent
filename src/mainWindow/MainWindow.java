@@ -92,7 +92,7 @@ public class MainWindow extends JFrame {
 		panelBtnSaveFolder.add(btnEditNameAndFolder);
 		btnEditNameAndFolder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NameAndFolderFrame frame = new NameAndFolderFrame(data);
+				NameAndFolderFrame frame = new NameAndFolderFrame(data, false);
 				frame.setVisible(true);
 				
 				if(state<0) state = 0;
@@ -123,6 +123,12 @@ public class MainWindow extends JFrame {
 		btnEditNameAndFolder.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		btnViewNameAndFolder = new JButton("Ver nombre y carpeta");
+		btnViewNameAndFolder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				NameAndFolderFrame frame = new NameAndFolderFrame(data, true);
+				frame.setVisible(true);
+			}
+		});
 		panelBtnSaveFolder.add(btnViewNameAndFolder);
 		btnViewNameAndFolder.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
@@ -148,7 +154,7 @@ public class MainWindow extends JFrame {
 		panelBtnAgents.add(btnEditParticipants);
 		btnEditParticipants.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AgentFrame frame = new AgentFrame(data);
+				AgentFrame frame = new AgentFrame(data, false);
 		        frame.setVisible(true);
 		        
 		        if(state<1) state = 1;
@@ -178,6 +184,12 @@ public class MainWindow extends JFrame {
 		btnEditParticipants.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		btnViewParticipants = new JButton("Ver participantes y prioridades");
+		btnViewParticipants.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AgentFrame frame = new AgentFrame(data, true);
+		        frame.setVisible(true);
+			}
+		});
 		panelBtnAgents.add(btnViewParticipants);
 		btnViewParticipants.setAlignmentX(Component.CENTER_ALIGNMENT);
 		

@@ -32,13 +32,15 @@ public class AgentPriorityFrame extends JFrame {
     private JList<String> listPriority;
     private DefaultListModel<String> listModelParticipantsPriorityTransitive;
     private JList<String> listPriorityTransitive;
+    private JButton btnAddPriority;
+    private JButton btnDeletePriority;
 
 	private DataManager data;
 
 	/**
 	 * Create the frame.
 	 */
-	public AgentPriorityFrame(DataManager data) {
+	public AgentPriorityFrame(DataManager data, boolean onlyView) {
 		this.data = data;
 		
 		setTitle("Prioridades entre agentes");
@@ -100,7 +102,7 @@ public class AgentPriorityFrame extends JFrame {
 		contentPane.add(panel_2);
 		panel_2.setLayout(new BorderLayout(0, 0));
 		
-		JButton btnAddPriority = new JButton("Agregar prioridad");
+		btnAddPriority = new JButton("Agregar prioridad");
 		btnAddPriority.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int bestIndexBox = comboBoxBest.getSelectedIndex();
@@ -127,7 +129,7 @@ public class AgentPriorityFrame extends JFrame {
 		});
 		panel_2.add(btnAddPriority, BorderLayout.NORTH);
 		
-		JButton btnDeletePriority = new JButton("Eliminar prioridad seleccionada");
+		btnDeletePriority = new JButton("Eliminar prioridad seleccionada");
 		btnDeletePriority.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int selectedIndex = listPriority.getSelectedIndex();
@@ -178,8 +180,18 @@ public class AgentPriorityFrame extends JFrame {
 		scrollPane_1.setColumnHeaderView(lblNewLabel_6);
 		
 		updateParticipantsPriorityTransitiveList();
+		onlyViewMod(onlyView);
 	}
 
+	private void onlyViewMod(boolean onlyView) {
+		if(onlyView) {
+			comboBoxBest.setEnabled(false);
+			comboBoxWorst.setEnabled(false);
+			btnAddPriority.setEnabled(false);
+			btnDeletePriority.setEnabled(false);
+		}
+	}
+	
 	private void updateParticipantsPriorityTransitiveList() {
 		data.checkParticipantsPriorityTransitivity();
 		
