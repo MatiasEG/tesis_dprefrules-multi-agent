@@ -241,9 +241,9 @@ public class CSVreader {
 						
 						Agent participant = newData.getParticipant(participantName);
 						if(participant!=null) {
-							String[] preferences = line.split(",");
+							String[] preferences = rulePreferences.split(",");
 							for(String preference : preferences) {
-								String[] parts = line.split(">");
+								String[] parts = preference.split(">");
 								if(parts.length==2) {
 									 String morePriorRuleString = parts[0].trim();
 									 String lessPriorRuleString = parts[1].trim();
