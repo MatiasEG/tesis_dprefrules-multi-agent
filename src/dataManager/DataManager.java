@@ -56,6 +56,10 @@ public class DataManager {
 		return rules;
 	}
 	
+	public void setRules(List<Rule> rules) {
+		this.rules = rules;
+	}
+	
 	public String[] getRulesNames() {
 		String[] arrayRulesNames = new String[rules.size()];
 		for(int i=0; i<rules.size(); i++) {
@@ -125,6 +129,13 @@ public class DataManager {
 			names.add(rule.getName());
 		}
 		return names;
+	}
+	
+	public Rule getRule(String ruleName) {
+		for(Rule rule : rules) {
+			if(rule.getName().equals(ruleName)) return rule;
+		}
+		return null;
 	}
 	
 	public String[] getParticipantsArrayString() {

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import agent.Agent;
 import agent.AgentPriorityValidations;
 import alternative.Alternative;
 import criteria.Criteria;
@@ -18,6 +19,7 @@ import errors.AgentPriorityError;
 import errors.CriteriaFileError;
 import errors.EvidenceFileError;
 import errors.RuleFileError;
+import errors.RulePriorityError;
 import prefRules.Rule;
 
 public class CSVreader {
@@ -218,6 +220,57 @@ public class CSVreader {
 	    	e.printStackTrace();
 	    }
 		
+		oldData.updateData(newData);
+	}
+	
+	public static void readRulePriorityCSV(String csvFile, DataManager oldData) throws RulePriorityError {
+		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
+		newData.updateData(oldData);
+		for(Agent participant : newData.getParticipants()) {
+			participant.setRulePriority(new ArrayList<Priority>());
+		}
+		
+		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+	    	if(br.readLine().equals("agent;importance_order")) {
+	    		String line;
+		        while ((line = br.readLine()) != null) {
+		        	String[] namePref = line.split(";");
+		        	if(namePref.length==2) {
+		        		String participantName = namePref[0].trim();
+						String rulePreferences = namePref[1].trim();
+						
+						Agent participant = newData.getParticipant(participantName);
+						if(participant!=null) {
+							String[] preferences = line.split(",");
+							for(String preference : preferences) {
+								String[] parts = line.split(">");
+								if(parts.length==2) {
+									 String morePriorRuleString = parts[0].trim();
+									 String lessPriorRuleString = parts[1].trim();
+									 
+									 Rule morePriorRule = newData.getRule(morePriorRuleString);
+									 Rule lessPriorRule = newData.getRule(lessPriorRuleString);
+									 
+									 if(morePriorRule!=null && lessPriorRule!=null) {
+										 participant.addPreference(new Priority(morePriorRuleString, lessPriorRuleString));
+									 }
+								}else {
+									throw new RulePriorityError("Las reglas de preferencia no contienen la sintaxis correspondiente.");
+								}
+							}
+						}else {
+							throw new RulePriorityError("El archivo contiene participantes que no estan definidos en el problema actual.");
+						}
+		        	}else {
+		        		throw new RulePriorityError("El archivo no contiene la sintaxis correspondiente.");
+		        	}
+		        }
+	    	}else {
+	    		throw new RulePriorityError("El archivo no contiene el header correspondiente.");
+	    	}
+	    }catch (IOException e) {
+	    	e.printStackTrace();
+	    }
 		oldData.updateData(newData);
 	}
 }

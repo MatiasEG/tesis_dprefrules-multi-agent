@@ -27,6 +27,10 @@ public class Agent {
 		this.rulePriorityTransitive = rulePriorityTransitive;
 	}
 	
+	public void setRulePriority(List<Priority> rulePriority) {
+		this.rulePriority = rulePriority;
+	}
+	
 	public void addRulePriorityTransitive(Priority prior) {
 		rulePriorityTransitive.add(prior);
 	}

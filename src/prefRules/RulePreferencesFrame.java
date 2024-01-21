@@ -4,9 +4,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import IOmanager.CSVreader;
+import IOmanager.CSVwriter;
+import IOmanager.FileChooser;
 import agent.Agent;
 import dataManager.DataManager;
 import dataManager.Priority;
+import errors.RulePriorityError;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -73,6 +77,35 @@ public class RulePreferencesFrame extends JFrame {
 		JLabel lblNewLabel_5 = new JLabel(" - La regla X no puede tener mayor prioridad que la regla Y y al mismo tiempo menor prioridad que la regla Y -");
 		lblNewLabel_5.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(lblNewLabel_5);
+		
+		Component verticalStrut_5 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_5);
+		
+		JButton btnLoadRulePreferencesFromFiles = new JButton("Cargar archivo de preferencias");
+		btnLoadRulePreferencesFromFiles.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String path = FileChooser.showFileChooser();
+				try {
+					CSVreader.readRulePriorityCSV(path, RulePreferencesFrame.this.data);
+					RulePreferencesFrame.this.updateIndexRulePriority();
+					RulePreferencesFrame.this.updateRulePriorityTransitiveList();;
+				} catch (RulePriorityError e1) {
+	    			JOptionPane.showMessageDialog(null, e1.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
+		btnLoadRulePreferencesFromFiles.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(btnLoadRulePreferencesFromFiles);
+		
+		JButton btnSaveRulePreferenes = new JButton("Guardar archivo de preferencias");
+		btnSaveRulePreferenes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CSVwriter.saveRulePriorityToCSV(RulePreferencesFrame.this.data);
+				JOptionPane.showMessageDialog(null, "Datos validados y guardados, ya puede cerrar esta ventana", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		btnSaveRulePreferenes.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(btnSaveRulePreferenes);
 		
 		Component verticalStrut = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut);

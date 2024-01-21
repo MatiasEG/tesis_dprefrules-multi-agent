@@ -130,7 +130,7 @@ public class CSVwriter {
         }
 	}
 	
-	public static void saveRulePreferencesToCSV(DataManager data) {
+	public static void saveRulePriorityToCSV(DataManager data) {
 		String filePath = data.getSaveFolder()+"/"+data.getProjectName()+"_importance_orders.csv";
 		filePath = checkCSVextension(filePath);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {

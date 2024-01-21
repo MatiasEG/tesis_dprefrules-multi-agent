@@ -129,7 +129,7 @@ public class BPremise extends Premise{
 	public String getPremise() {
 		String premise = "better(X,Y,"+criteria.getName()+")";
 		if(minDistBetweenXY!=0)
-			premise += ", min_dist(X,Y,"+minDistBetweenXY+")";
+			premise += ", min_dist(X,Y, "+criteria.getName()+", "+minDistBetweenXY+")";
 		if(minValueForX!=-1)
 			if(!criteria.isNumeric())
 				premise += ", min(X, "+criteria.getName()+", "+criteria.getValues()[minValueForX]+")";
