@@ -1,4 +1,0 @@
-criterion;values
-clima;between(1,10)
-entretenimiento;[malo,bueno,exelente]
-pp;between(1,2)
