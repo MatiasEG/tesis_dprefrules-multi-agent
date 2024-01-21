@@ -37,6 +37,12 @@ public class PrefRulesFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
+	private JButton btnEditRule;
+	private JButton btnDeleteRule;
+	private JButton btnNewRule;
+	private JButton btnLoadFile;
+	private JButton btnSaveFile;
+	
 	private DefaultListModel<String> listModelRules;
 	private JList<String> listRules;
 	private DataManager data;
@@ -67,7 +73,7 @@ public class PrefRulesFrame extends JFrame {
 					data.addCriteria(entrmnt);
 					data.addCriteria(service);
 					
-					PrefRulesFrame frame = new PrefRulesFrame(data);
+					PrefRulesFrame frame = new PrefRulesFrame(data, true);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -79,7 +85,7 @@ public class PrefRulesFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public PrefRulesFrame(DataManager data) {
+	public PrefRulesFrame(DataManager data, boolean onlyView) {
 		this.data = data;
 		setTitle("Reglas de preferencia definidas");
 		setBounds(100, 100, 400, 450);
@@ -117,7 +123,7 @@ public class PrefRulesFrame extends JFrame {
 		panelFileButtons.setMaximumSize(panelBtnDimensions);
 		panelFileButtons.setLayout(new GridLayout(0, 2, 0, 0));
 		
-		JButton btnLoadFile = new JButton("Cargar desde archivo");
+		btnLoadFile = new JButton("Cargar desde archivo");
 		btnLoadFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String path = FileChooser.showFileChooser();
@@ -133,13 +139,13 @@ public class PrefRulesFrame extends JFrame {
 		panelFileButtons.add(btnLoadFile);
 		btnLoadFile.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
-		JButton btnNewButton = new JButton("Guardar archivo");
-		btnNewButton.addActionListener(new ActionListener() {
+		btnSaveFile = new JButton("Guardar archivo");
+		btnSaveFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				CSVwriter.saveRulesToCSV(PrefRulesFrame.this.data);
 			}
 		});
-		panelFileButtons.add(btnNewButton);
+		panelFileButtons.add(btnSaveFile);
 		
 		Component verticalStrut_1 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_1);
@@ -151,7 +157,7 @@ public class PrefRulesFrame extends JFrame {
 		contentPane.add(panelButtons);
 		panelButtons.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		JButton btnNewRule = new JButton("Nueva regla");
+		btnNewRule = new JButton("Nueva regla");
 		btnNewRule.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				PrefRuleCreationFrame frame = new PrefRuleCreationFrame(PrefRulesFrame.this.data, null);
@@ -168,7 +174,7 @@ public class PrefRulesFrame extends JFrame {
 		});
 		panelButtons.add(btnNewRule);
 		
-		JButton btnDeleteRule = new JButton("Eliminar");
+		btnDeleteRule = new JButton("Eliminar");
 		btnDeleteRule.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int selectedIndex = listRules.getSelectedIndex();
@@ -194,7 +200,7 @@ public class PrefRulesFrame extends JFrame {
 		});
 		panelButtons.add(btnDeleteRule);
 		
-		JButton btnEditRule = new JButton("Editar");
+		btnEditRule = new JButton("Editar");
 		btnEditRule.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int selectedIndex = listRules.getSelectedIndex();
@@ -264,15 +270,39 @@ public class PrefRulesFrame extends JFrame {
 		Component verticalStrut_3 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_3);
 		
-		JButton btnRulePreferences = new JButton("Definir preferencias");
-		btnRulePreferences.addActionListener(new ActionListener() {
+		JPanel panelPreferences = new JPanel();
+		contentPane.add(panelPreferences);
+		panelPreferences.setLayout(new GridLayout(1, 0, 0, 0));
+		
+		JButton btnEditRulePreferences = new JButton("Definir preferencias");
+		panelPreferences.add(btnEditRulePreferences);
+		btnEditRulePreferences.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RulePreferencesFrame frame = new RulePreferencesFrame(PrefRulesFrame.this.data);
+				RulePreferencesFrame frame = new RulePreferencesFrame(PrefRulesFrame.this.data, false);
 				frame.setVisible(true);
 			}
 		});
-		btnRulePreferences.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentPane.add(btnRulePreferences);
+		btnEditRulePreferences.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		JButton btnViewRulePreferences = new JButton("Ver preferencias");
+		btnViewRulePreferences.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RulePreferencesFrame frame = new RulePreferencesFrame(PrefRulesFrame.this.data, true);
+				frame.setVisible(true);
+			}
+		});
+		panelPreferences.add(btnViewRulePreferences);
+		onlyViewMod(onlyView);
+	}
+	
+	private void onlyViewMod(boolean onlyView) {
+		if(onlyView) {
+			btnEditRule.setEnabled(false);
+			btnDeleteRule.setEnabled(false);
+			btnNewRule.setEnabled(false);
+			btnLoadFile.setEnabled(false);
+			btnSaveFile.setEnabled(false);
+		}
 	}
 
 	private void updateRules() {

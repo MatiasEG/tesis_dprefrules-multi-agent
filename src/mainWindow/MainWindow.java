@@ -328,7 +328,7 @@ public class MainWindow extends JFrame {
 		btnEditRules = new JButton("Definir reglas");
 		btnEditRules.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PrefRulesFrame frame = new PrefRulesFrame(data);
+				PrefRulesFrame frame = new PrefRulesFrame(data, false);
 				frame.setVisible(true);
 				
 				if(state<4) state = 4;
@@ -363,6 +363,12 @@ public class MainWindow extends JFrame {
 		panelBtnRules.add(btnEditRules);
 		
 		btnViewRules = new JButton("Ver reglas");
+		btnViewRules.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PrefRulesFrame frame = new PrefRulesFrame(data, true);
+				frame.setVisible(true);
+			}
+		});
 		panelBtnRules.add(btnViewRules);
 		
 		Component verticalStrut_4 = Box.createVerticalStrut(20);

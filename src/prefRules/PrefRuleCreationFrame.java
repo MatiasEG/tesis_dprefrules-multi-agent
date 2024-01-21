@@ -45,6 +45,11 @@ public class PrefRuleCreationFrame extends JFrame {
 	private JLabel lblRuleName;
 	private JTextPane textPaneDescription;
 	
+	private JButton btnDeletePremise;
+	private JButton btnNewBPremise;
+	private JButton btnNewWPremise;
+	private JButton btnNewEPremise;
+	
 	private Rule rule;
 	private DefaultListModel<String> listModelRuleContent;
 	private JList<String> listRuleConditions;
@@ -157,7 +162,8 @@ public class PrefRuleCreationFrame extends JFrame {
 		contentPane.add(panelButtons1);
 		panelButtons1.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		JButton btnNewBPremise = new JButton("Agregar X mejor que Y");
+		btnNewBPremise = new JButton("Agregar X mejor que Y");
+		btnNewBPremise.setEnabled(false);
 		btnNewBPremise.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				BPremiseFrame frame = new BPremiseFrame(PrefRuleCreationFrame.this.data, PrefRuleCreationFrame.this.rule);
@@ -174,7 +180,8 @@ public class PrefRuleCreationFrame extends JFrame {
 		});
 		panelButtons1.add(btnNewBPremise);
 		
-		JButton btnNewWPremise = new JButton("Agregar X peor que Y");
+		btnNewWPremise = new JButton("Agregar X peor que Y");
+		btnNewWPremise.setEnabled(false);
 		btnNewWPremise.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				WPremiseFrame frame = new WPremiseFrame(PrefRuleCreationFrame.this.data, PrefRuleCreationFrame.this.rule);
@@ -191,7 +198,8 @@ public class PrefRuleCreationFrame extends JFrame {
 		});
 		panelButtons1.add(btnNewWPremise);
 		
-		JButton btnNewEPremise = new JButton("Agregar X igual a Y");
+		btnNewEPremise = new JButton("Agregar X igual a Y");
+		btnNewEPremise.setEnabled(false);
 		btnNewEPremise.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				EPremiseFrame frame = new EPremiseFrame(PrefRuleCreationFrame.this.data, PrefRuleCreationFrame.this.rule);
@@ -215,8 +223,9 @@ public class PrefRuleCreationFrame extends JFrame {
 		panelButtons1.setPreferredSize(panelButtonsDimensions);
 		panelButtons1.setMaximumSize(panelButtonsDimensions);
 		
-		JButton btnDeletePremise = new JButton("Eliminar condicion");
+		btnDeletePremise = new JButton("Eliminar condicion");
 		panelButtons1.add(btnDeletePremise);
+		btnDeletePremise.setEnabled(false);
 		btnDeletePremise.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int selectedIndex = listRuleConditions.getSelectedIndex();
@@ -274,6 +283,10 @@ public class PrefRuleCreationFrame extends JFrame {
 			textFieldRuleName.setText(this.rule.getName());
 			lblRuleName.setText("Nombre establecido: "+this.rule.getName());
 			updateRuleDescription();
+			btnNewBPremise.setEnabled(true);
+			btnNewWPremise.setEnabled(true);
+			btnNewEPremise.setEnabled(true);
+			btnDeletePremise.setEnabled(true);
 		}
 	}
 	

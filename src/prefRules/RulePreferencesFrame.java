@@ -34,20 +34,26 @@ public class RulePreferencesFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JComboBox<String> comboBoxParticipant;
-	private JComboBox<String> comboBoxBest;
-	private JComboBox<String> comboBoxWorst;
     private DefaultListModel<String> listModelRulePriority;
     private JList<String> listPriority;
     private DefaultListModel<String> listModelParticipantsPriorityTransitive;
     private JList<String> listPriorityTransitive;
+    
+    private JComboBox<String> comboBoxParticipant;
+	private JComboBox<String> comboBoxBest;
+	private JComboBox<String> comboBoxWorst;
+	
+    private JButton btnLoadRulePreferencesFromFiles;
+    private JButton btnSaveRulePreferenes;
+    private JButton btnAddPriority;
+    private JButton btnDeletePriority;
 
 	private DataManager data;
 
 	/**
 	 * Create the frame.
 	 */
-	public RulePreferencesFrame(DataManager data) {
+	public RulePreferencesFrame(DataManager data, boolean onlyView) {
 		this.data = data;
 		
 		setTitle("Prioridades entre agentes");
@@ -81,7 +87,7 @@ public class RulePreferencesFrame extends JFrame {
 		Component verticalStrut_5 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_5);
 		
-		JButton btnLoadRulePreferencesFromFiles = new JButton("Cargar archivo de preferencias");
+		btnLoadRulePreferencesFromFiles = new JButton("Cargar archivo de preferencias");
 		btnLoadRulePreferencesFromFiles.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String path = FileChooser.showFileChooser();
@@ -97,7 +103,7 @@ public class RulePreferencesFrame extends JFrame {
 		btnLoadRulePreferencesFromFiles.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(btnLoadRulePreferencesFromFiles);
 		
-		JButton btnSaveRulePreferenes = new JButton("Guardar archivo de preferencias");
+		btnSaveRulePreferenes = new JButton("Guardar archivo de preferencias");
 		btnSaveRulePreferenes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				CSVwriter.saveRulePriorityToCSV(RulePreferencesFrame.this.data);
@@ -135,7 +141,7 @@ public class RulePreferencesFrame extends JFrame {
 		Component verticalStrut_3 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_3);
 		
-		JButton btnAddPriority = new JButton("Agregar prioridad");
+		btnAddPriority = new JButton("Agregar prioridad");
 		btnAddPriority.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnAddPriority.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -175,7 +181,7 @@ public class RulePreferencesFrame extends JFrame {
 		listPriority = new JList<String>(listModelRulePriority);
 		scrollPane.setViewportView(listPriority);
 		
-		JButton btnDeletePriority = new JButton("Eliminar prioridad seleccionada");
+		btnDeletePriority = new JButton("Eliminar prioridad seleccionada");
 		btnDeletePriority.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnDeletePriority.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -214,8 +220,22 @@ public class RulePreferencesFrame extends JFrame {
 		
 		updateIndexRulePriority();
 		updateRulePriorityTransitiveList();
+		onlyViewMod(onlyView);
 	}
 
+	private void onlyViewMod(boolean onlyView) {
+		if(onlyView) {
+			comboBoxParticipant.setEnabled(false);
+			comboBoxBest.setEnabled(false);
+			comboBoxWorst.setEnabled(false);
+			
+		    btnLoadRulePreferencesFromFiles.setEnabled(false);
+		    btnSaveRulePreferenes.setEnabled(false);
+		    btnAddPriority.setEnabled(false);
+		    btnDeletePriority.setEnabled(false);
+		}
+	}
+	
 	private void updateIndexRulePriority() {
 		listModelRulePriority.removeAllElements();
 		for(int i=0; i<data.getParticipants().size(); i++) {
