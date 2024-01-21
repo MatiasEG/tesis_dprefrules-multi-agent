@@ -8,8 +8,7 @@ import javax.swing.border.EmptyBorder;
 
 import criteria.Criteria;
 import dataManager.DataManager;
-import dataManager.DataValidations;
-import exceptions.SintacticStringError;
+import dataManager.StringValidations;
 import participant.Participant;
 import premises.BPremiseFrame;
 import premises.EPremiseFrame;
@@ -259,9 +258,9 @@ public class PrefRuleCreationFrame extends JFrame {
 		
 		btnSaveRuleName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SintacticStringError validation = DataValidations.validateStringWithOnlyLettersAndNumbers(textFieldRuleName.getText());
+				String validation = StringValidations.validateStringWithOnlyLettersAndNumbers(textFieldRuleName.getText());
 				if(validation == null) {
-					if(DataValidations.validateStringListNotContainNewElement(PrefRuleCreationFrame.this.data.getRuleNames(), textFieldRuleName.getText())) {
+					if(StringValidations.validateStringListNotContainNewElement(PrefRuleCreationFrame.this.data.getRuleNames(), textFieldRuleName.getText())) {
 						lblRuleName.setText("Nombre establecido: "+textFieldRuleName.getText());
 						if(PrefRuleCreationFrame.this.rule==null) {
 							PrefRuleCreationFrame.this.rule = new Rule(textFieldRuleName.getText());
@@ -274,7 +273,7 @@ public class PrefRuleCreationFrame extends JFrame {
 						JOptionPane.showMessageDialog(null, "Por favor, revise que el nombre ya que este esta siendo utilizado por otra regla.", "Nombre repetido", JOptionPane.WARNING_MESSAGE);
 					}
 				}else {
-					JOptionPane.showMessageDialog(null, "Por favor, revise que el nombre solo contenga letras y/o digitos.", validation.getMsg(), JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Por favor, revise que el nombre solo contenga letras y/o digitos.", validation, JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});

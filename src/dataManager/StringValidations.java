@@ -2,16 +2,14 @@ package dataManager;
 
 import java.util.List;
 
-import exceptions.SintacticStringError;
-
-public class DataValidations {
+public class StringValidations {
 	
-	public static SintacticStringError validateStringWithOnlyLettersAndNumbers(String s) {
-		if(s == null || s.equals("")) return new SintacticStringError(s, "", "Cadena de caracteres vacia.");
+	public static String validateStringWithOnlyLettersAndNumbers(String s) {
+		if(s == null || s.equals("")) return "Cadena de caracteres vacia";
 		
 		for(int i = 0; i < s.length(); i++) {
 			if(!Character.isLetterOrDigit(s.charAt(i))) {
-				return new SintacticStringError(s, ""+s.charAt(i), "Caracter invalido ("+s.charAt(i)+") en "+s+".");
+				return "Caracter invalido ("+s.charAt(i)+") en "+s+".";
 			}
 		}
 		return null;
@@ -23,7 +21,6 @@ public class DataValidations {
 				return false;
 			}
 		}
-		
 		return true;
 	}
 	

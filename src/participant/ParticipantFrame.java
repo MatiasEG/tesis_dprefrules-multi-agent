@@ -10,7 +10,6 @@ import IOmanager.CSVreader;
 import IOmanager.CSVwriter;
 import IOmanager.FileChooser;
 import dataManager.DataManager;
-import dataManager.DataValidations;
 import exceptions.AgentPriorityException;
 
 import javax.swing.BoxLayout;
@@ -214,16 +213,10 @@ public class ParticipantFrame extends JFrame {
 	
 	private void addParticipantName(DataManager data) {
         String name = JOptionPane.showInputDialog(this, "Ingrese el nombre del participante que desea agregar:");
-        String validation = ParticipantPriorityValidations.validateAgentName(name, data);
-        if(validation.equals("OK")) {
-        	if(DataValidations.validateStringListNotContainNewElement(data.getParticipantsNames(), name)) {
-    			listModelParticipants.addElement(name);
-    			data.addParticipant(new Participant(name));
-    		}else {
-    			JOptionPane.showMessageDialog(null, "Error, el nombre \""+name+"\" ya se encuentra en la lista de participantes.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-    		}
+        if(data.validParticipantName(name)) {
+    		data.addParticipant(new Participant(name));
         }else {
-        	JOptionPane.showMessageDialog(null, validation, "Advertencia", JOptionPane.WARNING_MESSAGE);
+        	JOptionPane.showMessageDialog(null, "El nombre del participante "+name+" no es valido.", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
     }
 	

@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 
 import alternative.Alternative;
 import criteria.Criteria;
-import dataManager.CriteriaManager;
 import dataManager.DataManager;
 import dataManager.Priority;
 import exceptions.AgentPriorityException;
@@ -19,7 +18,6 @@ import exceptions.EvidenceFileException;
 import exceptions.RuleFileErrorException;
 import exceptions.RulePriorityException;
 import participant.Participant;
-import participant.ParticipantPriorityValidations;
 import prefRules.Rule;
 
 public class CSVreader {
@@ -37,26 +35,29 @@ public class CSVreader {
 		            String[] parts = line.split(";");
 					if (parts.length == 2) {
 					    String name = parts[0].trim();
-					    CriteriaManager.checkValidCriteriaName(name, null, criterias);
 					    
-					    String valoresString = parts[1].trim();
-					    
-						String[] values;
-						
-						// Create a Criterion object and add it to the list
-						Criteria criteria;
-						if (valoresString.matches("^between\\(\\d+,\\d+\\)$")) {
-							values = obtainValuesBetween(valoresString);
+					    if(newData.validCriteriaName(name)) {
+					    	String valoresString = parts[1].trim();
+						    
+							String[] values;
 							
-							criteria = new Criteria(name, values, true);
-			            }else {
-			            	// Remove brackets and spaces and divide by commas
-			            	values = valoresString.replaceAll("[\\[\\] ]", "").split(",");
-			            	
-			            	criteria = new Criteria(name, values, false);
-			            }
-						//newData.addCriteria(criteria);
-						criterias.add(criteria);
+							// Create a Criterion object and add it to the list
+							Criteria criteria;
+							if (valoresString.matches("^between\\(\\d+,\\d+\\)$")) {
+								values = obtainValuesBetween(valoresString);
+								
+								criteria = new Criteria(name, values, true);
+				            }else {
+				            	// Remove brackets and spaces and divide by commas
+				            	values = valoresString.replaceAll("[\\[\\] ]", "").split(",");
+				            	
+				            	criteria = new Criteria(name, values, false);
+				            }
+							//newData.addCriteria(criteria);
+							criterias.add(criteria);
+					    }else {
+					    	throw new CriteriaFileException("El archivo posee un nombre de criterio que es invalido ("+name+").");
+					    }
 		            }else{
 		            	throw new CriteriaFileException("El archivo no contiene la sintaxis correspondiente.");
 		            }
@@ -102,19 +103,20 @@ public class CSVreader {
 					    String morePriorAgent = parts[0].trim();
 					    String lessPriorAgent = parts[1].trim();
 					    
-					    String nameValidations1 = ParticipantPriorityValidations.validateAgentName(morePriorAgent, newData);
-					    if(!nameValidations1.equals("OK")) throw new AgentPriorityException(nameValidations1);
+					    Participant morePriorParticipant = newData.getParticipant(morePriorAgent);
+					    Participant lessPriorParticipant = newData.getParticipant(lessPriorAgent);
 					    
-					    String nameValidations2 = ParticipantPriorityValidations.validateAgentName(lessPriorAgent, newData);
-					    if(!nameValidations2.equals("OK")) throw new AgentPriorityException(nameValidations2);
+					    if(morePriorParticipant==null && !newData.validParticipantName(morePriorAgent)) throw new AgentPriorityException("El nombre "+morePriorAgent+" no es valido.");
+					    
+					    if(lessPriorParticipant==null && !newData.validParticipantName(morePriorAgent)) throw new AgentPriorityException("El nombre "+lessPriorAgent+" no es valido.");
 					    
 						Priority newParticipantsPriority = new Priority(morePriorAgent, lessPriorAgent);
 						String validPrior = newParticipantsPriority.isValid(newData);
 					    
 					    if(validPrior.equals("OK")) {
 					    	newData.addParticipantsPriority(newParticipantsPriority);
-					    	ParticipantPriorityValidations.ifNotExistAddNewAgent(morePriorAgent, newData);
-					    	ParticipantPriorityValidations.ifNotExistAddNewAgent(lessPriorAgent, newData);
+					    	if(morePriorParticipant==null) newData.addParticipant(new Participant(morePriorAgent));
+					    	if(lessPriorParticipant==null) newData.addParticipant(new Participant(lessPriorAgent));
 					    }else {
 					    	throw new AgentPriorityException(validPrior);
 					    }

@@ -7,9 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import dataManager.DataManager;
-import dataManager.DataValidations;
-import exceptions.SintacticStringError;
-
+import dataManager.StringValidations;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -130,13 +128,13 @@ public class NameAndFolderFrame extends JFrame {
 	
 	private boolean validateInput() {
 		if(FileChooser.isValidFolder(folderPath)) {
-			SintacticStringError error = DataValidations.validateStringWithOnlyLettersAndNumbers(textFieldProjectName.getText());
+			String error = StringValidations.validateStringWithOnlyLettersAndNumbers(textFieldProjectName.getText());
 			if(error == null){
 				NameAndFolderFrame.this.data.setSaveFolder(folderPath);
 				NameAndFolderFrame.this.data.setProjectName(textFieldProjectName.getText());
 				return true;
 			}else {
-				JOptionPane.showMessageDialog(null, error.getMsg(), "Advertencia", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, error, "Advertencia", JOptionPane.WARNING_MESSAGE);
 			}
 		}else {
 			JOptionPane.showMessageDialog(null, "La ruta seleccionada no es una ruta valida a una carpeta del sistema.", "Advertencia", JOptionPane.WARNING_MESSAGE);

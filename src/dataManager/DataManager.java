@@ -1,7 +1,10 @@
 package dataManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import alternative.Alternative;
 import criteria.Criteria;
@@ -98,6 +101,56 @@ public class DataManager {
 		}
 	}
 	
+	public boolean validCriteriaName(String name) {
+		if(name == null || name.equals("")) return false;
+		
+		for(int i = 0; i < name.length(); i++) {
+			if(!Character.isLetterOrDigit(name.charAt(i))) {
+				return false;
+			}
+		}
+		
+		for(Criteria criteria : criterias) {
+			if(criteria.getName().equals(name)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	public boolean validCriteriaValues(String[] values, boolean isNumeric) {
+		if(!isNumeric) {
+			//Create Set with all the elements in the array
+	        Set<String> set = new HashSet<String>(Arrays.asList(values));
+
+	        // since Set cannot contain duplicates, so if array size and
+	        // HashSet size then it can be concluded that array has all
+	        // distinct or unique elements otherwise its not
+	        if(!(values.length==set.size())){
+	        	// Given array does not contains all unique elements, and contains duplicate elements 
+	            return false;
+	        }
+	        
+	        for(String myStr: values) {
+	        	String validation = StringValidations.validateStringWithOnlyLettersAndNumbers(myStr);
+	        	if(validation!=null) return false;
+		    }
+		}else {
+			try {
+				if(values.length == 2) {
+					Integer.parseInt(values[0]);
+					Integer.parseInt(values[1]);
+				}else {
+					return false;
+				}
+			}catch (NumberFormatException e) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	public void addParticipant(Participant newParticipant) {
 		participants.add(newParticipant);
 	}
@@ -121,6 +174,15 @@ public class DataManager {
 			names.add(participant.getName());
 		}
 		return names;
+	}
+	
+	public boolean validParticipantName(String name) {
+		if(StringValidations.validateStringWithOnlyLettersAndNumbers(name)!=null) return false;
+		if ((name==null) || name.trim().isEmpty()) return false;
+		for(Participant participant : participants) {
+			if(participant.getName().equals(name)) return false;
+		}
+		return true;
 	}
 	
 	public List<String> getRuleNames() {

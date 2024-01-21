@@ -14,10 +14,8 @@ import IOmanager.CSVwriter;
 import IOmanager.FileChooser;
 import criteria.Criteria;
 import dataManager.DataManager;
-import dataManager.DataValidations;
+import dataManager.StringValidations;
 import exceptions.EvidenceFileException;
-import exceptions.SintacticStringError;
-
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -196,9 +194,9 @@ public class AlternativesFrame extends JFrame {
 	
 	private void addAlternative(DataManager data) {
 		String name = JOptionPane.showInputDialog(this, "Ingrese el nombre de la alternativa que desea agregar:");
-        SintacticStringError validation = DataValidations.validateStringWithOnlyLettersAndNumbers(name);
+        String validation = StringValidations.validateStringWithOnlyLettersAndNumbers(name);
         if(validation==null) {
-        	if(DataValidations.validateStringListNotContainNewElement(data.getAlternativesNames(), name)) {
+        	if(StringValidations.validateStringListNotContainNewElement(data.getAlternativesNames(), name)) {
         		DefaultTableModel model = (DefaultTableModel) table.getModel();
         		model.addRow(new Object[] {name});
     			for (int j = 1; j < model.getColumnCount(); j++) {
@@ -209,7 +207,7 @@ public class AlternativesFrame extends JFrame {
     			JOptionPane.showMessageDialog(null, "Error, la alternativa \""+name+"\" ya se encuentra en la lista de alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
     		}
         }else {
-        	JOptionPane.showMessageDialog(null, validation.getMsg(), "Advertencia", JOptionPane.WARNING_MESSAGE);
+        	JOptionPane.showMessageDialog(null, validation, "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
 	}
 	
