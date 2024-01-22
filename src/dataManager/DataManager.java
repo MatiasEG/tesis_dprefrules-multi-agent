@@ -200,6 +200,17 @@ public class DataManager {
 		return null;
 	}
 	
+	public void removeRules(String criteriaName) {
+		List<Rule> validRules = new ArrayList<Rule>();
+		for(int i=0; i<rules.size(); i++) {
+			if(!rules.get(i).isUsingCriteria(criteriaName)) validRules.add(rules.get(i));
+		}
+		rules = new ArrayList<Rule>();
+		for(Rule rule : validRules) {
+			rules.add(rule);
+		}
+	}
+	
 	public String[] getParticipantsArrayString() {
 		String[] arrayParticipants = new String[participants.size()];
 		for(int i=0; i<participants.size(); i++) {

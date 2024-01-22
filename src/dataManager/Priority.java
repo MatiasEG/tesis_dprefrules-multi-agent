@@ -2,6 +2,8 @@ package dataManager;
 
 import java.util.List;
 
+import participant.Participant;
+
 public class Priority {
 
 	protected String morePriority;
@@ -30,6 +32,30 @@ public class Priority {
 	
 	public String getPriorityFormatted() {
 		return morePriority + " > " + lessPriority;
+	}
+	
+	public String isValid(Participant participant) {
+		List<Priority> rulePref = participant.getPreferences();
+		for(Priority prior: rulePref) {
+			if(prior.getLessPriority().equals(lessPriority) && prior.getMorePriority().equals(morePriority)) {
+				return "Ya existe una regla de prioridad que contempla ( "+morePriority+" > "+lessPriority+" ).";
+			}
+			if(prior.getLessPriority().equals(morePriority) && prior.getMorePriority().equals(lessPriority)) {
+				return "No puede existir una prioridad simetrica, usted define ( "+morePriority+" > "+lessPriority+" ), pero ya existe ( "+lessPriority+" > "+morePriority+" ).";
+			}
+		}
+		
+		List<Priority> rulePrefTransitive = participant.getPreferencesTransitive();
+		for(Priority prior: rulePrefTransitive) {
+			if(prior.getLessPriority().equals(lessPriority) && prior.getMorePriority().equals(morePriority)) {
+				return "Ya existe una regla de prioridad que contempla ( "+morePriority+" > "+lessPriority+" ).";
+			}
+			if(prior.getLessPriority().equals(morePriority) && prior.getMorePriority().equals(lessPriority)) {
+				return "No puede existir una prioridad simetrica, usted define ( "+morePriority+" > "+lessPriority+" ), pero ya existe ( "+lessPriority+" > "+morePriority+" ).";
+			}
+		}
+		
+		return "OK";
 	}
 	
 	public String isValid(DataManager data) {

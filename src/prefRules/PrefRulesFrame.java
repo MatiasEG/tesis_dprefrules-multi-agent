@@ -73,7 +73,7 @@ public class PrefRulesFrame extends JFrame {
 					data.addCriteria(entrmnt);
 					data.addCriteria(service);
 					
-					PrefRulesFrame frame = new PrefRulesFrame(data, true);
+					PrefRulesFrame frame = new PrefRulesFrame(data, false);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -293,6 +293,7 @@ public class PrefRulesFrame extends JFrame {
 		});
 		panelPreferences.add(btnViewRulePreferences);
 		onlyViewMod(onlyView);
+		updateRules(data);
 	}
 	
 	private void onlyViewMod(boolean onlyView) {
@@ -302,6 +303,12 @@ public class PrefRulesFrame extends JFrame {
 			btnNewRule.setEnabled(false);
 			btnLoadFile.setEnabled(false);
 			btnSaveFile.setEnabled(false);
+		}
+	}
+	
+	private void updateRules(DataManager data) {
+		for(Rule rule : data.getRules()) {
+			listModelRules.addElement(rule.getName());
 		}
 	}
 

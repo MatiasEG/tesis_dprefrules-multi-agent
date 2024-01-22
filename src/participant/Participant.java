@@ -62,4 +62,8 @@ public class Participant {
 	public List<Priority> getPreferences(){
 		return rulePriority;
 	}
+	
+	public List<Priority> getPreferencesTransitive(){
+		return rulePriorityTransitive;
+	}
 }

@@ -101,6 +101,8 @@ public class EPremiseFrame extends JFrame {
 				if(criteria != null) {
 					lblCriteria1.setText("en el criterio "+criteria.getName()+".");
 					lblCriteria2.setText("en el criterio "+criteria.getName()+".");
+					btnValidateDataAndSave.setEnabled(true);
+					btnConfirmCriteria.setEnabled(false);
 					
 					if(!criteria.isNumeric()) {
 						lblSelectedCriteriaValues.setText("["+criteria.getCriteriaValuesString()+"]");

@@ -214,11 +214,10 @@ public class AlternativesFrame extends JFrame {
 	private boolean validateEvidence(DataManager data) {
 		String value;
 		for (int row = 0; row < model.getRowCount(); row++) {
-			data.getAlternatives().get(row).resetValues();
 		    for (int col = 1; col < model.getColumnCount(); col++) {
 		    	value = (String) model.getValueAt(row, col);
 		    	if(data.getCriterias().get(col-1).valueIsValid(value)) {
-		    		data.getAlternatives().get(row).addValue(value);
+		    		data.getAlternatives().get(row).addCriteriaValue(data.getCriterias().get(col-1), value);
 		    	}else {
 		    		JOptionPane.showMessageDialog(null, "Error, ingreso un valor no valido para la alternativa ("+data.getAlternatives().get(row).getName()+") en el criterio ("+data.getCriterias().get(col-1).getName()+")", "Advertencia", JOptionPane.WARNING_MESSAGE);
 		    		data.getAlternatives().clear();

@@ -151,11 +151,11 @@ public class PrefRulePreferencesFrame extends JFrame {
 				
 				if(participant!=-1 && bestIndexBox!=-1 && worstIndexBox!=-1) {
 					String participantName = (String)comboBoxParticipant.getSelectedItem();
-					String bestRule = (String) comboBoxParticipant.getSelectedItem();
-					String worstRule = (String) comboBoxBest.getSelectedItem();
+					String bestRule = (String) comboBoxBest.getSelectedItem();
+					String worstRule = (String) comboBoxWorst.getSelectedItem();
 					if(!bestRule.equals(worstRule)) {
 						Priority prior = new Priority(bestRule, worstRule);
-						String validation = prior.isValid(PrefRulePreferencesFrame.this.data);
+						String validation = prior.isValid(PrefRulePreferencesFrame.this.data.getParticipant(participantName));
 						if(validation.equals("OK")) {
 							PrefRulePreferencesFrame.this.data.getParticipant(participantName).addPreference(prior);
 							int index = PrefRulePreferencesFrame.this.data.getParticipant(participantName).getPreferences().size()-1;
@@ -240,8 +240,8 @@ public class PrefRulePreferencesFrame extends JFrame {
 		listModelRulePriority.removeAllElements();
 		for(int i=0; i<data.getParticipants().size(); i++) {
 			Participant participant = data.getParticipants().get(i);
-			for(Priority prior : participant.getPreferences()) {
-				listModelRulePriority.addElement("El participante <"+participant.getName()+"("+i+")> considera que la regla "+prior.getMorePriority()+" tiene mayor prioridad que la regla "+prior.getLessPriority());
+			for(int index=0; index<participant.getPreferences().size(); index++) {
+				listModelRulePriority.addElement("El participante <"+participant.getName()+"("+index+")> considera que la regla "+participant.getPreferences().get(index).getMorePriority()+" tiene mayor prioridad que la regla "+participant.getPreferences().get(index).getLessPriority());
 			}
 		}
 	}
@@ -250,7 +250,7 @@ public class PrefRulePreferencesFrame extends JFrame {
 		listModelParticipantsPriorityTransitive.removeAllElements();
 		for(Participant participant : data.getParticipants()) {
 			participant.checkRulePriorityTransitivity();
-			for(Priority prior : participant.getPreferences()) {
+			for(Priority prior : participant.getPreferencesTransitive()) {
 				listModelParticipantsPriorityTransitive.addElement("El participante "+participant.getName()+" considera que la regla "+prior.getMorePriority()+" tiene mayor prioridad que la regla "+prior.getLessPriority());
 			}
 		}

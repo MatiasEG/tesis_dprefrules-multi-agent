@@ -265,6 +265,10 @@ public class PrefRuleCreationFrame extends JFrame {
 						if(PrefRuleCreationFrame.this.rule==null) {
 							PrefRuleCreationFrame.this.rule = new Rule(textFieldRuleName.getText());
 							PrefRuleCreationFrame.this.data.addRule(PrefRuleCreationFrame.this.rule);
+							btnNewBPremise.setEnabled(true);
+							btnNewWPremise.setEnabled(true);
+							btnNewEPremise.setEnabled(true);
+							btnDeletePremise.setEnabled(true);
 						}else {
 							PrefRuleCreationFrame.this.rule.setName(textFieldRuleName.getText());
 						}

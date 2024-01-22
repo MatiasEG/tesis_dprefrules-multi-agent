@@ -10,7 +10,6 @@ import IOmanager.FileChooser;
 import alternative.Alternative;
 import dataManager.DataManager;
 import exceptions.CriteriaFileException;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
@@ -131,9 +130,10 @@ public class CriteriaFrame extends JFrame {
 						int index = table.getSelectedRow();
 						model.removeRow(index);
 						CriteriaFrame.this.data.removeCriteria(criteriaName);
-						for(Alternative alt: CriteriaFrame.this.data.getAlternatives()) {
-							alt.removeValue(index);
+						for(Alternative alt : CriteriaFrame.this.data.getAlternatives()) {
+							alt.removeCriteria(criteriaName);
 						}
+						CriteriaFrame.this.data.removeRules(criteriaName);
 						JOptionPane.showMessageDialog(null, "El criterio seleccionado fue correctamente removido");
 					}else {
 						// user do not want to delete selected criteria
@@ -231,9 +231,10 @@ public class CriteriaFrame extends JFrame {
 		
 		if(criteriaUpdate==null) {
 			model.addRow(new Object[] {criteriaName, "between("+splittedValues[0]+","+splittedValues[1]+")"});
-			data.addCriteria(new Criteria(criteriaName, splittedValues, isNumeric));
+			Criteria criteria = new Criteria(criteriaName, splittedValues, isNumeric);
+			data.addCriteria(criteria);
 			for(Alternative alt: data.getAlternatives()) {
-				alt.addValue("-");
+				alt.addCriteriaValue(criteria, "-");
 			}
 		}else {
 			int rowIndex = findRow(table, criteriaUpdate);
@@ -259,9 +260,10 @@ public class CriteriaFrame extends JFrame {
 		
 		if(criteriaUpdate==null) {
 			model.addRow(new Object[] {criteriaName, valueFormatted});
-			data.addCriteria(new Criteria(criteriaName, splittedValues, isNumeric));
+			Criteria criteria = new Criteria(criteriaName, splittedValues, isNumeric);
+			data.addCriteria(criteria);
 			for(Alternative alt: data.getAlternatives()) {
-				alt.addValue("-");
+				alt.addCriteriaValue(criteria, "-");
 			}
 		}else {
 			int rowIndex = findRow(table, criteriaUpdate);

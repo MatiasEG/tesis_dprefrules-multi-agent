@@ -101,6 +101,8 @@ public class BPremiseFrame extends JFrame {
 					lblMinDist.setText("La distancia minima entre los valores posibles para el criterio "+criteria.getName()+" debe ser:");
 					lblCriteria1.setText("en el criterio "+criteria.getName()+".");
 					lblCriteria2.setText("en el criterio "+criteria.getName()+".");
+					btnValidateDataAndSave.setEnabled(true);
+					btnConfirmCriteria.setEnabled(false);
 					
 					if(!criteria.isNumeric()) {
 						lblSelectedCriteriaValues.setText("["+criteria.getCriteriaValuesString()+"]");
@@ -251,6 +253,7 @@ public class BPremiseFrame extends JFrame {
 		contentPane.add(verticalStrut_5);
 		
 		btnValidateDataAndSave = new JButton("Validar datos y guardar");
+		btnValidateDataAndSave.setEnabled(false);
 		btnValidateDataAndSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int minDist = 0;

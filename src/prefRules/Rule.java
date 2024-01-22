@@ -159,6 +159,25 @@ public class Rule {
 		}
 	}
 	
+	public boolean isUsingCriteria(String criteriaName) {
+		for(int i=0; i<betterP.size(); i++) {
+			if(betterP.get(i).getCriteria().getName().equals(criteriaName)) {
+				return true;
+			}
+		}
+		for(int i=0; i<worstP.size(); i++) {
+			if(worstP.get(i).getCriteria().getName().equals(criteriaName)) {
+				return true;
+			}
+		}
+		for(int i=0; i<equalP.size(); i++) {
+			if(equalP.get(i).getCriteria().getName().equals(criteriaName)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public String getRuleDescription() {
 		String description = "Para preferir la alternativa X por sobre la alternativa Y, ";
 		

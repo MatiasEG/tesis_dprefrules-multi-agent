@@ -214,6 +214,7 @@ public class ParticipantFrame extends JFrame {
 	private void addParticipantName(DataManager data) {
         String name = JOptionPane.showInputDialog(this, "Ingrese el nombre del participante que desea agregar:");
         if(data.validParticipantName(name)) {
+        	listModelParticipants.addElement(name);
     		data.addParticipant(new Participant(name));
         }else {
         	JOptionPane.showMessageDialog(null, "El nombre del participante "+name+" no es valido.", "Advertencia", JOptionPane.WARNING_MESSAGE);
