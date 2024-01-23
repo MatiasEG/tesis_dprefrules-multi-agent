@@ -65,10 +65,11 @@ public class CSVwriter {
             	writer.newLine();
             }
             
-            for(Priority prior: data.getParticipantsPriorityTransitive()) {
-            	writer.write(prior.getPriorityFormatted());
-            	writer.newLine();
-            }
+            // TODO estas son implicitas no deberia escribirlas cierto?
+//            for(Priority prior: data.getParticipantsPriorityTransitive()) {
+//            	writer.write(prior.getPriorityFormatted());
+//            	writer.newLine();
+//            }
 
             System.out.println("Archivo CSV creado con éxito.");
         } catch (IOException e) {

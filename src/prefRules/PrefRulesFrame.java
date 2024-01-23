@@ -185,6 +185,7 @@ public class PrefRulesFrame extends JFrame {
 		                    "Confirmar Eliminación",
 		                    JOptionPane.YES_NO_OPTION);
 		            if (option == JOptionPane.YES_OPTION) {
+		            	PrefRulesFrame.this.data.removeRule(ruleName);
 		            	for(int i=0; i<PrefRulesFrame.this.data.getRules().size(); i++) {
 		            		if(PrefRulesFrame.this.data.getRules().get(i).getName().equals(ruleName)) {
 		            			PrefRulesFrame.this.data.getRules().remove(i);

@@ -55,6 +55,24 @@ public class DataManager {
 		rules.add(rule);
 	}
 	
+	public void removeRule(String ruleName) {
+		for(int i=0; i<rules.size(); i++) {
+    		if(rules.get(i).getName().equals(ruleName)) {
+    			rules.remove(i);
+    			break;
+    		}
+    	}
+		
+		for(Participant participant : participants) {
+			for(int i=0; i<participant.getPreferences().size(); i++) {
+				if(participant.getPreferences().get(i).getMorePriority().equals(ruleName) || participant.getPreferences().get(i).getLessPriority().equals(ruleName)) {
+					participant.getPreferences().remove(i);
+				}
+			}
+			participant.checkRulePriorityTransitivity();
+		}
+	}
+	
 	public List<Rule> getRules(){
 		return rules;
 	}
@@ -233,6 +251,7 @@ public class DataManager {
 				participantsPriority.remove(i);
 			}
 		}
+		checkParticipantsPriorityTransitivity();
 	}
 	
 	public void addParticipantsPriority(Priority newParticipantsPriority) {
