@@ -103,8 +103,8 @@ public class CSVreader {
 					    String morePriorAgent = parts[0].trim();
 					    String lessPriorAgent = parts[1].trim();
 					    
-					    Participant morePriorParticipant = newData.getParticipant(morePriorAgent);
-					    Participant lessPriorParticipant = newData.getParticipant(lessPriorAgent);
+					    Participant morePriorParticipant = newData.getParticipantByName(morePriorAgent);
+					    Participant lessPriorParticipant = newData.getParticipantByName(lessPriorAgent);
 					    
 					    if(morePriorParticipant==null && !newData.validParticipantName(morePriorAgent)) throw new AgentPriorityException("El nombre "+morePriorAgent+" no es valido.");
 					    
@@ -241,7 +241,7 @@ public class CSVreader {
 		        		String participantName = namePref[0].trim();
 						String rulePreferences = namePref[1].trim();
 						
-						Participant participant = newData.getParticipant(participantName);
+						Participant participant = newData.getParticipantByName(participantName);
 						if(participant!=null) {
 							String[] preferences = rulePreferences.split(",");
 							for(String preference : preferences) {

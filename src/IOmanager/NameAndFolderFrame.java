@@ -7,7 +7,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import dataManager.DataManager;
-import dataManager.StringValidations;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -128,7 +127,7 @@ public class NameAndFolderFrame extends JFrame {
 	
 	private boolean validateInput() {
 		if(FileChooser.isValidFolder(folderPath)) {
-			String error = StringValidations.validateStringWithOnlyLettersAndNumbers(textFieldProjectName.getText());
+			String error = DataManager.validateStringWithOnlyLettersAndNumbers(textFieldProjectName.getText());
 			if(error == null){
 				NameAndFolderFrame.this.data.setSaveFolder(folderPath);
 				NameAndFolderFrame.this.data.setProjectName(textFieldProjectName.getText());

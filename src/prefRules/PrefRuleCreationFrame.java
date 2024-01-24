@@ -8,7 +8,6 @@ import javax.swing.border.EmptyBorder;
 
 import criteria.Criteria;
 import dataManager.DataManager;
-import dataManager.StringValidations;
 import participant.Participant;
 import premises.BPremiseFrame;
 import premises.EPremiseFrame;
@@ -258,9 +257,9 @@ public class PrefRuleCreationFrame extends JFrame {
 		
 		btnSaveRuleName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String validation = StringValidations.validateStringWithOnlyLettersAndNumbers(textFieldRuleName.getText());
+				String validation = DataManager.validateStringWithOnlyLettersAndNumbers(textFieldRuleName.getText());
 				if(validation == null) {
-					if(StringValidations.validateStringListNotContainNewElement(PrefRuleCreationFrame.this.data.getRuleNames(), textFieldRuleName.getText())) {
+					if(DataManager.validateStringListNotContainNewElement(PrefRuleCreationFrame.this.data.getRuleNames(), textFieldRuleName.getText())) {
 						lblRuleName.setText("Nombre establecido: "+textFieldRuleName.getText());
 						if(PrefRuleCreationFrame.this.rule==null) {
 							PrefRuleCreationFrame.this.rule = new Rule(textFieldRuleName.getText());

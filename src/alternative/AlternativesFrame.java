@@ -14,7 +14,6 @@ import IOmanager.CSVwriter;
 import IOmanager.FileChooser;
 import criteria.Criteria;
 import dataManager.DataManager;
-import dataManager.StringValidations;
 import exceptions.EvidenceFileException;
 import participant.Participant;
 import javax.swing.DefaultCellEditor;
@@ -231,9 +230,9 @@ public class AlternativesFrame extends JFrame {
 	
 	private void addAlternative(DataManager data) {
 		String name = JOptionPane.showInputDialog(this, "Ingrese el nombre de la alternativa que desea agregar:");
-        String validation = StringValidations.validateStringWithOnlyLettersAndNumbers(name);
+        String validation = DataManager.validateStringWithOnlyLettersAndNumbers(name);
         if(validation==null) {
-        	if(StringValidations.validateStringListNotContainNewElement(data.getAlternativesNames(), name)) {
+        	if(DataManager.validateStringListNotContainNewElement(data.getAlternativesNames(), name)) {
         		DefaultTableModel model = (DefaultTableModel) table.getModel();
         		model.addRow(new Object[] {name});
     			for (int j = 1; j < model.getColumnCount(); j++) {
