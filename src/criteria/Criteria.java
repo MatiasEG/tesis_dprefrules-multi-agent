@@ -8,11 +8,13 @@ public class Criteria {
 	protected String[] values;
 	protected boolean isNumeric;
 	protected JComboBox<String> comboValues;
+	protected String noInformationValue;
 	
 	public Criteria(String name, String[] values, boolean isNumeric) {
 		this.name = name;
 		this.values = values;
 		this.isNumeric = isNumeric;
+		this.noInformationValue = "";
 		
 		if(!isNumeric) {
 			String[] comboBoxValues = new String[values.length + 1];
@@ -23,6 +25,14 @@ public class Criteria {
 		}else {
 			comboValues = null;
 		}
+	}
+	
+	public void setNoInformationValue(String noInformationValue) {
+		this.noInformationValue = noInformationValue;
+	}
+	
+	public String getNoInformationValue() {
+		return this.noInformationValue;
 	}
 	
 	public void updateCriteria(String name, String[] values, boolean isNumeric) {

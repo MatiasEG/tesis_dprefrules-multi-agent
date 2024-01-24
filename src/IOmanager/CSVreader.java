@@ -158,7 +158,7 @@ public class CSVreader {
 						
 						for(int i=1; i<parts.length; i++) {
 							if(newData.getCriterias().get(i-1).valueIsValid(parts[i].trim())) {
-								newData.getAlternatives().get(altIndex).addCriteriaValue(newData.getCriterias().get(i-1), parts[i].trim());
+								newData.getAlternatives().get(altIndex).updateOrAddCriteriaValue(newData.getCriterias().get(i-1), parts[i].trim());
 							}else {
 				            	throw new EvidenceFileException("El criterio ("+newData.getCriterias().get(i-1).getName()+") contiene una valor no valido ("+parts[i].trim()+") en el archivo de evidencia.");
 							}

@@ -2,6 +2,7 @@ package IOmanager;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Random;
 
 import alternative.Alternative;
 import criteria.Criteria;
@@ -45,10 +46,56 @@ public class CSVwriter {
 	
 	private static String putAllValues(Criteria criteria) {
 		String values = "";
-		for(String value: criteria.getValues()) {
-			values += value+",";
+		values += addNoInformationValue(criteria);
+		for(int i=0; i<criteria.getValues().length; i++) {
+			if(criteria.isNumeric() && i==0) {
+				// discard
+			}else {
+				values += ","+criteria.getValues()[i];
+			}
 		}
-		return values.substring(0, values.length() - 1);
+		return values;
+	}
+	
+	private static String addNoInformationValue(Criteria criteria) {
+		if(criteria.isNumeric()) {
+			criteria.setNoInformationValue(""+((Integer.parseInt(criteria.getValues()[0]))-1));
+			return criteria.getNoInformationValue();
+		}else {
+			boolean finish = false;
+			while(!finish) {
+				String random = rndString();
+				boolean valid = true;
+				for(String str : criteria.getValues()) {
+					if(str.equals(random)) {
+						valid = false;
+						break;
+					}
+				}
+				if(valid) {
+					finish = true;
+					criteria.setNoInformationValue(random);
+					return criteria.getNoInformationValue();
+				}
+			}
+		}
+		return "";
+    }
+	
+	private static String rndString() {
+		int size = 4;
+        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder cadenaRandom = new StringBuilder();
+
+        Random random = new Random();
+
+        for (int i = 0; i < size; i++) {
+            int indice = random.nextInt(caracteres.length());
+            char caracter = caracteres.charAt(indice);
+            cadenaRandom.append(caracter);
+        }
+
+        return cadenaRandom.toString();
 	}
 	
 	public static void saveAgentPriorityToCSV(DataManager data) {
@@ -92,8 +139,24 @@ public class CSVwriter {
 
             // write data
             for(Alternative alt: data.getAlternatives()) {
-            	writer.write(alt.toString());
+            	String values[] = alt.evidenceFileContent();
+            	writer.write(values[0]);
+            	
+//            	for(int i=0; i<values.length; i++) {
+//            		System.out.print(" - "+values[i]);
+//            	}
+            	
+            	System.out.println();
+            	for(int i=1; i<values.length; i++) {
+            		System.out.print(values[i]+" - - ");
+            		if(values[i].equals("-")) {
+            			writer.write(";"+data.getCriterias().get(i-1).getNoInformationValue());
+            		}else {
+            			writer.write(";"+values[i]);
+            		}
+            	}
             	writer.newLine();
+            	System.out.println();
             }
 
             System.out.println("Archivo CSV creado con éxito.");

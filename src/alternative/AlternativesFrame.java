@@ -16,6 +16,7 @@ import criteria.Criteria;
 import dataManager.DataManager;
 import dataManager.StringValidations;
 import exceptions.EvidenceFileException;
+import participant.Participant;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -27,6 +28,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.BoxLayout;
 import java.awt.Component;
+import java.awt.EventQueue;
 
 public class AlternativesFrame extends JFrame {
 
@@ -41,6 +43,41 @@ public class AlternativesFrame extends JFrame {
 	
 	private DataManager data;
 
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					DataManager data = new DataManager("evidenceTest","C:\\Users\\Matia\\Desktop\\Archivos");
+					data.addParticipant(new Participant("Matias"));
+					
+					//Criteria entretenimiento = new Criteria("Entretenimiento", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
+					//Criteria clima = new Criteria("Clima", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
+					//Criteria costo = new Criteria("Costo", new String[]{"caro", "medio", "normal", "economico"}, false);
+					//Criteria dias = new Criteria("Dias", new String[]{"1", "30"}, true);
+					//data.addCriteria(entretenimiento);
+					//data.addCriteria(clima);
+					//data.addCriteria(costo);
+					//data.addCriteria(dias);
+					
+					Criteria days = new Criteria("days", new String[]{"1","30"}, true);
+					Criteria entrmnt = new Criteria("entrmnt", new String[]{"vbad","bad","reg","good","vgood"}, false);
+					Criteria service = new Criteria("service", new String[]{"vbad","bad","reg","good","vgood"}, false);
+					data.addCriteria(days);
+					data.addCriteria(entrmnt);
+					data.addCriteria(service);
+					
+					AlternativesFrame frame = new AlternativesFrame(data, false);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
 	/**
 	 * Create the frame.
 	 */
@@ -217,7 +254,7 @@ public class AlternativesFrame extends JFrame {
 		    for (int col = 1; col < model.getColumnCount(); col++) {
 		    	value = (String) model.getValueAt(row, col);
 		    	if(data.getCriterias().get(col-1).valueIsValid(value)) {
-		    		data.getAlternatives().get(row).addCriteriaValue(data.getCriterias().get(col-1), value);
+		    		data.getAlternatives().get(row).updateOrAddCriteriaValue(data.getCriterias().get(col-1), value);
 		    	}else {
 		    		JOptionPane.showMessageDialog(null, "Error, ingreso un valor no valido para la alternativa ("+data.getAlternatives().get(row).getName()+") en el criterio ("+data.getCriterias().get(col-1).getName()+")", "Advertencia", JOptionPane.WARNING_MESSAGE);
 		    		data.getAlternatives().clear();

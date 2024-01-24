@@ -10,8 +10,10 @@ import IOmanager.FileChooser;
 import alternative.Alternative;
 import dataManager.DataManager;
 import exceptions.CriteriaFileException;
+import participant.Participant;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -43,6 +45,32 @@ public class CriteriaFrame extends JFrame {
 	private JScrollPane scrollPaneCriteria;
 	
 	private DataManager data;
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					DataManager data = new DataManager("ruleTest","C:\\Users\\Matia\\Desktop\\Archivos");
+					data.addParticipant(new Participant("Matias"));
+					
+					Criteria days = new Criteria("days", new String[]{"1","30"}, true);
+					Criteria entrmnt = new Criteria("entrmnt", new String[]{"vbad","bad","reg","good","vgood"}, false);
+					Criteria service = new Criteria("service", new String[]{"vbad","bad","reg","good","vgood"}, false);
+					data.addCriteria(days);
+					data.addCriteria(entrmnt);
+					data.addCriteria(service);
+					
+					CriteriaFrame frame = new CriteriaFrame(data, false);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 	
 	/**
 	 * Create the frame.
@@ -234,7 +262,7 @@ public class CriteriaFrame extends JFrame {
 			Criteria criteria = new Criteria(criteriaName, splittedValues, isNumeric);
 			data.addCriteria(criteria);
 			for(Alternative alt: data.getAlternatives()) {
-				alt.addCriteriaValue(criteria, "-");
+				alt.updateOrAddCriteriaValue(criteria, "-");
 			}
 		}else {
 			int rowIndex = findRow(table, criteriaUpdate);
@@ -263,7 +291,7 @@ public class CriteriaFrame extends JFrame {
 			Criteria criteria = new Criteria(criteriaName, splittedValues, isNumeric);
 			data.addCriteria(criteria);
 			for(Alternative alt: data.getAlternatives()) {
-				alt.addCriteriaValue(criteria, "-");
+				alt.updateOrAddCriteriaValue(criteria, "-");
 			}
 		}else {
 			int rowIndex = findRow(table, criteriaUpdate);

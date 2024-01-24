@@ -40,18 +40,49 @@ public class Alternative {
 		}
 	}
 	
-	public void addCriteriaValue(Criteria criteria, String value) {
-		valuesObject.add(new CriteriaValue(criteria, value));
+	public void updateOrAddCriteriaValue(Criteria criteria, String value) {
+		boolean finish = false;
+		for(CriteriaValue cv : valuesObject) {
+			if(cv.getCriteria().getName().equals(criteria.getName())) {
+				cv.setValue(value);
+				finish = true;
+				break;
+			}
+		}
+		
+		if(!finish) {
+			valuesObject.add(new CriteriaValue(criteria, value));
+		}
 	}
 	
-	public String toString() {
-		String toString = name;
+	public String[] evidenceFileContent() {
+		String[] toString = new String[valuesObject.size()+1];
+		check(toString);
+		checkCriterias();
+		toString[0] = name;
 		List<String> values = getValues();
-		for(String s: values) {
-			toString += ";"+s;
+		for(int i=1; i<=values.size(); i++) {
+			toString[i] = values.get(i-1);
 		}
 		
 		return toString;
+	}
+	
+	//TODO borrar --------------------------------------------------------------------------
+	private void check(String[] str) {
+		System.out.println("CHECK");
+		for(int i=0; i<str.length; i++) {
+			System.out.print(" - "+str[i]);
+		}
+		System.out.println();
+	}
+	
+	private void checkCriterias() {
+		System.out.println("CHECK CRITERIAS");
+		for(int i=0; i<valuesObject.size(); i++) {
+			System.out.print(" - ("+valuesObject.get(i).getCriteria().getName()+","+valuesObject.get(i).getValue()+")");
+		}
+		System.out.println();
 	}
 	
 }
