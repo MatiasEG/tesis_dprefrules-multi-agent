@@ -57,6 +57,9 @@ public class DataManagerEvidence {
 		this.data = newData;
 		
 		alternatives = new ArrayList<Alternative>();
-		alternatives = newData.getAlternatives();
+		
+		for(Alternative a : newData.getAlternatives()) {
+			alternatives.add(a);
+		}
 	}
 }

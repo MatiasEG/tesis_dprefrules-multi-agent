@@ -133,8 +133,14 @@ public class DataManagerParticipant {
 		participantsPriority = new ArrayList<Priority>();
 		participantsPriorityTransitive = new ArrayList<Priority>();
 		
-		participants = newData.getParticipants();
-		participantsPriority = newData.getParticipantsPriority();
-		participantsPriorityTransitive = newData.getParticipantsPriorityTransitive();
+		for(Participant p : newData.getParticipants()) {
+			participants.add(p);
+		}
+		for(Priority p : newData.getParticipantsPriority()) {
+			participantsPriority.add(p);
+		}
+		for(Priority p : newData.getParticipantsPriorityTransitive()) {
+			participantsPriorityTransitive.add(p);
+		}
 	}
 }

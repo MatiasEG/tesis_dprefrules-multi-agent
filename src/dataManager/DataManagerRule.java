@@ -93,6 +93,9 @@ public class DataManagerRule {
 		this.data = newData;
 		
 		rules = new ArrayList<Rule>();
-		rules = newData.getRules();
+		
+		for(Rule r : newData.getRules()) {
+			rules.add(r);
+		}
 	}
 }

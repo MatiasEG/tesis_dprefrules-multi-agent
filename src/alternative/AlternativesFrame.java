@@ -197,6 +197,7 @@ public class AlternativesFrame extends JFrame {
 					if(validateEvidence(AlternativesFrame.this.data)) {
 						CSVwriter.saveEvidenceToCSV(AlternativesFrame.this.data);
 						JOptionPane.showMessageDialog(null, "Alternativas guardadas correctamente, ya puede cerrar esta ventana.","Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+						AlternativesFrame.this.data.setDataValidated();
 						onlyViewMod(true);
 					}
 				}else {

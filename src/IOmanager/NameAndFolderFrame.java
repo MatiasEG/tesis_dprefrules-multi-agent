@@ -104,6 +104,7 @@ public class NameAndFolderFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(validateInput()) {
 					JOptionPane.showMessageDialog(null, "Datos validados y guardados, ya puede cerrar esta ventana", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+					NameAndFolderFrame.this.data.setDataValidated();
 					viewOnlyMod(true);
 				}
 			}

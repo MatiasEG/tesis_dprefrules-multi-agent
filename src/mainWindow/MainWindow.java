@@ -41,6 +41,7 @@ public class MainWindow extends JFrame {
     private JButton btnViewRules;
 
 	private DataManager data;
+	private DataManager dataClone;
 	private boolean modifyingData;
 	private int state;
 	
@@ -92,7 +93,9 @@ public class MainWindow extends JFrame {
 		panelBtnSaveFolder.add(btnEditNameAndFolder);
 		btnEditNameAndFolder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NameAndFolderFrame frame = new NameAndFolderFrame(data, false);
+				dataClone = data.clone();
+				
+				NameAndFolderFrame frame = new NameAndFolderFrame(dataClone, false);
 				frame.setVisible(true);
 				
 				if(state<0) state = 0;
@@ -104,7 +107,14 @@ public class MainWindow extends JFrame {
 				frame.addWindowListener(new WindowAdapter() {
 		            @Override
 		            public void windowClosing(WindowEvent e) {
-		            	if(!modifyingData) {
+		            	if(dataClone.getDataValidated()) {
+		            		data.updateData(dataClone);
+		            	}else {
+		            		// The user close the window without save.
+		            	}
+		            	dataClone = null;
+		            	
+	            		if(!modifyingData) {
 		            		if(!data.getProjectName().equals("") && !data.getSaveFolder().equals("")) {
 			                	setState1(false);
 			                }else {
@@ -154,7 +164,9 @@ public class MainWindow extends JFrame {
 		panelBtnAgents.add(btnEditParticipants);
 		btnEditParticipants.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ParticipantFrame frame = new ParticipantFrame(data, false);
+				dataClone = data.clone();
+				
+				ParticipantFrame frame = new ParticipantFrame(dataClone, false);
 		        frame.setVisible(true);
 		        
 		        if(state<1) state = 1;
@@ -165,6 +177,13 @@ public class MainWindow extends JFrame {
 		        frame.addWindowListener(new WindowAdapter() {
 		            @Override
 		            public void windowClosing(WindowEvent e) {
+		            	if(dataClone.getDataValidated()) {
+		            		data.updateData(dataClone);
+		            	}else {
+		            		// The user close the window without save.
+		            	}
+		            	dataClone = null;
+		            	
 		            	if(!modifyingData) {
 			                if(data.getParticipants().size()>0) {
 			                	setState2(false);
@@ -220,7 +239,9 @@ public class MainWindow extends JFrame {
 		btnViewCriteria.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnEditCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CriteriaFrame frame = new CriteriaFrame(data, false);
+				dataClone = data.clone();
+				
+				CriteriaFrame frame = new CriteriaFrame(dataClone, false);
 				frame.setVisible(true);
 				
 				if(state<2) state = 2;
@@ -231,6 +252,13 @@ public class MainWindow extends JFrame {
 				frame.addWindowListener(new WindowAdapter() {
 		            @Override
 		            public void windowClosing(WindowEvent e) {
+		            	if(dataClone.getDataValidated()) {
+		            		data.updateData(dataClone);
+		            	}else {
+		            		// The user close the window without save.
+		            	}
+		            	dataClone = null;
+		            	
 		            	if(!modifyingData) {
 			                if(data.getCriterias().size()>0) {
 			                	setState3(false);
@@ -283,7 +311,9 @@ public class MainWindow extends JFrame {
 		btnViewEvidence.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnEditEvidence.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AlternativesFrame frame = new AlternativesFrame(data, false);
+				dataClone = data.clone();
+				
+				AlternativesFrame frame = new AlternativesFrame(dataClone, false);
 				frame.setVisible(true);
 				
 				if(state<3) state = 3;
@@ -294,6 +324,13 @@ public class MainWindow extends JFrame {
 				frame.addWindowListener(new WindowAdapter() {
 		            @Override
 		            public void windowClosing(WindowEvent e) {
+		            	if(MainWindow.this.dataClone!=null && MainWindow.this.dataClone.getDataValidated()) {
+		            		data.updateData(MainWindow.this.dataClone);
+		            	}else {
+		            		// The user close the window without save.
+		            	}
+		            	MainWindow.this.dataClone = null;
+		            	
 		            	if(!modifyingData) {
 			            	if(data.getAlternatives().size()>1) {
 			                	setState4(false);
@@ -328,7 +365,9 @@ public class MainWindow extends JFrame {
 		btnEditRules = new JButton("Definir reglas");
 		btnEditRules.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PrefRulesFrame frame = new PrefRulesFrame(data, false);
+				dataClone = data.clone();
+				
+				PrefRulesFrame frame = new PrefRulesFrame(dataClone, false);
 				frame.setVisible(true);
 				
 				if(state<4) state = 4;
@@ -339,6 +378,13 @@ public class MainWindow extends JFrame {
 				frame.addWindowListener(new WindowAdapter() {
 		            @Override
 		            public void windowClosing(WindowEvent e) {
+		            	if(MainWindow.this.dataClone.getDataValidated()) {
+		            		data.updateData(MainWindow.this.dataClone);
+		            	}else {
+		            		// The user close the window without save.
+		            	}
+		            	MainWindow.this.dataClone = null;
+		            	
 		            	if(!modifyingData) {
 			                if(data.getRules().size()>0) {
 			                	setState5(false);

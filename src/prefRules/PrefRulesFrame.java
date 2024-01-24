@@ -57,15 +57,6 @@ public class PrefRulesFrame extends JFrame {
 					DataManager data = new DataManager("evidenceTest","C:\\Users\\Matia\\Desktop\\Archivos");
 					data.addParticipant(new Participant("Matias"));
 					
-					//Criteria entretenimiento = new Criteria("Entretenimiento", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
-					//Criteria clima = new Criteria("Clima", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
-					//Criteria costo = new Criteria("Costo", new String[]{"caro", "medio", "normal", "economico"}, false);
-					//Criteria dias = new Criteria("Dias", new String[]{"1", "30"}, true);
-					//data.addCriteria(entretenimiento);
-					//data.addCriteria(clima);
-					//data.addCriteria(costo);
-					//data.addCriteria(dias);
-					
 					Criteria days = new Criteria("days", new String[]{"1","30"}, true);
 					Criteria entrmnt = new Criteria("entrmnt", new String[]{"vbad","bad","reg","good","vgood"}, false);
 					Criteria service = new Criteria("service", new String[]{"vbad","bad","reg","good","vgood"}, false);
@@ -86,6 +77,8 @@ public class PrefRulesFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public PrefRulesFrame(DataManager data, boolean onlyView) {
+		//TODO ver como mejorar esta ventanta
+		
 		this.data = data;
 		setTitle("Reglas de preferencia definidas");
 		setBounds(100, 100, 400, 450);
@@ -143,6 +136,9 @@ public class PrefRulesFrame extends JFrame {
 		btnSaveFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				CSVwriter.saveRulesToCSV(PrefRulesFrame.this.data);
+				JOptionPane.showMessageDialog(null, "Alternativas guardadas correctamente, ya puede cerrar esta ventana.","Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+				PrefRulesFrame.this.data.setDataValidated();
+				onlyViewMod(true);
 			}
 		});
 		panelFileButtons.add(btnSaveFile);

@@ -149,6 +149,7 @@ public class ParticipantFrame extends JFrame {
 				if(ParticipantFrame.this.data.getParticipants().size()>0) {
 					CSVwriter.saveAgentPriorityToCSV(ParticipantFrame.this.data);
 					JOptionPane.showMessageDialog(null, "Datos validados y guardados, ya puede cerrar esta ventana", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+					ParticipantFrame.this.data.setDataValidated();
 					viewOnlyMod(true);
 				}
 			}

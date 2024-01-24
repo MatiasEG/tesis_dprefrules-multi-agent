@@ -16,9 +16,13 @@ public class DataManager {
 	protected String projectName;
 	protected String folderPath;
 	
+	protected boolean dataValidated;
+	
 	public DataManager(String projectName, String folderPath) {
 		this.projectName = projectName;
 		this.folderPath = folderPath;
+		
+		dataValidated = false;
 		
 		dataParticipants = new DataManagerParticipant(this);
 		dataCriterias = new DataManagerCriteria(this);
@@ -187,12 +191,30 @@ public class DataManager {
 		return this.projectName;
 	}
 	
+	// data validated --------------------------------------------------------------------------------------------------------------
+	public void setDataValidated() {
+		dataValidated = true;
+	}
+	
+	public boolean getDataValidated() {
+		return dataValidated;
+	}
+	
 	// update data --------------------------------------------------------------------------------------------------------------
 	public void updateData(DataManager newData) {
+		this.projectName = newData.getProjectName();
+		this.folderPath = newData.getSaveFolder();
+		
 		this.dataParticipants.updateData(newData);
 		this.dataCriterias.updateData(newData);
 		this.dataEvidence.updateData(newData);
 		this.dataRules.updateData(newData);
+	}
+	
+	public DataManager clone() {
+		DataManager dataClone = new DataManager(this.projectName, this.folderPath);
+		dataClone.updateData(this);
+		return dataClone;
 	}
 	
 	// check --------------------------------------------------------------------------------------------------------------

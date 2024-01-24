@@ -222,9 +222,8 @@ public class CriteriaCreationFrame extends JFrame {
 		JButton btnAcept = new JButton("Aceptar y Guardar criterio");
 		btnAcept.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(CriteriaCreationFrame.this.data.validCriteriaName(textFieldCriteriaName.getText())) {
+				if((criteriaToUpdate!=null && criteriaToUpdate.getName().equals(textFieldCriteriaName.getText())) || CriteriaCreationFrame.this.data.validCriteriaName(textFieldCriteriaName.getText())) {
 					if(!isNumericEnabled && !textFieldSimbolicValues.getText().equals("")) {
-						
 						String[] simbolicSplittedValues = textFieldSimbolicValues.getText().trim().split("\\s*,\\s*");
 						
 						if(CriteriaCreationFrame.this.data.validCriteriaValues(simbolicSplittedValues, isNumericEnabled)) {

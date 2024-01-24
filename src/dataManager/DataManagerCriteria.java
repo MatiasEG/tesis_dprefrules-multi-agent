@@ -110,6 +110,9 @@ public class DataManagerCriteria {
 		this.data = newData;
 		
 		criterias = new ArrayList<Criteria>();
-		criterias = newData.getCriterias();
+		
+		for(Criteria c : newData.getCriterias()) {
+			criterias.add(c);
+		}
 	}
 }
