@@ -19,11 +19,14 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.FlowLayout;
+import java.awt.Component;
+import javax.swing.Box;
 
 @SuppressWarnings("serial")
 public class CriteriaFrame extends JFrame {
@@ -32,11 +35,10 @@ public class CriteriaFrame extends JFrame {
 	private JTable table;
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_2;
-	private JPanel panelLabels_2;
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_3;
 	private JLabel lblNewLabel_4;
-	private JPanel panelButtons_1;
+	private JPanel panelButtons;
 	private JButton btnSaveFile;
 	private JButton btnAddCriteria;
 	private JButton btnDeleteCriteria;
@@ -45,6 +47,8 @@ public class CriteriaFrame extends JFrame {
 	private JScrollPane scrollPaneCriteria;
 	
 	private DataManager data;
+	private Component verticalStrut;
+	private Component verticalStrut_1;
 	
 	/**
 	 * Launch the application.
@@ -80,43 +84,58 @@ public class CriteriaFrame extends JFrame {
 		
 		setTitle("Criterios a evaluar");
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 950, 400);
+		setBounds(100, 100, 850, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(10, 10));
-		
-		JPanel panelLabels_1 = new JPanel();
-		panelLabels_1.setPreferredSize(new Dimension(100,100));
-		contentPane.add(panelLabels_1, BorderLayout.NORTH);
-		panelLabels_1.setLayout(new BorderLayout(0, 0));
+		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 		
 		lblNewLabel_1 = new JLabel("A continuacion ingrese o modifique los criterios que desea utilizar.");
-		panelLabels_1.add(lblNewLabel_1, BorderLayout.NORTH);
+		lblNewLabel_1.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblNewLabel_1);
+		
+		verticalStrut = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut);
 		
 		lblNewLabel_2 = new JLabel("Recuerde que:");
-		panelLabels_1.add(lblNewLabel_2, BorderLayout.CENTER);
+		lblNewLabel_2.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblNewLabel_2);
 		
-		panelLabels_2 = new JPanel();
-		panelLabels_2.setPreferredSize(new Dimension(50,50));
-		panelLabels_1.add(panelLabels_2, BorderLayout.SOUTH);
-		panelLabels_2.setLayout(new BorderLayout(0, 0));
+		lblNewLabel = new JLabel("- Los criterios no pueden repetirse -");
+		lblNewLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblNewLabel);
 		
-		lblNewLabel = new JLabel(" > Los criterios no pueden repetirse");
-		panelLabels_2.add(lblNewLabel, BorderLayout.NORTH);
+		lblNewLabel_3 = new JLabel("- Los valores posibles para los criterios deben estar separados por coma -");
+		lblNewLabel_3.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblNewLabel_3);
 		
-		lblNewLabel_3 = new JLabel(" > Los valores posibles para los criterios deben estar separados por coma");
-		panelLabels_2.add(lblNewLabel_3, BorderLayout.CENTER);
+		lblNewLabel_4 = new JLabel("- El valor de mas a la izquierda sera considerado el peor valor posible, mientras que el de mas a la derecha el mejor -");
+		lblNewLabel_4.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblNewLabel_4);
 		
-		lblNewLabel_4 = new JLabel(" > El valor de mas a la izquierda sera considerado el peor valor posible, mientras que el de mas a la derecha el mejor");
-		panelLabels_2.add(lblNewLabel_4, BorderLayout.SOUTH);
+		verticalStrut_1 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_1);
 		
-		panelButtons_1 = new JPanel();
-		contentPane.add(panelButtons_1, BorderLayout.SOUTH);
-		panelButtons_1.setPreferredSize(new Dimension(50,50));
-		FlowLayout fl_panelButtons_1 = new FlowLayout(FlowLayout.CENTER, 5, 5);
-		panelButtons_1.setLayout(fl_panelButtons_1);
+		scrollPaneCriteria = new JScrollPane();
+		contentPane.add(scrollPaneCriteria, BorderLayout.CENTER);
+		
+		String[] columnNames = {"Criterio", "Rango de valores"};
+		Object[][] tableData = {};
+		
+		table = new JTable(new DefaultTableModel(tableData, columnNames));
+		// disable cell edition
+		table.setDefaultEditor(Object.class, null);
+        // one row selected at the same time
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+		scrollPaneCriteria.setViewportView(table);
+		
+		panelButtons = new JPanel();
+		contentPane.add(panelButtons);
+		panelButtons.setPreferredSize(new Dimension(50,50));
+		FlowLayout fl_panelButtons = new FlowLayout(FlowLayout.CENTER, 5, 5);
+		panelButtons.setLayout(fl_panelButtons);
 		
 		btnLoadFile = new JButton("Cargar archivo");
 		btnLoadFile.addActionListener(new ActionListener() {
@@ -131,10 +150,10 @@ public class CriteriaFrame extends JFrame {
 				}
 			}
 		});
-		panelButtons_1.add(btnLoadFile);
+		panelButtons.add(btnLoadFile);
 		
 		btnAddCriteria = new JButton("Agregar nuevo criterio");
-		panelButtons_1.add(btnAddCriteria);
+		panelButtons.add(btnAddCriteria);
 		btnAddCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CriteriaCreationFrame frame = new CriteriaCreationFrame(CriteriaFrame.this, CriteriaFrame.this.data, null);
@@ -143,7 +162,7 @@ public class CriteriaFrame extends JFrame {
 		});
 		
 		btnDeleteCriteria = new JButton("Eliminar criterio seleccionado");
-		panelButtons_1.add(btnDeleteCriteria);
+		panelButtons.add(btnDeleteCriteria);
 		btnDeleteCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				// check for selected row first
@@ -174,7 +193,7 @@ public class CriteriaFrame extends JFrame {
 		});
 		
 		btnEditCriteria = new JButton("Editar criterio seleccionado");
-		panelButtons_1.add(btnEditCriteria);
+		panelButtons.add(btnEditCriteria);
 		btnEditCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
@@ -194,7 +213,7 @@ public class CriteriaFrame extends JFrame {
 		});
 		
 		btnSaveFile = new JButton("Guardar archivo");
-		panelButtons_1.add(btnSaveFile);
+		panelButtons.add(btnSaveFile);
 		btnSaveFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CSVwriter.saveCriteriasToCSV(CriteriaFrame.this.data);
@@ -203,20 +222,6 @@ public class CriteriaFrame extends JFrame {
 				onlyViewMod(true);
 			}
 		});
-		
-		scrollPaneCriteria = new JScrollPane();
-		contentPane.add(scrollPaneCriteria, BorderLayout.CENTER);
-		
-		String[] columnNames = {"Criterio", "Rango de valores"};
-		Object[][] tableData = {};
-		
-		table = new JTable(new DefaultTableModel(tableData, columnNames));
-		// disable cell edition
-		table.setDefaultEditor(Object.class, null);
-        // one row selected at the same time
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-		scrollPaneCriteria.setViewportView(table);
 		checkData(data);
 		onlyViewMod(onlyView);
 	}
