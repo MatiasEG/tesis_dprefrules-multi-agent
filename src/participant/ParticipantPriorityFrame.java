@@ -52,57 +52,49 @@ public class ParticipantPriorityFrame extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 		
-		JPanel panel = new JPanel();
-		contentPane.add(panel);
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		
-		JPanel panel_3 = new JPanel();
-		panel.add(panel_3);
-		panel_3.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblNewLabel = new JLabel("Defina la prioridad que hay entre los participantes.");
-		panel_3.add(lblNewLabel, BorderLayout.NORTH);
-		
-		JPanel panel_4 = new JPanel();
-		panel_3.add(panel_4, BorderLayout.CENTER);
-		panel_4.setLayout(new BoxLayout(panel_4, BoxLayout.Y_AXIS));
+		JLabel lblNewLabel = new JLabel("Defina la prioridad que hay entre los participantes");
+		lblNewLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblNewLabel, BorderLayout.NORTH);
 		
 		Component verticalStrut_1 = Box.createVerticalStrut(20);
-		panel_4.add(verticalStrut_1);
+		contentPane.add(verticalStrut_1);
 		
-		JLabel lblNewLabel_1 = new JLabel(" - La prioridad sera tenida en cuenta al momento de determinar cual es la mejor alternativa.");
-		panel_4.add(lblNewLabel_1);
+		JLabel lblNewLabel_1 = new JLabel(" - La prioridad sera tenida en cuenta al momento de determinar cual es la mejor alternativa -");
+		lblNewLabel_1.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblNewLabel_1);
 		
-		JLabel lblNewLabel_4 = new JLabel(" - Recuerde que el participante X no puede tener mayor prioridad que X");
-		panel_4.add(lblNewLabel_4);
+		JLabel lblNewLabel_4 = new JLabel(" - Recuerde que el participante X no puede tener mayor prioridad que X -");
+		lblNewLabel_4.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblNewLabel_4);
 		
-		JLabel lblNewLabel_5 = new JLabel(" - El participante X no puede tener mayor prioridad que el participante Y y al mismo tiempo menor prioridad que Y");
-		panel_4.add(lblNewLabel_5);
+		JLabel lblNewLabel_5 = new JLabel(" - El participante X no puede tener mayor prioridad que el participante Y y al mismo tiempo menor prioridad que Y -");
+		lblNewLabel_5.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblNewLabel_5);
 		
-		JPanel panel_1 = new JPanel();
-		panel.add(panel_1);
-		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.X_AXIS));
+		Component verticalStrut_3 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_3);
 		
-		JLabel lblNewLabel_2 = new JLabel("El participante");
-		panel_1.add(lblNewLabel_2);
-		
-		comboBoxBest = new JComboBox<String>(data.getParticipantsArrayString());
-		panel_1.add(comboBoxBest);
-		
-		JLabel lblNewLabel_3 = new JLabel("tiene mayor prioridad que el participante");
-		panel_1.add(lblNewLabel_3);
-		
-		comboBoxWorst = new JComboBox<String>(data.getParticipantsArrayString());
-		panel_1.add(comboBoxWorst);
+		JPanel panelPriorityConfiguration = new JPanel();
+		contentPane.add(panelPriorityConfiguration);
+		panelPriorityConfiguration.setLayout(new BoxLayout(panelPriorityConfiguration, BoxLayout.X_AXIS));
 		
 		Component verticalStrut = Box.createVerticalStrut(20);
-		panel.add(verticalStrut);
+		contentPane.add(verticalStrut);
 		
-		JPanel panel_2 = new JPanel();
-		contentPane.add(panel_2);
-		panel_2.setLayout(new BorderLayout(0, 0));
+		JLabel lblNewLabel_2 = new JLabel("El participante");
+		panelPriorityConfiguration.add(lblNewLabel_2);
+		
+		comboBoxBest = new JComboBox<String>(data.getParticipantsArrayString());
+		panelPriorityConfiguration.add(comboBoxBest);
+		
+		JLabel lblNewLabel_3 = new JLabel("tiene mayor prioridad que el participante");
+		panelPriorityConfiguration.add(lblNewLabel_3);
+		
+		comboBoxWorst = new JComboBox<String>(data.getParticipantsArrayString());
+		panelPriorityConfiguration.add(comboBoxWorst);
 		
 		btnAddPriority = new JButton("Agregar prioridad");
+		btnAddPriority.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnAddPriority.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int bestIndexBox = comboBoxBest.getSelectedIndex();
@@ -127,9 +119,20 @@ public class ParticipantPriorityFrame extends JFrame {
 				}
 			}
 		});
-		panel_2.add(btnAddPriority, BorderLayout.NORTH);
+		contentPane.add(btnAddPriority, BorderLayout.NORTH);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		contentPane.add(scrollPane, BorderLayout.CENTER);
+		
+		listModelParticipantsPriority = new DefaultListModel<>();
+		for(Priority prior: data.getParticipantsPriority()) {
+			listModelParticipantsPriority.addElement("El participante "+prior.getMorePriority()+" tiene mayor prioridad que el participante "+prior.getLessPriority());
+		}
+		listPriority = new JList<String>(listModelParticipantsPriority);
+		scrollPane.setViewportView(listPriority);
 		
 		btnDeletePriority = new JButton("Eliminar prioridad seleccionada");
+		btnDeletePriority.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnDeletePriority.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int selectedIndex = listPriority.getSelectedIndex();
@@ -147,27 +150,13 @@ public class ParticipantPriorityFrame extends JFrame {
 		        }
 			}
 		});
-		panel_2.add(btnDeletePriority, BorderLayout.SOUTH);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		panel_2.add(scrollPane, BorderLayout.CENTER);
-		
-		listModelParticipantsPriority = new DefaultListModel<>();
-		for(Priority prior: data.getParticipantsPriority()) {
-			listModelParticipantsPriority.addElement("El participante "+prior.getMorePriority()+" tiene mayor prioridad que el participante "+prior.getLessPriority());
-		}
-		listPriority = new JList<String>(listModelParticipantsPriority);
-		scrollPane.setViewportView(listPriority);
+		contentPane.add(btnDeletePriority, BorderLayout.SOUTH);
 		
 		Component verticalStrut_2 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_2);
 		
-		JPanel panel_5 = new JPanel();
-		contentPane.add(panel_5);
-		panel_5.setLayout(new BoxLayout(panel_5, BoxLayout.X_AXIS));
-		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		panel_5.add(scrollPane_1);
+		contentPane.add(scrollPane_1);
 		
 		listModelParticipantsPriorityTransitive = new DefaultListModel<>();
 		for(Priority prior: data.getParticipantsPriorityTransitive()) {
