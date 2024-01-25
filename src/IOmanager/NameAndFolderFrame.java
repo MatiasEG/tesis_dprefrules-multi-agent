@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Component;
+import java.awt.Dimension;
+
 import javax.swing.Box;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -53,16 +55,20 @@ public class NameAndFolderFrame extends JFrame {
 		this.data = data;
 		
 		setTitle("Nombre y Carpeta destino");
-		setBounds(100, 100, 500, 250);
+		setBounds(100, 100, 450, 275);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 		
-		JLabel lblNewLabel = new JLabel("Ingrese un nombre para el problema.");
+		JLabel lblNewLabel = new JLabel("Ingrese un nombre que caracterice al problema");
 		lblNewLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(lblNewLabel);
+		
+		JLabel lblNewLabel_2 = new JLabel("Por favor no utilice espacios");
+		lblNewLabel_2.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblNewLabel_2);
 		
 		Component verticalStrut_1 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_1);
@@ -75,7 +81,7 @@ public class NameAndFolderFrame extends JFrame {
 		Component verticalStrut_2 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_2);
 		
-		JLabel lblNewLabel_1 = new JLabel("Seleccione la carpeta donde se guardaran los archivos asociados al problema.");
+		JLabel lblNewLabel_1 = new JLabel("Seleccione la carpeta donde se guardaran los archivos asociados al problema");
 		lblNewLabel_1.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(lblNewLabel_1);
 		
@@ -111,6 +117,10 @@ public class NameAndFolderFrame extends JFrame {
 		});
 		btnSaveData.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(btnSaveData);
+		
+		Dimension textFieldDimensions = new Dimension(200, 20);
+		textFieldProjectName.setPreferredSize(textFieldDimensions);
+		textFieldProjectName.setMaximumSize(textFieldDimensions);
 		
 		viewOnlyMod(viewOnly);
 	}

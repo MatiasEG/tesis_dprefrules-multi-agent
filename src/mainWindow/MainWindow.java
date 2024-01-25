@@ -17,10 +17,12 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.awt.event.ActionEvent;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Dimension;
 
 import javax.swing.Box;
@@ -77,11 +79,26 @@ public class MainWindow extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 		
+		Component verticalStrut_6 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_6);
+		
+		JButton btnManual = new JButton("Manual de usuario");
+		btnManual.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				openManual();
+			}
+		});
+		btnManual.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(btnManual);
+		
+		Component verticalStrut_5 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_5);
+		
 		JPanel panelSaveFolder = new JPanel();
 		contentPane.add(panelSaveFolder);
 		panelSaveFolder.setLayout(new BoxLayout(panelSaveFolder, BoxLayout.Y_AXIS));
 		
-		JLabel lblNewLabel_5 = new JLabel("A continuacion por favor ingrese un nombre para el problema y selecciones una carpeta donde desea guardar los datos.");
+		JLabel lblNewLabel_5 = new JLabel("- Ingrese un nombre para el problema y selecciones una carpeta donde desea guardar los archivos resultantes -");
 		lblNewLabel_5.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panelSaveFolder.add(lblNewLabel_5);
 		
@@ -152,7 +169,7 @@ public class MainWindow extends JFrame {
 		Component verticalStrut_2 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_2);
 		
-		JLabel lblNewLabel = new JLabel("Defina los participantes involucrados en el problema de eleccion");
+		JLabel lblNewLabel = new JLabel("- Defina los participantes involucrados en el problema de eleccion -");
 		lblNewLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panelAgents.add(lblNewLabel);
 		
@@ -288,7 +305,7 @@ public class MainWindow extends JFrame {
 		contentPane.add(panelAlternatives);
 		panelAlternatives.setLayout(new BoxLayout(panelAlternatives, BoxLayout.Y_AXIS));
 		
-		JLabel lblNewLabel_3 = new JLabel("Determine cuales son las alternativas posibles");
+		JLabel lblNewLabel_3 = new JLabel("- Determine cuales son las alternativas posibles -");
 		lblNewLabel_3.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panelAlternatives.add(lblNewLabel_3);
 		
@@ -355,7 +372,7 @@ public class MainWindow extends JFrame {
 		contentPane.add(panelRules);
 		panelRules.setLayout(new BoxLayout(panelRules, BoxLayout.Y_AXIS));
 		
-		JLabel lblNewLabel_1 = new JLabel("Defina las reglas que utilizara para comparar las alternativas en base a los criterios definidos");
+		JLabel lblNewLabel_1 = new JLabel("- Defina las reglas que utilizara para comparar las alternativas en base a los criterios definidos -");
 		lblNewLabel_1.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panelRules.add(lblNewLabel_1);
 		
@@ -628,5 +645,16 @@ public class MainWindow extends JFrame {
 	    btnViewEvidence.setEnabled(true);
 	    
 	    btnViewRules.setEnabled(false);
+	}
+	
+	private void openManual() {
+		try {
+            System.out.println("Start..");
+            File file = new java.io.File("src/manual.html").getAbsoluteFile();
+            Desktop.getDesktop().open(file);                    
+            System.out.println("End..");
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
 	}
 }

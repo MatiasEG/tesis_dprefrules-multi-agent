@@ -1,0 +1,46 @@
+<p style="text-align: center;"><strong>Manual de usuario para la definicion de un problema de decision</strong></p>
+<p style="text-align: center;"><br></p>
+<p style="text-align: center;"><strong>- 1 -</strong></p>
+<p style="text-align: center;"><strong>- Nombre de proyecto y carpeta destino -</strong></p>
+<p style="text-align: justify;">En esta primer etapa se le solicitara un nombre para el proyecto, el mismo sera utilizado para asignarle el nombre a los archivos asociados a los datos que usted haya cargado. Estos archivos se van a ubicar en la carpeta que usted elija de su ordenador, de esta manera podra visualizarlos y en caso de que lo desee podra abrirlos nuevamente para editarlos.</p>
+<p style="text-align: justify;">El nombre del proyecto solo puede contener letras y numeros.</p>
+<p style="text-align: justify;"><br></p>
+<p style="text-align: center;"><strong>- 2 -</strong></p>
+<p style="text-align: center;"><strong>- Participantes involucrados en el problema de decision -</strong></p>
+<p style="text-align: justify;">Ahora usted debe indicar los participantes que tendran influencia en la decision. Puede ser un unico participante o varios, tenga en cuenta que si son varios podra, si asi lo quiere, definir un orden de prioridad entre ellos, lo cual hara que las preferencias del participante mas importante tengan mas peso que las del participante menos importante.</p>
+<p style="text-align: justify;">Todos los participantes involucrados deben estar de acuerdo con toda la informacion que se indique a continuacion.</p>
+<p style="text-align: justify;">El nombre de un participante solo puede contener letras y numeros.</p>
+<p style="text-align: justify;"><br></p>
+<p style="text-align: center;"><strong>- 3 -</strong></p>
+<p style="text-align: center;"><strong>- Criterios con los que se compararan las alternativas -</strong></p>
+<p style="text-align: justify;">A continuacion debe definir los criterios con los que se compararan las alternativas, tenga en cuenta que hay dos tipos distintos de criterios:</p>
+<ul>
+    <li style="text-align: justify;">Numerico: los posibles valores de este criterio se representan mediante numeros. Por ejemplo, Criterio = Costo, Valores = entre(500,200)</li>
+    <li style="text-align: justify;">Categorico: los posibles valores de este criterio se representan mediante palabras descriptivas. Por ejemplo, Criterio = Costo, Valores = [muyalto,alto,medio,bajo]</li>
+</ul>
+<p style="text-align: justify;">Al cargar los valores de los criterios tenga en cuenta que [mas a la izquierda representa un valor peor &lt; ... &lt; mas a la derecha representa un valor mejor]</p>
+<p style="text-align: justify;">Recuerde que si un criterio tiene valores categorios [si,no], es posible que no sea un criterio, sino que sea un filtro que usted debe aplicar sobre las alternativas. Por ejemplo, Criterio = MeGusta, Valores = [si,no], probablemente usted no elija algo que no le gusta y por lo tanto descarte todas aquellas alternativas que usted considera que no le gustan y elija entre aquellas que si lo hacen, entonces el criterio MeGusta no tendria utilidad.</p>
+<p style="text-align: justify;">Otra consideracion es la ausencia de informacion, si usted considera que la ausencia de informacion no es mala, entonces debe indicarla con un valor dentro de el rango.&nbsp;</p>
+<p style="text-align: justify;">Los valores categoricos deben estar separados mediante una coma (&quot;,&quot;), y solo pueden contener letras y numeros.</p>
+<p style="text-align: justify;"><br></p>
+<p style="text-align: center;"><strong>- 4 -</strong></p>
+<p style="text-align: center;"><strong>- Alternativas y evidencia -</strong></p>
+<p style="text-align: justify;">El siguiente paso es indicar cuales son las alternativas entre las cuales los participantes puede elegir, una vez que las indiquen pueden ingresar los datos correspondientes a cada una, esto es lo que se llama la evidencia, y son los datos que se utilizaran para comparar las alternativas. Si no posee informacion de alguna de ellas debe dejar un &quot;-&quot;, en caso de que no poseea informacion pero esto le resulte una caracteristica positiva de la alternativa recuerde indicarlo en el criterio con un valor que haga referencia a eso.</p>
+<p style="text-align: justify;"><br></p>
+<p style="text-align: center;"><strong>- 5 -</strong></p>
+<p style="text-align: center;"><strong>- Reglas de preferencia -</strong></p>
+<p style="text-align: justify;">Por utimo, los participantes deben definir las reglas, estas permiten generar excepciones entre las alternativas. Por ejemplo: Si quiero ir a la playa, prefiero el hotel X que sale mas caro, como mucho $100 mas caro que Y, si X esta mas cerca de la playa, al menos 5 cuadras mas cerca que Y.</p>
+<p style="text-align: justify;">Una regla tiene tres partes:</p>
+<ul>
+    <li style="text-align: justify;">X mejor que Y: indica que una alternativa X debe ser mejor que otra Y en algun criterio que usted seleccione.</li>
+    <li style="text-align: justify;">X peor que Y: indica que una alternativa X debe ser peor que otra Y en algun criterio que usted seleccione.</li>
+    <li style="text-align: justify;">X igual que Y: indica que una alternativa X debe ser igual que otra Y en algun criterio que usted seleccione.</li>
+</ul>
+<p style="text-align: justify;">Para que una regla sea valida debe tener al menos una parte &quot;X mejor que Y&quot;, ya que no tiene sentido preferir X sobre Y si no existe nada en lo que X sea mejor que Y.</p>
+<p style="text-align: justify;">La regla que indicamos anteriormente se crea de la siguiente manera:</p>
+<ul>
+    <li style="text-align: justify;">&quot;prefiero el hotel X que sale mas caro, como mucho $100 mas caro que Y&quot; = X peor que Y, en el criterio &quot;Costo&quot;, distancia maxima (100)<br>Aclaracion: Si X fuese $200 mas caro que Y, no me interesa en este caso.</li>
+    <li style="text-align: justify;">&quot;X esta mas cerca de la playa, al menos 5 cuadras mas cerca que Y&quot; = X mejor que Y, en el criterio &quot;DistanciaPlaya&quot;, distancia minima (5)</li>
+</ul>
+<p style="text-align: justify;">Usted puede explorar el funcionamiento de las reglas e ir leyendo como la descripcion de la misma va cambiando a medida que agrega condiciones.</p>
+<p><br></p>
