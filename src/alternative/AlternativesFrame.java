@@ -28,6 +28,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.BoxLayout;
 import java.awt.Component;
 import java.awt.EventQueue;
+import javax.swing.Box;
 
 public class AlternativesFrame extends JFrame {
 
@@ -41,6 +42,7 @@ public class AlternativesFrame extends JFrame {
 	private JButton btnNewAlternative;
 	
 	private DataManager data;
+	private Component verticalStrut;
 
 	/**
 	 * Launch the application.
@@ -95,11 +97,11 @@ public class AlternativesFrame extends JFrame {
 		contentPane.add(lblNewLabel);
 		lblNewLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
-		JLabel lblNewLabel_1 = new JLabel("- Si lo desea puede modificarla haciendo click directamente en los casilleros de la misma -");
+		JLabel lblNewLabel_1 = new JLabel("- Puede modificar la evidencia haciendo click directamente en los casilleros -");
 		contentPane.add(lblNewLabel_1);
 		lblNewLabel_1.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
-		JLabel lblNewLabel_2 = new JLabel("- Recuerde que el nombre no puede contener espacios ni caracteres especiales -");
+		JLabel lblNewLabel_2 = new JLabel("- Recuerde que los nombres de las alternativas no puede contener espacios ni caracteres especiales -");
 		contentPane.add(lblNewLabel_2);
 		lblNewLabel_2.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
@@ -129,6 +131,9 @@ public class AlternativesFrame extends JFrame {
 		        model.setValueAt("-", i, j);
 		    }
 		}
+		
+		verticalStrut = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane);

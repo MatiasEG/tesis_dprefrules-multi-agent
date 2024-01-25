@@ -81,7 +81,7 @@ public class PrefRulesFrame extends JFrame {
 		
 		this.data = data;
 		setTitle("Reglas de preferencia definidas");
-		setBounds(100, 100, 400, 450);
+		setBounds(100, 100, 450, 450);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -96,7 +96,7 @@ public class PrefRulesFrame extends JFrame {
 		contentPane.add(verticalStrut);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		Dimension panelDimensionsScrollPane = new Dimension(400, 200);
+		Dimension panelDimensionsScrollPane = new Dimension(450, 200);
 		scrollPane.setPreferredSize(panelDimensionsScrollPane);
 		scrollPane.setMaximumSize(panelDimensionsScrollPane);
 		contentPane.add(scrollPane);
@@ -108,7 +108,7 @@ public class PrefRulesFrame extends JFrame {
 		Component verticalStrut_4 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_4);
 		
-		Dimension panelBtnDimensions = new Dimension(400, 40);
+		Dimension panelBtnDimensions = new Dimension(450, 40);
 		
 		JPanel panelFileButtons = new JPanel();
 		contentPane.add(panelFileButtons);
@@ -270,6 +270,8 @@ public class PrefRulesFrame extends JFrame {
 		JPanel panelPreferences = new JPanel();
 		contentPane.add(panelPreferences);
 		panelPreferences.setLayout(new GridLayout(1, 0, 0, 0));
+		panelPreferences.setPreferredSize(panelBtnDimensions);
+		panelPreferences.setMaximumSize(panelBtnDimensions);
 		
 		JButton btnEditRulePreferences = new JButton("Definir preferencias");
 		panelPreferences.add(btnEditRulePreferences);
