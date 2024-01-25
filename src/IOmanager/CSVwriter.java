@@ -2,8 +2,6 @@ package IOmanager;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Random;
-
 import alternative.Alternative;
 import criteria.Criteria;
 import dataManager.DataManager;
@@ -46,7 +44,7 @@ public class CSVwriter {
 	
 	private static String putAllValues(Criteria criteria) {
 		String values = "";
-		values += addNoInformationValue(criteria);
+		values += criteria.getNoInformationValue();
 		for(int i=0; i<criteria.getValues().length; i++) {
 			if(criteria.isNumeric() && i==0) {
 				// discard
@@ -55,47 +53,6 @@ public class CSVwriter {
 			}
 		}
 		return values;
-	}
-	
-	private static String addNoInformationValue(Criteria criteria) {
-		if(criteria.isNumeric()) {
-			criteria.setNoInformationValue(""+((Integer.parseInt(criteria.getValues()[0]))-1));
-			return criteria.getNoInformationValue();
-		}else {
-			boolean finish = false;
-			while(!finish) {
-				String random = rndString();
-				boolean valid = true;
-				for(String str : criteria.getValues()) {
-					if(str.equals(random)) {
-						valid = false;
-						break;
-					}
-				}
-				if(valid) {
-					finish = true;
-					criteria.setNoInformationValue(random);
-					return criteria.getNoInformationValue();
-				}
-			}
-		}
-		return "";
-    }
-	
-	private static String rndString() {
-		int size = 4;
-        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        StringBuilder cadenaRandom = new StringBuilder();
-
-        Random random = new Random();
-
-        for (int i = 0; i < size; i++) {
-            int indice = random.nextInt(caracteres.length());
-            char caracter = caracteres.charAt(indice);
-            cadenaRandom.append(caracter);
-        }
-
-        return cadenaRandom.toString();
 	}
 	
 	public static void saveAgentPriorityToCSV(DataManager data) {

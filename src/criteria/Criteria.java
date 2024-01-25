@@ -1,5 +1,7 @@
 package criteria;
 
+import java.util.Random;
+
 import javax.swing.JComboBox;
 
 public class Criteria {
@@ -14,7 +16,6 @@ public class Criteria {
 		this.name = name;
 		this.values = values;
 		this.isNumeric = isNumeric;
-		this.noInformationValue = "";
 		
 		if(!isNumeric) {
 			String[] comboBoxValues = new String[values.length + 1];
@@ -25,6 +26,49 @@ public class Criteria {
 		}else {
 			comboValues = null;
 		}
+		
+		this.noInformationValue =  addNoInformationValue();
+	}
+	
+	private String addNoInformationValue() {
+		if(isNumeric) {
+			setNoInformationValue(""+((Integer.parseInt(values[0]))-1));
+			return getNoInformationValue();
+		}else {
+			boolean finish = false;
+			while(!finish) {
+				String random = rndString();
+				boolean valid = true;
+				for(String str : values) {
+					if(str.equals(random)) {
+						valid = false;
+						break;
+					}
+				}
+				if(valid) {
+					finish = true;
+					setNoInformationValue(random);
+					return getNoInformationValue();
+				}
+			}
+		}
+		return "";
+    }
+	
+	private static String rndString() {
+		int size = 4;
+        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder cadenaRandom = new StringBuilder();
+
+        Random random = new Random();
+
+        for (int i = 0; i < size; i++) {
+            int indice = random.nextInt(caracteres.length());
+            char caracter = caracteres.charAt(indice);
+            cadenaRandom.append(caracter);
+        }
+
+        return cadenaRandom.toString();
 	}
 	
 	public void setNoInformationValue(String noInformationValue) {
@@ -49,6 +93,8 @@ public class Criteria {
 		}else {
 			comboValues = null;
 		}
+		
+		this.noInformationValue =  addNoInformationValue();
 	}
 
 	public String getName() {
@@ -63,10 +109,6 @@ public class Criteria {
 		return values;
 	}
 
-	public void setValues(String[] values) {
-		this.values = values;
-	}
-
 	public boolean isNumeric() {
 		return isNumeric;
 	}
@@ -77,10 +119,6 @@ public class Criteria {
 
 	public JComboBox<String> getComboValues() {
 		return comboValues;
-	}
-
-	public void setComboValues(JComboBox<String> comboValues) {
-		this.comboValues = comboValues;
 	}
 	
 	public String getCriteriaValuesString() {
