@@ -20,7 +20,7 @@ public class CSVwriter {
             writer.newLine();
 
             // write data
-            for(Criteria criteria: data.getCriterias()) {
+            for(Criteria criteria: data.getDataManagerCriteria().getCriterias()) {
             	writer.write(criteria.getName()+";");
             	String values = "";
             	if(!criteria.isNumeric()) {
@@ -64,7 +64,7 @@ public class CSVwriter {
             writer.newLine();
 
             // write data
-            for(Priority prior: data.getParticipantsPriority()) {
+            for(Priority prior: data.getDataManagerParticipant().getParticipantsPriority()) {
             	writer.write(prior.getPriorityFormatted());
             	writer.newLine();
             }
@@ -87,7 +87,7 @@ public class CSVwriter {
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
 
 			String header = "alternative";
-			for(Criteria criteria: data.getCriterias()) {
+			for(Criteria criteria: data.getDataManagerCriteria().getCriterias()) {
 				header += ";"+criteria.getName();
 			}
 			
@@ -95,7 +95,7 @@ public class CSVwriter {
             writer.newLine();
 
             // write data
-            for(Alternative alt: data.getAlternatives()) {
+            for(Alternative alt: data.getDataManagerEvidence().getAlternatives()) {
             	String values[] = alt.evidenceFileContent();
             	writer.write(values[0]);
             	
@@ -105,7 +105,7 @@ public class CSVwriter {
             	
             	for(int i=1; i<values.length; i++) {
             		if(values[i].equals("-")) {
-            			writer.write(";"+data.getCriterias().get(i-1).getNoInformationValue());
+            			writer.write(";"+data.getDataManagerCriteria().getCriterias().get(i-1).getNoInformationValue());
             		}else {
             			writer.write(";"+values[i]);
             		}
@@ -137,7 +137,7 @@ public class CSVwriter {
             writer.newLine();
 
             // write data
-            for(Rule rule: data.getRules()) {
+            for(Rule rule: data.getDataManagerRule().getRules()) {
             	writer.write(rule.toString());
             	writer.newLine();
             }
@@ -157,7 +157,7 @@ public class CSVwriter {
             writer.newLine();
 
             // write data
-            for(Participant participant : data.getParticipants()) {
+            for(Participant participant : data.getDataManagerParticipant().getParticipants()) {
             	writer.write(participant.getName()+";");
             	for(int i=0; i<participant.getPreferences().size(); i++) {
             		writer.write(participant.getPreferences().get(i).getPriorityFormatted());

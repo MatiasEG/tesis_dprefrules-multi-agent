@@ -12,7 +12,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
-import java.awt.BorderLayout;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 
@@ -45,7 +44,7 @@ public class ParticipantPriorityFrame extends JFrame {
 		
 		setTitle("Prioridades entre agentes");
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 699, 420);
+		setBounds(100, 100, 699, 460);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -54,7 +53,7 @@ public class ParticipantPriorityFrame extends JFrame {
 		
 		JLabel lblNewLabel = new JLabel("Defina la prioridad que hay entre los participantes");
 		lblNewLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentPane.add(lblNewLabel, BorderLayout.NORTH);
+		contentPane.add(lblNewLabel);
 		
 		Component verticalStrut_1 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_1);
@@ -84,16 +83,54 @@ public class ParticipantPriorityFrame extends JFrame {
 		JLabel lblNewLabel_2 = new JLabel("El participante");
 		panelPriorityConfiguration.add(lblNewLabel_2);
 		
-		comboBoxBest = new JComboBox<String>(data.getParticipantsArrayString());
+		comboBoxBest = new JComboBox<String>(data.getDataManagerParticipant().getParticipantsArrayString());
 		panelPriorityConfiguration.add(comboBoxBest);
 		
 		JLabel lblNewLabel_3 = new JLabel("tiene mayor prioridad que el participante");
 		panelPriorityConfiguration.add(lblNewLabel_3);
 		
-		comboBoxWorst = new JComboBox<String>(data.getParticipantsArrayString());
+		comboBoxWorst = new JComboBox<String>(data.getDataManagerParticipant().getParticipantsArrayString());
 		panelPriorityConfiguration.add(comboBoxWorst);
 		
+		JScrollPane scrollPane = new JScrollPane();
+		contentPane.add(scrollPane);
+		
+		listModelParticipantsPriority = new DefaultListModel<>();
+		for(Priority prior: data.getDataManagerParticipant().getParticipantsPriority()) {
+			listModelParticipantsPriority.addElement("El participante "+prior.getMorePriority()+" tiene mayor prioridad que el participante "+prior.getLessPriority());
+		}
+		listPriority = new JList<String>(listModelParticipantsPriority);
+		scrollPane.setViewportView(listPriority);
+		
+		btnDeletePriority = new JButton("Eliminar prioridad seleccionada");
+		btnDeletePriority.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnDeletePriority.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selectedIndex = listPriority.getSelectedIndex();
+		        if (selectedIndex != -1) {
+		        	Priority participantPriorityToRemove = ParticipantPriorityFrame.this.data.getDataManagerParticipant().getParticipantsPriority().get(selectedIndex);
+		        	int option = JOptionPane.showConfirmDialog(ParticipantPriorityFrame.this,
+		                    "¿Seguro que desea eliminar la regla seleccionada: ( "+participantPriorityToRemove.getMorePriority()+" > "+participantPriorityToRemove.getLessPriority()+" )?",
+		                    "Confirmar Eliminación",
+		                    JOptionPane.YES_NO_OPTION);
+		            if (option == JOptionPane.YES_OPTION) {
+		            	listModelParticipantsPriority.remove(selectedIndex);
+		            	ParticipantPriorityFrame.this.data.getDataManagerParticipant().getParticipantsPriority().remove(selectedIndex);
+		            	updateParticipantsPriorityTransitiveList();
+		            }
+		        }
+			}
+		});
+		
+		Component verticalStrut_4 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_4);
+		
+		JPanel panelButtons = new JPanel();
+		contentPane.add(panelButtons);
+		panelButtons.add(btnDeletePriority);
+		
 		btnAddPriority = new JButton("Agregar prioridad");
+		panelButtons.add(btnAddPriority);
 		btnAddPriority.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnAddPriority.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -107,7 +144,7 @@ public class ParticipantPriorityFrame extends JFrame {
 						Priority pprior = new Priority(bestAgent, worstAgent);
 						String validation = pprior.isValid(ParticipantPriorityFrame.this.data);
 						if(validation.equals("OK")) {
-							ParticipantPriorityFrame.this.data.addParticipantsPriority(pprior);
+							ParticipantPriorityFrame.this.data.getDataManagerParticipant().addParticipantsPriority(pprior);
 							listModelParticipantsPriority.addElement("El participante "+bestAgent+" tiene mayor prioridad que el participante "+worstAgent);
 							updateParticipantsPriorityTransitiveList();
 						}else {
@@ -119,38 +156,6 @@ public class ParticipantPriorityFrame extends JFrame {
 				}
 			}
 		});
-		contentPane.add(btnAddPriority, BorderLayout.NORTH);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		contentPane.add(scrollPane, BorderLayout.CENTER);
-		
-		listModelParticipantsPriority = new DefaultListModel<>();
-		for(Priority prior: data.getParticipantsPriority()) {
-			listModelParticipantsPriority.addElement("El participante "+prior.getMorePriority()+" tiene mayor prioridad que el participante "+prior.getLessPriority());
-		}
-		listPriority = new JList<String>(listModelParticipantsPriority);
-		scrollPane.setViewportView(listPriority);
-		
-		btnDeletePriority = new JButton("Eliminar prioridad seleccionada");
-		btnDeletePriority.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnDeletePriority.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int selectedIndex = listPriority.getSelectedIndex();
-		        if (selectedIndex != -1) {
-		        	Priority participantPriorityToRemove = ParticipantPriorityFrame.this.data.getParticipantsPriority().get(selectedIndex);
-		        	int option = JOptionPane.showConfirmDialog(ParticipantPriorityFrame.this,
-		                    "¿Seguro que desea eliminar la regla seleccionada: ( "+participantPriorityToRemove.getMorePriority()+" > "+participantPriorityToRemove.getLessPriority()+" )?",
-		                    "Confirmar Eliminación",
-		                    JOptionPane.YES_NO_OPTION);
-		            if (option == JOptionPane.YES_OPTION) {
-		            	listModelParticipantsPriority.remove(selectedIndex);
-		            	ParticipantPriorityFrame.this.data.getParticipantsPriority().remove(selectedIndex);
-		            	updateParticipantsPriorityTransitiveList();
-		            }
-		        }
-			}
-		});
-		contentPane.add(btnDeletePriority, BorderLayout.SOUTH);
 		
 		Component verticalStrut_2 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_2);
@@ -159,7 +164,7 @@ public class ParticipantPriorityFrame extends JFrame {
 		contentPane.add(scrollPane_1);
 		
 		listModelParticipantsPriorityTransitive = new DefaultListModel<>();
-		for(Priority prior: data.getParticipantsPriorityTransitive()) {
+		for(Priority prior: data.getDataManagerParticipant().getParticipantsPriorityTransitive()) {
 			listModelParticipantsPriorityTransitive.addElement("El participante "+prior.getMorePriority()+" tiene mayor prioridad que el participante "+prior.getLessPriority());
 		}
 		listPriorityTransitive = new JList<String>(listModelParticipantsPriorityTransitive);
@@ -167,6 +172,20 @@ public class ParticipantPriorityFrame extends JFrame {
 		
 		JLabel lblNewLabel_6 = new JLabel("A continuacion puede ver las relaciones transitivas implicitas.");
 		scrollPane_1.setColumnHeaderView(lblNewLabel_6);
+		
+		Component verticalStrut_5 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_5);
+		
+		JButton btnConfirmChanges = new JButton("Confirmar cambios");
+		btnConfirmChanges.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JOptionPane.showMessageDialog(null, "Datos validados y guardados, ya puede cerrar esta ventana", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+				ParticipantPriorityFrame.this.data.setDataValidated();
+				onlyViewMod(true);
+			}
+		});
+		btnConfirmChanges.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(btnConfirmChanges);
 		
 		updateParticipantsPriorityTransitiveList();
 		onlyViewMod(onlyView);
@@ -182,10 +201,10 @@ public class ParticipantPriorityFrame extends JFrame {
 	}
 	
 	private void updateParticipantsPriorityTransitiveList() {
-		data.checkParticipantsPriorityTransitivity();
+		data.getDataManagerParticipant().checkParticipantsPriorityTransitivity();
 		
 		listModelParticipantsPriorityTransitive = new DefaultListModel<>();
-		for(Priority prior: data.getParticipantsPriorityTransitive()) {
+		for(Priority prior: data.getDataManagerParticipant().getParticipantsPriorityTransitive()) {
 			listModelParticipantsPriorityTransitive.addElement("El participante "+prior.getMorePriority()+" tiene mayor prioridad que el participante "+prior.getLessPriority());
 		}
 		listPriorityTransitive.setModel(listModelParticipantsPriorityTransitive);

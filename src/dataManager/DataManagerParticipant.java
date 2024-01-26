@@ -103,6 +103,16 @@ public class DataManagerParticipant {
 		checkParticipantsPriorityTransitivity();
 	}
 	
+	public void removeParticipantPreferencesByCriteria(String criteriaName) {
+		for(Participant participant : participants) {
+			for(int i=participant.getPreferences().size()-1; i>-1; i--) {
+				if(participant.getPreferences().get(i).getMorePriority().equals(criteriaName) || participant.getPreferences().get(i).getLessPriority().equals(criteriaName)) {
+					participant.getPreferences().remove(i);
+				}
+			}
+		}
+	}
+	
 	// check --------------------------------------------------------------------------------------------------------------
 	public boolean validParticipantName(String name) {
 		if(DataManager.validateStringWithOnlyLettersAndNumbers(name)!=null) return false;
@@ -133,13 +143,13 @@ public class DataManagerParticipant {
 		participantsPriority = new ArrayList<Priority>();
 		participantsPriorityTransitive = new ArrayList<Priority>();
 		
-		for(Participant p : newData.getParticipants()) {
-			participants.add(p);
+		for(Participant p : newData.getDataManagerParticipant().getParticipants()) {
+			participants.add(p.clone());
 		}
-		for(Priority p : newData.getParticipantsPriority()) {
+		for(Priority p : newData.getDataManagerParticipant().getParticipantsPriority()) {
 			participantsPriority.add(p);
 		}
-		for(Priority p : newData.getParticipantsPriorityTransitive()) {
+		for(Priority p : newData.getDataManagerParticipant().getParticipantsPriorityTransitive()) {
 			participantsPriorityTransitive.add(p);
 		}
 	}

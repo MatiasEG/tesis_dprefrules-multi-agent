@@ -141,4 +141,12 @@ public class WPremise extends Premise{
 		
 		return true;
 	}
+	
+	public WPremise clone() {
+		WPremise wpClone = new WPremise(criteria);
+		wpClone.setMaxDist(maxDistBetweenXY);
+		wpClone.setMinValueForX(minValueForX);
+		wpClone.setMaxValueForY(maxValueForY);
+		return wpClone;
+	}
 }

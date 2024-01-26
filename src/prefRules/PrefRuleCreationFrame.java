@@ -63,16 +63,16 @@ public class PrefRuleCreationFrame extends JFrame {
 				try {
 					
 					DataManager data = new DataManager("ruleTest","C:\\Users\\Matia\\Desktop\\tesis_dprefrules-multi-agent\\src\\files");
-					data.addParticipant(new Participant("Matias"));
+					data.getDataManagerParticipant().addParticipant(new Participant("Matias"));
 					
 					Criteria entretenimiento = new Criteria("Entretenimiento", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
 					Criteria clima = new Criteria("Clima", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
 					Criteria costo = new Criteria("Costo", new String[]{"caro", "medio", "normal", "economico"}, false);
 					Criteria dias = new Criteria("Dias", new String[]{"1", "30"}, true);
-					data.addCriteria(entretenimiento);
-					data.addCriteria(clima);
-					data.addCriteria(costo);
-					data.addCriteria(dias);
+					data.getDataManagerCriteria().addCriteria(entretenimiento);
+					data.getDataManagerCriteria().addCriteria(clima);
+					data.getDataManagerCriteria().addCriteria(costo);
+					data.getDataManagerCriteria().addCriteria(dias);
 					
 					
 					
@@ -262,11 +262,11 @@ public class PrefRuleCreationFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String validation = DataManager.validateStringWithOnlyLettersAndNumbers(textFieldRuleName.getText());
 				if(validation == null) {
-					if(DataManager.validateStringListNotContainNewElement(PrefRuleCreationFrame.this.data.getRuleNames(), textFieldRuleName.getText())) {
+					if(DataManager.validateStringListNotContainNewElement(PrefRuleCreationFrame.this.data.getDataManagerRule().getRuleNames(), textFieldRuleName.getText())) {
 						lblRuleName.setText("Nombre establecido: "+textFieldRuleName.getText());
 						if(PrefRuleCreationFrame.this.rule==null) {
 							PrefRuleCreationFrame.this.rule = new Rule(textFieldRuleName.getText());
-							PrefRuleCreationFrame.this.data.addRule(PrefRuleCreationFrame.this.rule);
+							PrefRuleCreationFrame.this.data.getDataManagerRule().addRule(PrefRuleCreationFrame.this.rule);
 							btnNewBPremise.setEnabled(true);
 							btnNewWPremise.setEnabled(true);
 							btnNewEPremise.setEnabled(true);

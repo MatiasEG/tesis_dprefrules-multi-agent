@@ -143,11 +143,11 @@ public class CriteriaCreationFrame extends JFrame {
 		btnAcept.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnAcept.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if((criteriaToUpdate!=null && criteriaToUpdate.getName().equals(textFieldCriteriaName.getText())) || CriteriaCreationFrame.this.data.validCriteriaName(textFieldCriteriaName.getText())) {
+				if((criteriaToUpdate!=null && criteriaToUpdate.getName().equals(textFieldCriteriaName.getText())) || CriteriaCreationFrame.this.data.getDataManagerCriteria().validCriteriaName(textFieldCriteriaName.getText())) {
 					if(!isNumericEnabled && !textFieldSimbolicValues.getText().equals("")) {
 						String[] simbolicSplittedValues = textFieldSimbolicValues.getText().trim().split("\\s*,\\s*");
 						
-						if(CriteriaCreationFrame.this.data.validCriteriaValues(simbolicSplittedValues, isNumericEnabled)) {
+						if(CriteriaCreationFrame.this.data.getDataManagerCriteria().validCriteriaValues(simbolicSplittedValues, isNumericEnabled)) {
 							criteriaFrame.addCriteria(textFieldCriteriaName.getText(), textFieldSimbolicValues.getText(), isNumericEnabled, criteriaToUpdate);
 							CriteriaCreationFrame.this.dispose();
 						}else {
@@ -156,7 +156,7 @@ public class CriteriaCreationFrame extends JFrame {
 					}else if(isNumericEnabled && !textFieldNumericValue1.getText().equals("") && !textFieldNumericValue2.getText().equals("")) {
 						String[] numericSplittedValues = new String[] {textFieldNumericValue1.getText(), textFieldNumericValue2.getText()};
 						
-						if(CriteriaCreationFrame.this.data.validCriteriaValues(numericSplittedValues, isNumericEnabled)){
+						if(CriteriaCreationFrame.this.data.getDataManagerCriteria().validCriteriaValues(numericSplittedValues, isNumericEnabled)){
 							criteriaFrame.addCriteria(textFieldCriteriaName.getText(), textFieldNumericValue1.getText()+","+textFieldNumericValue2.getText(), isNumericEnabled, criteriaToUpdate);
 							CriteriaCreationFrame.this.dispose();
 						}else {

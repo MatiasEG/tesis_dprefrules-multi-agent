@@ -66,4 +66,15 @@ public class Participant {
 	public List<Priority> getPreferencesTransitive(){
 		return rulePriorityTransitive;
 	}
+	
+	public Participant clone() {
+		Participant pClone = new Participant(name);
+		for(Priority p : rulePriority) {
+			pClone.addPreference(p);
+		}
+		for(Priority p : rulePriorityTransitive) {
+			pClone.addRulePriorityTransitive(p);
+		}
+		return pClone;
+	}
 }

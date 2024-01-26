@@ -24,8 +24,7 @@ public class CSVreader {
 
 	public static void readCriteriasCSV(String csvFile, DataManager oldData) throws CriteriaFileException{
 		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
-		newData.setParticipants(oldData.getParticipants());
-		newData.setParticipantsPriority(oldData.getParticipantsPriority());
+		newData.updateData(oldData);
 		
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
@@ -36,7 +35,7 @@ public class CSVreader {
 					if (parts.length == 2) {
 					    String name = parts[0].trim();
 					    
-					    if(newData.validCriteriaName(name)) {
+					    if(newData.getDataManagerCriteria().validCriteriaName(name)) {
 					    	String valoresString = parts[1].trim();
 						    
 							String[] values;
@@ -68,7 +67,7 @@ public class CSVreader {
 	    }catch (IOException e) {
 	    	e.printStackTrace();
 	    }
-		newData.setCriterias(criterias);
+		newData.getDataManagerCriteria().setCriterias(criterias);
 		oldData.updateData(newData);
 	}
 	
@@ -91,8 +90,7 @@ public class CSVreader {
 	
 	public static void readAgentPriorityCSV(String csvFile, DataManager oldData) throws AgentPriorityException {
 		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
-		newData.setCriterias(oldData.getCriterias());
-		newData.setAlternatives(oldData.getAlternatives());
+		newData.updateData(oldData);
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 	    	if(br.readLine().equals("priority_order")) {
@@ -103,20 +101,20 @@ public class CSVreader {
 					    String morePriorAgent = parts[0].trim();
 					    String lessPriorAgent = parts[1].trim();
 					    
-					    Participant morePriorParticipant = newData.getParticipantByName(morePriorAgent);
-					    Participant lessPriorParticipant = newData.getParticipantByName(lessPriorAgent);
+					    Participant morePriorParticipant = newData.getDataManagerParticipant().getParticipantByName(morePriorAgent);
+					    Participant lessPriorParticipant = newData.getDataManagerParticipant().getParticipantByName(lessPriorAgent);
 					    
-					    if(morePriorParticipant==null && !newData.validParticipantName(morePriorAgent)) throw new AgentPriorityException("El nombre "+morePriorAgent+" no es valido.");
+					    if(morePriorParticipant==null && !newData.getDataManagerParticipant().validParticipantName(morePriorAgent)) throw new AgentPriorityException("El nombre "+morePriorAgent+" no es valido.");
 					    
-					    if(lessPriorParticipant==null && !newData.validParticipantName(morePriorAgent)) throw new AgentPriorityException("El nombre "+lessPriorAgent+" no es valido.");
+					    if(lessPriorParticipant==null && !newData.getDataManagerParticipant().validParticipantName(morePriorAgent)) throw new AgentPriorityException("El nombre "+lessPriorAgent+" no es valido.");
 					    
 						Priority newParticipantsPriority = new Priority(morePriorAgent, lessPriorAgent);
 						String validPrior = newParticipantsPriority.isValid(newData);
 					    
 					    if(validPrior.equals("OK")) {
-					    	newData.addParticipantsPriority(newParticipantsPriority);
-					    	if(morePriorParticipant==null) newData.addParticipant(new Participant(morePriorAgent));
-					    	if(lessPriorParticipant==null) newData.addParticipant(new Participant(lessPriorAgent));
+					    	newData.getDataManagerParticipant().addParticipantsPriority(newParticipantsPriority);
+					    	if(morePriorParticipant==null) newData.getDataManagerParticipant().addParticipant(new Participant(morePriorAgent));
+					    	if(lessPriorParticipant==null) newData.getDataManagerParticipant().addParticipant(new Participant(lessPriorAgent));
 					    }else {
 					    	throw new AgentPriorityException(validPrior);
 					    }
@@ -135,14 +133,11 @@ public class CSVreader {
 	
 	public static void readEvidenceCSV(String csvFile, DataManager oldData) throws EvidenceFileException {
 		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
-		newData.setCriterias(oldData.getCriterias());
-		newData.setParticipants(oldData.getParticipants());
-		newData.setParticipantsPriority(oldData.getParticipantsPriority());
-		newData.setParticipantsPriorityTransitive(oldData.getParticipantsPriorityTransitive());
+		newData.updateData(oldData);
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 			String header = "alternative";
-			for(Criteria criteria: newData.getCriterias()) {
+			for(Criteria criteria: newData.getDataManagerCriteria().getCriterias()) {
 				header += ";"+criteria.getName();
 			}
 			
@@ -150,17 +145,17 @@ public class CSVreader {
 	    		String line;
 		        while ((line = br.readLine()) != null) {
 		            String[] parts = line.split(";");
-					if (parts.length == (newData.getCriterias().size()+1)) {
+					if (parts.length == (newData.getDataManagerCriteria().getCriterias().size()+1)) {
 						String altName = parts[0].trim();
 						Alternative alt = new Alternative(altName);
-						newData.addAlternative(alt);
-						int altIndex = newData.getAlternatives().size()-1;
+						newData.getDataManagerEvidence().addAlternative(alt);
+						int altIndex = newData.getDataManagerEvidence().getAlternatives().size()-1;
 						
 						for(int i=1; i<parts.length; i++) {
-							if(newData.getCriterias().get(i-1).valueIsValid(parts[i].trim())) {
-								newData.getAlternatives().get(altIndex).updateOrAddCriteriaValue(newData.getCriterias().get(i-1), parts[i].trim());
+							if(newData.getDataManagerCriteria().getCriterias().get(i-1).valueIsValid(parts[i].trim())) {
+								newData.getDataManagerEvidence().getAlternatives().get(altIndex).updateOrAddCriteriaValue(newData.getDataManagerCriteria().getCriterias().get(i-1), parts[i].trim());
 							}else {
-				            	throw new EvidenceFileException("El criterio ("+newData.getCriterias().get(i-1).getName()+") contiene una valor no valido ("+parts[i].trim()+") en el archivo de evidencia.");
+				            	throw new EvidenceFileException("El criterio ("+newData.getDataManagerCriteria().getCriterias().get(i-1).getName()+") contiene una valor no valido ("+parts[i].trim()+") en el archivo de evidencia.");
 							}
 						}
 		            }else {
@@ -178,11 +173,7 @@ public class CSVreader {
 	
 	public static void readRulesCSV(String csvFile, DataManager oldData) throws RuleFileErrorException {
 		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
-		newData.setCriterias(oldData.getCriterias());
-		newData.setParticipants(oldData.getParticipants());
-		newData.setParticipantsPriority(oldData.getParticipantsPriority());
-		newData.setParticipantsPriorityTransitive(oldData.getParticipantsPriorityTransitive());
-		newData.setAlternatives(oldData.getAlternatives());
+		newData.updateData(oldData);
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 			String header = "id;rule";
@@ -200,7 +191,7 @@ public class CSVreader {
 							boolean validation = RuleParser.analizeRule(premises[0], auxRule, newData);
 							if(validation) {
 								if(auxRule.getBetterP().size()>0) {
-									newData.addRule(auxRule);
+									newData.getDataManagerRule().addRule(auxRule);
 								}else {
 									throw new RuleFileErrorException("La regla "+auxRule.getName()+" no contiene al menos una premisa better.");
 								}
@@ -227,7 +218,7 @@ public class CSVreader {
 	public static void readRulePriorityCSV(String csvFile, DataManager oldData) throws RulePriorityException {
 		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
 		newData.updateData(oldData);
-		for(Participant participant : newData.getParticipants()) {
+		for(Participant participant : newData.getDataManagerParticipant().getParticipants()) {
 			participant.setRulePriority(new ArrayList<Priority>());
 		}
 		
@@ -240,7 +231,7 @@ public class CSVreader {
 		        		String participantName = namePref[0].trim();
 						String rulePreferences = namePref[1].trim();
 						
-						Participant participant = newData.getParticipantByName(participantName);
+						Participant participant = newData.getDataManagerParticipant().getParticipantByName(participantName);
 						if(participant!=null) {
 							String[] preferences = rulePreferences.split(",");
 							for(String preference : preferences) {
@@ -249,8 +240,8 @@ public class CSVreader {
 									 String morePriorRuleString = parts[0].trim();
 									 String lessPriorRuleString = parts[1].trim();
 									 
-									 Rule morePriorRule = newData.getRule(morePriorRuleString);
-									 Rule lessPriorRule = newData.getRule(lessPriorRuleString);
+									 Rule morePriorRule = newData.getDataManagerRule().getRule(morePriorRuleString);
+									 Rule lessPriorRule = newData.getDataManagerRule().getRule(lessPriorRuleString);
 									 
 									 if(morePriorRule!=null && lessPriorRule!=null) {
 										 participant.addPreference(new Priority(morePriorRuleString, lessPriorRuleString));

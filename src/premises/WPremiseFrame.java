@@ -95,7 +95,7 @@ public class WPremiseFrame extends JFrame {
 		btnConfirmCriteria = new JButton("Confirmar criterio seleccionado");
 		btnConfirmCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				criteria = WPremiseFrame.this.data.getCriteria((String)WPremiseFrame.this.comboBoxAvailableCriterias.getSelectedItem());
+				criteria = WPremiseFrame.this.data.getDataManagerCriteria().getCriteria((String)WPremiseFrame.this.comboBoxAvailableCriterias.getSelectedItem());
 				if(criteria != null) {
 					textFieldMaxDist.setEnabled(true);
 					lblMaxDist.setText("La distancia minima entre los valores posibles para el criterio "+criteria.getName()+" debe ser:");
@@ -414,7 +414,7 @@ public class WPremiseFrame extends JFrame {
 		wPremise.setMaxDist(minDist);
 		wPremise.setMinValueForX(minXIndex);
 		wPremise.setMaxValueForY(maxYIndex);
-		WPremiseFrame.this.rule.addWorstP(wPremise);
+		WPremiseFrame.this.rule.addWorseP(wPremise);
 		btnValidateDataAndSave.setEnabled(false);
 		JOptionPane.showMessageDialog(null, "Exito: Los datos se han guardado correctamente, ya puede cerrar esta ventana.", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 		disableEdit();

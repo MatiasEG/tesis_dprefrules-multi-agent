@@ -1,10 +1,6 @@
 package dataManager;
 
 import java.util.List;
-import alternative.Alternative;
-import criteria.Criteria;
-import participant.Participant;
-import prefRules.Rule;
 
 public class DataManager {
 	
@@ -30,152 +26,21 @@ public class DataManager {
 		dataRules = new DataManagerRule(this);
 	}
 	
-	// participants data manager --------------------------------------------------------------------------------------------------------------
-	public void addParticipant(Participant newParticipant) {
-		dataParticipants.addParticipant(newParticipant);
+	// others data managers --------------------------------------------------------------------------------------------------------------
+	public DataManagerParticipant getDataManagerParticipant() {
+		return dataParticipants;
 	}
 	
-	public void addParticipantsPriority(Priority newParticipantsPriority) {
-		dataParticipants.addParticipantsPriority(newParticipantsPriority);
+	public DataManagerCriteria getDataManagerCriteria() {
+		return dataCriterias;
 	}
 	
-	public void addParticipantsPriorityTransitive(Priority newParticipantsPriority) {
-		dataParticipants.addParticipantsPriorityTransitive(newParticipantsPriority);
+	public DataManagerEvidence getDataManagerEvidence() {
+		return dataEvidence;
 	}
 	
-	public void setParticipantsPriorityTransitive(List<Priority> participantsPriorityTransitive){
-		dataParticipants.setParticipantsPriorityTransitive(participantsPriorityTransitive);
-	}
-	
-	public void setParticipants(List<Participant> participants) {
-		dataParticipants.setParticipants(participants);
-	}
-	
-	public void setParticipantsPriority(List<Priority> participantsPriority) {
-		dataParticipants.setParticipantsPriority(participantsPriority);
-	}
-	
-	public Participant getParticipantByName(String name) {
-		return dataParticipants.getParticipantByName(name);
-	}
-	
-	public List<Participant> getParticipants(){
-		return dataParticipants.getParticipants();
-	}
-	
-	public List<String> getParticipantsNames() {
-		return dataParticipants.getParticipantsNames();
-	}
-	
-	public String[] getParticipantsArrayString() {
-		return dataParticipants.getParticipantsArrayString();
-	}
-	
-	public List<Priority> getParticipantsPriority(){
-		return dataParticipants.getParticipantsPriority();
-	}
-	
-	public List<Priority> getParticipantsPriorityTransitive(){
-		return dataParticipants.getParticipantsPriorityTransitive();
-	}
-	
-	public void removeParticipant(String participant) {
-		dataParticipants.removeParticipant(participant);
-	}
-	
-	public boolean validParticipantName(String name) {
-		return dataParticipants.validParticipantName(name);
-	}
-	
-	public void checkParticipantsPriorityTransitivity() {
-		dataParticipants.checkParticipantsPriorityTransitivity();
-	}
-	
-	// criteria data manager --------------------------------------------------------------------------------------------------------------
-	public void addCriteria(Criteria criteria) {
-		dataCriterias.addCriteria(criteria);
-	}
-	
-	public void setCriterias(List<Criteria> newCriterias) {
-		dataCriterias.setCriterias(newCriterias);
-	}
-	
-	public List<Criteria> getCriterias(){
-		return dataCriterias.getCriterias();
-	}
-	
-	public Criteria getCriteria(String name) {
-		return dataCriterias.getCriteria(name);
-	}
-	
-	public void removeCriteria(String name) {
-		dataCriterias.removeCriteria(name);
-	}
-	
-	public boolean validCriteriaName(String name) {
-		return dataCriterias.validCriteriaName(name);
-	}
-	
-	public boolean validCriteriaValues(String[] values, boolean isNumeric) {
-		return dataCriterias.validCriteriaValues(values, isNumeric);
-	}
-	
-	// evidence data manager --------------------------------------------------------------------------------------------------------------
-	public void addAlternative(Alternative newAlternative) {
-		dataEvidence.addAlternative(newAlternative);
-	}
-	
-	public void setAlternatives(List<Alternative> alternatives) {
-		dataEvidence.setAlternatives(alternatives);
-	}
-	
-	public List<Alternative> getAlternatives(){
-		return dataEvidence.getAlternatives();
-	}
-	
-	public List<String> getAlternativesNames(){
-		return dataEvidence.getAlternativesNames();
-	}
-	
-	public void removeAlternative(String alternative) {
-		dataEvidence.removeAlternative(alternative);
-	}
-	
-	public void removeEvidence(String criteriaName) {
-		dataEvidence.removeEvidence(criteriaName);
-	}
-	
-	// rule data manager --------------------------------------------------------------------------------------------------------------
-	public void addRule(Rule rule) {
-		dataRules.addRule(rule);
-	}
-	
-	public void setRules(List<Rule> rules) {
-		dataRules.setRules(rules);
-	}
-	
-	public List<Rule> getRules(){
-		return dataRules.getRules();
-	}
-	
-	public Rule getRule(String ruleName) {
-		return dataRules.getRule(ruleName);
-	}
-	
-	public String[] getRulesNames() {
-		return dataRules.getRulesNames();
-	}
-	
-	public List<String> getRuleNames() {
-		return dataRules.getRuleNames();
-	}
-	
-	public void removeRule(String ruleName) {
-		dataRules.removeRule(ruleName);
-	}
-	
-	public void removeRules(String criteriaName) {
-		dataRules.removeRules(criteriaName);
+	public DataManagerRule getDataManagerRule() {
+		return dataRules;
 	}
 	
 	// project name and folder manager --------------------------------------------------------------------------------------------------------------

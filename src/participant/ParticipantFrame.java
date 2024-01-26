@@ -42,6 +42,7 @@ public class ParticipantFrame extends JFrame {
 	private DefaultListModel<String> listModelParticipants;
     private JList<String> listParticipants;
     private DataManager data;
+    private DataManager dataClone;
     
 	/**
 	 * Launch the application.
@@ -147,7 +148,7 @@ public class ParticipantFrame extends JFrame {
 		panelAgentsButtons.add(btnSaveParticipantsFile);
 		btnSaveParticipantsFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(ParticipantFrame.this.data.getParticipants().size()>0) {
+				if(ParticipantFrame.this.data.getDataManagerParticipant().getParticipants().size()>0) {
 					CSVwriter.saveAgentPriorityToCSV(ParticipantFrame.this.data);
 					JOptionPane.showMessageDialog(null, "Datos validados y guardados, ya puede cerrar esta ventana", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 					ParticipantFrame.this.data.setDataValidated();
@@ -171,14 +172,23 @@ public class ParticipantFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String validation = canDefineAgentPriority(ParticipantFrame.this.data);
 				if(validation.equals("OK")) {
+					dataClone = ParticipantFrame.this.data.clone();
 					ParticipantFrame.this.viewOnlyMod(true);
-					ParticipantPriorityFrame frame = new ParticipantPriorityFrame(ParticipantFrame.this.data, false);
+					
+					ParticipantPriorityFrame frame = new ParticipantPriorityFrame(ParticipantFrame.this.dataClone, false);
 					frame.setVisible(true);
 					
 					// WindowListener for detect when the frame is closed
 					frame.addWindowListener(new WindowAdapter() {
 			            @Override
 			            public void windowClosing(WindowEvent e) {
+			            	if(dataClone.getDataValidated()) {
+			            		ParticipantFrame.this.data.updateData(dataClone);
+			            	}else {
+			            		// The user close the window without save.
+			            	}
+			            	dataClone = null;
+			            	
 			            	ParticipantFrame.this.viewOnlyMod(false);
 			            }
 			        });
@@ -214,7 +224,7 @@ public class ParticipantFrame extends JFrame {
                     "Confirmar Eliminación",
                     JOptionPane.YES_NO_OPTION);
             if (option == JOptionPane.YES_OPTION) {
-                data.removeParticipant(listModelParticipants.remove(selectedIndex));
+                data.getDataManagerParticipant().removeParticipant(listModelParticipants.remove(selectedIndex));
             }
         } else {
             JOptionPane.showMessageDialog(this, "Debe seleccionar a un participante para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
@@ -223,9 +233,9 @@ public class ParticipantFrame extends JFrame {
 	
 	private void addParticipantName(DataManager data) {
         String name = JOptionPane.showInputDialog(this, "Ingrese el nombre del participante que desea agregar:");
-        if(data.validParticipantName(name)) {
+        if(data.getDataManagerParticipant().validParticipantName(name)) {
         	listModelParticipants.addElement(name);
-    		data.addParticipant(new Participant(name));
+    		data.getDataManagerParticipant().addParticipant(new Participant(name));
         }else {
         	JOptionPane.showMessageDialog(null, "El nombre del participante "+name+" no es valido.", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
@@ -233,13 +243,13 @@ public class ParticipantFrame extends JFrame {
 	
 	private void updateVisualComponents(DataManager data) {		
 		listModelParticipants.clear();
-		for(String agent: data.getParticipantsNames()) {
+		for(String agent: data.getDataManagerParticipant().getParticipantsNames()) {
 			listModelParticipants.addElement(agent);
 		}
 	}
 	
 	private String canDefineAgentPriority(DataManager data) {
-		if(data.getParticipants().size()>1) {
+		if(data.getDataManagerParticipant().getParticipants().size()>1) {
 			return "OK";
 		}else {
 			return "Advertencia. Debe definir al menos a dos participante del problema para poder compararlos.";

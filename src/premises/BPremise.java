@@ -142,4 +142,12 @@ public class BPremise extends Premise{
 				premise += ", max(Y, "+criteria.getName()+", "+maxValueForY+")";
 		return premise;
 	}
+	
+	public BPremise clone() {
+		BPremise bpClone = new BPremise(criteria);
+		bpClone.setMinDist(minDistBetweenXY);
+		bpClone.setMinValueForX(minValueForX);
+		bpClone.setMaxValueForY(maxValueForY);
+		return bpClone;
+	}
 }

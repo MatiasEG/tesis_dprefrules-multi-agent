@@ -105,4 +105,11 @@ public class EPremise extends Premise{
 		}
 		return true;
 	}
+	
+	public EPremise clone() {
+		EPremise epClone = new EPremise(criteria);
+		epClone.setMinValueForX(minValueForX);
+		epClone.setMaxValueForY(maxValueForY);
+		return epClone;
+	}
 }

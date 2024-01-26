@@ -59,7 +59,7 @@ public class Priority {
 	}
 	
 	public String isValid(DataManager data) {
-		List<Priority> participants = data.getParticipantsPriority();
+		List<Priority> participants = data.getDataManagerParticipant().getParticipantsPriority();
 		for(Priority pprior: participants) {
 			if(pprior.getLessPriority().equals(lessPriority) && pprior.getMorePriority().equals(morePriority)) {
 				return "Ya existe una regla de prioridad que contempla ( "+morePriority+" > "+lessPriority+" ).";
@@ -69,7 +69,7 @@ public class Priority {
 			}
 		}
 		
-		List<Priority> participantsTransitive = data.getParticipantsPriorityTransitive();
+		List<Priority> participantsTransitive = data.getDataManagerParticipant().getParticipantsPriorityTransitive();
 		for(Priority pprior: participantsTransitive) {
 			if(pprior.getLessPriority().equals(lessPriority) && pprior.getMorePriority().equals(morePriority)) {
 				return "Ya existe una regla de prioridad que contempla ( "+morePriority+" > "+lessPriority+" ).";

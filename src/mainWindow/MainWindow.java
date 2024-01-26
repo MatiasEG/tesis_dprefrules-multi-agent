@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import IOmanager.CSVwriter;
 import IOmanager.NameAndFolderFrame;
 import alternative.AlternativesFrame;
 import criteria.CriteriaFrame;
@@ -41,6 +42,7 @@ public class MainWindow extends JFrame {
     private JButton btnViewEvidence;
     private JButton btnEditRules;
     private JButton btnViewRules;
+    private JButton btnSaveFiles;
 
 	private DataManager data;
 	private DataManager dataClone;
@@ -188,7 +190,7 @@ public class MainWindow extends JFrame {
 		        
 		        if(state<1) state = 1;
 		        MainWindow.this.modifyingData = false;
-		        if(data.getParticipants().size()>0) modifyingData = true;
+		        if(data.getDataManagerParticipant().getParticipants().size()>0) modifyingData = true;
 		        
 		        // WindowListener for detect when the frame is closed
 		        frame.addWindowListener(new WindowAdapter() {
@@ -202,7 +204,7 @@ public class MainWindow extends JFrame {
 		            	dataClone = null;
 		            	
 		            	if(!modifyingData) {
-			                if(data.getParticipants().size()>0) {
+			                if(data.getDataManagerParticipant().getParticipants().size()>0) {
 			                	setState2(false);
 			                }else {
 			                	setState1(false);
@@ -263,7 +265,7 @@ public class MainWindow extends JFrame {
 				
 				if(state<2) state = 2;
 				MainWindow.this.modifyingData = false;
-				if(data.getCriterias().size()>0) modifyingData = true;
+				if(data.getDataManagerCriteria().getCriterias().size()>0) modifyingData = true;
 				
 				// WindowListener for detect when the frame is closed
 				frame.addWindowListener(new WindowAdapter() {
@@ -277,14 +279,14 @@ public class MainWindow extends JFrame {
 		            	dataClone = null;
 		            	
 		            	if(!modifyingData) {
-			                if(data.getCriterias().size()>0) {
+			                if(data.getDataManagerCriteria().getCriterias().size()>0) {
 			                	setState3(false);
 			                }else {
 			                	setState2(false);
 			                	JOptionPane.showMessageDialog(null, "Debe definir al menos un criterio de comparacion para poder seguir con el problema y definir las alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 			                }
 			            }else {
-			            	if(data.getCriterias().size()>0) {
+			            	if(data.getDataManagerCriteria().getCriterias().size()>0) {
 			            		checkState(false);
 			            	}else {
 			            		setState2(false);
@@ -335,7 +337,7 @@ public class MainWindow extends JFrame {
 				
 				if(state<3) state = 3;
 				MainWindow.this.modifyingData = false;
-				if(data.getAlternatives().size()>1) modifyingData = true;
+				if(data.getDataManagerEvidence().getAlternatives().size()>1) modifyingData = true;
 					
 				// WindowListener for detect when the frame is closed
 				frame.addWindowListener(new WindowAdapter() {
@@ -349,7 +351,7 @@ public class MainWindow extends JFrame {
 		            	MainWindow.this.dataClone = null;
 		            	
 		            	if(!modifyingData) {
-			            	if(data.getAlternatives().size()>1) {
+			            	if(data.getDataManagerEvidence().getAlternatives().size()>1) {
 			                	setState4(false);
 			                }else {
 			                	setState3(false);
@@ -389,7 +391,7 @@ public class MainWindow extends JFrame {
 				
 				if(state<4) state = 4;
 				MainWindow.this.modifyingData = false;
-				if(data.getRules().size()>0) modifyingData = true;
+				if(data.getDataManagerRule().getRules().size()>0) modifyingData = true;
 				
 				// WindowListener for detect when the frame is closed
 				frame.addWindowListener(new WindowAdapter() {
@@ -403,14 +405,14 @@ public class MainWindow extends JFrame {
 		            	MainWindow.this.dataClone = null;
 		            	
 		            	if(!modifyingData) {
-			                if(data.getRules().size()>0) {
+			                if(data.getDataManagerRule().getRules().size()>0) {
 			                	setState5(false);
 			                }else {
 			                	setState4(false);
 			                	JOptionPane.showMessageDialog(null, "Debe definir al menos un criterio de comparacion para poder seguir con el problema y definir las alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 			                }
 			            }else {
-			            	if(data.getRules().size()>0) {
+			            	if(data.getDataManagerRule().getRules().size()>0) {
 			            		checkState(false);
 			            	}else {
 			            		setState4(false);
@@ -449,6 +451,19 @@ public class MainWindow extends JFrame {
 		panelBtnRules.setPreferredSize(panelDimensions);
 		panelBtnRules.setMaximumSize(panelDimensions);
 		
+		btnSaveFiles = new JButton("Guardar archivos");
+		btnSaveFiles.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CSVwriter.saveAgentPriorityToCSV(data);
+				CSVwriter.saveCriteriasToCSV(data);
+				CSVwriter.saveEvidenceToCSV(data);
+				CSVwriter.saveRulesToCSV(data);
+				CSVwriter.saveRulePriorityToCSV(data);
+			}
+		});
+		btnSaveFiles.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(btnSaveFiles);
+		
 		setState0(false);
 	}
 	
@@ -473,6 +488,10 @@ public class MainWindow extends JFrame {
 	        case 4:
 	            // Must indicate the preference rules
 	        	setState4(isEditing);
+	            break;
+	        case 5:
+	            // Must indicate the preference rules
+	        	setState5(isEditing);
 	            break;
 	        default:
 	            // Error
@@ -502,6 +521,8 @@ public class MainWindow extends JFrame {
 	    
 	    btnEditRules.setEnabled(false);
 	    btnViewRules.setEnabled(false);
+	    
+	    btnSaveFiles.setEnabled(false);
 	}
 	
 	// The user indicate name and project folder
@@ -528,6 +549,8 @@ public class MainWindow extends JFrame {
 	    
 	    btnEditRules.setEnabled(false);
 	    btnViewRules.setEnabled(false);
+	    
+	    btnSaveFiles.setEnabled(true);
 	}
 	
 	// The user indicate the participants and they priorities
@@ -556,6 +579,8 @@ public class MainWindow extends JFrame {
 	    
 	    btnEditRules.setEnabled(false);
 	    btnViewRules.setEnabled(false);
+	    
+	    btnSaveFiles.setEnabled(true);
 	}
 	
 	// The user indicate the criteria
@@ -585,6 +610,8 @@ public class MainWindow extends JFrame {
 	    
 	    btnEditRules.setEnabled(false);
 	    btnViewRules.setEnabled(false);
+	    
+	    btnSaveFiles.setEnabled(true);
 	}
 	
 	// The user indicate the evidence
@@ -615,13 +642,15 @@ public class MainWindow extends JFrame {
 	    btnViewEvidence.setEnabled(true);
 	    
 	    btnViewRules.setEnabled(false);
+	    
+	    btnSaveFiles.setEnabled(true);
 	}
 	
 	// The user indicate the rules
 	// > This is a finish state
 	// [Here you can do something with the files or data?]
 	private void setState5(boolean isEditing) {
-		state = 4;
+		state = 5;
 		if(isEditing) {
 			btnEditNameAndFolder.setEnabled(false);
 			btnEditParticipants.setEnabled(false);
@@ -644,7 +673,9 @@ public class MainWindow extends JFrame {
 	    
 	    btnViewEvidence.setEnabled(true);
 	    
-	    btnViewRules.setEnabled(false);
+	    btnViewRules.setEnabled(true);
+	    
+	    btnSaveFiles.setEnabled(true);
 	}
 	
 	private void openManual() {

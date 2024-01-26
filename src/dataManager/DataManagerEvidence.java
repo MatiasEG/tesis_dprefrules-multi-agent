@@ -64,7 +64,7 @@ public class DataManagerEvidence {
 		
 		alternatives = new ArrayList<Alternative>();
 		
-		for(Alternative a : newData.getAlternatives()) {
+		for(Alternative a : newData.getDataManagerEvidence().getAlternatives()) {
 			alternatives.add(a.clone());
 		}
 	}

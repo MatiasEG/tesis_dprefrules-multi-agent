@@ -11,7 +11,6 @@ import dataManager.DataManager;
 import dataManager.Priority;
 import exceptions.RulePriorityException;
 import participant.Participant;
-
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
@@ -58,7 +57,7 @@ public class PrefRulePreferencesFrame extends JFrame {
 		
 		setTitle("Prioridades entre agentes");
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 700, 500);
+		setBounds(100, 100, 700, 550);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -87,7 +86,11 @@ public class PrefRulePreferencesFrame extends JFrame {
 		Component verticalStrut_5 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_5);
 		
+		JPanel panel = new JPanel();
+		contentPane.add(panel);
+		
 		btnLoadRulePreferencesFromFiles = new JButton("Cargar archivo de preferencias");
+		panel.add(btnLoadRulePreferencesFromFiles);
 		btnLoadRulePreferencesFromFiles.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String path = FileChooser.showFileChooser();
@@ -101,9 +104,9 @@ public class PrefRulePreferencesFrame extends JFrame {
 			}
 		});
 		btnLoadRulePreferencesFromFiles.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentPane.add(btnLoadRulePreferencesFromFiles);
 		
 		btnSaveRulePreferenes = new JButton("Guardar archivo de preferencias");
+		panel.add(btnSaveRulePreferenes);
 		btnSaveRulePreferenes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				CSVwriter.saveRulePriorityToCSV(PrefRulePreferencesFrame.this.data);
@@ -111,7 +114,6 @@ public class PrefRulePreferencesFrame extends JFrame {
 			}
 		});
 		btnSaveRulePreferenes.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentPane.add(btnSaveRulePreferenes);
 		
 		Component verticalStrut = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut);
@@ -123,19 +125,19 @@ public class PrefRulePreferencesFrame extends JFrame {
 		JLabel lblNewLabel_2 = new JLabel("El participante");
 		panelPreference.add(lblNewLabel_2);
 		
-		comboBoxParticipant = new JComboBox<String>(data.getParticipantsArrayString());
+		comboBoxParticipant = new JComboBox<String>(data.getDataManagerParticipant().getParticipantsArrayString());
 		panelPreference.add(comboBoxParticipant);
 		
 		JLabel lblNewLabel_3 = new JLabel("prefiere la regla");
 		panelPreference.add(lblNewLabel_3);
 		
-		comboBoxBest = new JComboBox<String>(data.getRulesNames());
+		comboBoxBest = new JComboBox<String>(data.getDataManagerRule().getRulesNames());
 		panelPreference.add(comboBoxBest);
 		
 		JLabel lblNewLabel = new JLabel("por sobre la regla");
 		panelPreference.add(lblNewLabel);
 		
-		comboBoxWorst = new JComboBox<String>(data.getRulesNames());
+		comboBoxWorst = new JComboBox<String>(data.getDataManagerRule().getRulesNames());
 		panelPreference.add(comboBoxWorst);
 		
 		Component verticalStrut_3 = Box.createVerticalStrut(20);
@@ -155,10 +157,10 @@ public class PrefRulePreferencesFrame extends JFrame {
 					String worstRule = (String) comboBoxWorst.getSelectedItem();
 					if(!bestRule.equals(worstRule)) {
 						Priority prior = new Priority(bestRule, worstRule);
-						String validation = prior.isValid(PrefRulePreferencesFrame.this.data.getParticipantByName(participantName));
+						String validation = prior.isValid(PrefRulePreferencesFrame.this.data.getDataManagerParticipant().getParticipantByName(participantName));
 						if(validation.equals("OK")) {
-							PrefRulePreferencesFrame.this.data.getParticipantByName(participantName).addPreference(prior);
-							int index = PrefRulePreferencesFrame.this.data.getParticipantByName(participantName).getPreferences().size()-1;
+							PrefRulePreferencesFrame.this.data.getDataManagerParticipant().getParticipantByName(participantName).addPreference(prior);
+							int index = PrefRulePreferencesFrame.this.data.getDataManagerParticipant().getParticipantByName(participantName).getPreferences().size()-1;
 							listModelRulePriority.addElement("El participante <"+participantName+"("+index+")> considera que la regla "+bestRule+" tiene mayor prioridad que la regla "+worstRule);
 							updateRulePriorityTransitiveList();
 						}else {
@@ -188,7 +190,7 @@ public class PrefRulePreferencesFrame extends JFrame {
 				int selectedIndex = listPriority.getSelectedIndex();
 		        if (selectedIndex != -1) {
 		        	String[] participantAndIndex =  extraerDatos(listPriority.getSelectedValue());
-		        	Participant participant = PrefRulePreferencesFrame.this.data.getParticipantByName(participantAndIndex[0]);
+		        	Participant participant = PrefRulePreferencesFrame.this.data.getDataManagerParticipant().getParticipantByName(participantAndIndex[0]);
 		        	Priority prior = participant.getPreferences().get(Integer.parseInt(participantAndIndex[1]));
 		        	
 		        	int option = JOptionPane.showConfirmDialog(PrefRulePreferencesFrame.this,
@@ -218,6 +220,20 @@ public class PrefRulePreferencesFrame extends JFrame {
 		JLabel lblNewLabel_6 = new JLabel("A continuacion puede ver las relaciones transitivas implicitas.");
 		scrollPane_1.setColumnHeaderView(lblNewLabel_6);
 		
+		Component verticalStrut_6 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_6);
+		
+		JButton btnConfirmChanges = new JButton("Confirmar cambios");
+		btnConfirmChanges.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "Datos validados y guardados, ya puede cerrar esta ventana", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+				PrefRulePreferencesFrame.this.data.setDataValidated();
+				onlyViewMod(true);
+			}
+		});
+		btnConfirmChanges.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(btnConfirmChanges);
+		
 		updateIndexRulePriority();
 		updateRulePriorityTransitiveList();
 		onlyViewMod(onlyView);
@@ -238,8 +254,8 @@ public class PrefRulePreferencesFrame extends JFrame {
 	
 	private void updateIndexRulePriority() {
 		listModelRulePriority.removeAllElements();
-		for(int i=0; i<data.getParticipants().size(); i++) {
-			Participant participant = data.getParticipants().get(i);
+		for(int i=0; i<data.getDataManagerParticipant().getParticipants().size(); i++) {
+			Participant participant = data.getDataManagerParticipant().getParticipants().get(i);
 			for(int index=0; index<participant.getPreferences().size(); index++) {
 				listModelRulePriority.addElement("El participante <"+participant.getName()+"("+index+")> considera que la regla "+participant.getPreferences().get(index).getMorePriority()+" tiene mayor prioridad que la regla "+participant.getPreferences().get(index).getLessPriority());
 			}
@@ -248,7 +264,7 @@ public class PrefRulePreferencesFrame extends JFrame {
 	
 	private void updateRulePriorityTransitiveList() {
 		listModelParticipantsPriorityTransitive.removeAllElements();
-		for(Participant participant : data.getParticipants()) {
+		for(Participant participant : data.getDataManagerParticipant().getParticipants()) {
 			participant.checkRulePriorityTransitivity();
 			for(Priority prior : participant.getPreferencesTransitive()) {
 				listModelParticipantsPriorityTransitive.addElement("El participante "+participant.getName()+" considera que la regla "+prior.getMorePriority()+" tiene mayor prioridad que la regla "+prior.getLessPriority());

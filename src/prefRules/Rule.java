@@ -13,13 +13,13 @@ public class Rule {
 
 	private String name;
 	private List<BPremise> betterP;
-	private List<WPremise> worstP;
+	private List<WPremise> worseP;
 	private List<EPremise> equalP;
 	
 	public Rule(String name) {
 		this.name = name;
 		this.betterP = new ArrayList<BPremise>();
-		this.worstP = new ArrayList<WPremise>();
+		this.worseP = new ArrayList<WPremise>();
 		this.equalP = new ArrayList<EPremise>();
 	}
 
@@ -44,15 +44,15 @@ public class Rule {
 	}
 
 	public List<WPremise> getWorstP() {
-		return worstP;
+		return worseP;
 	}
 
 	public void setWorstP(List<WPremise> worstP) {
-		this.worstP = worstP;
+		this.worseP = worstP;
 	}
 	
-	public void addWorstP(WPremise wPremise) {
-		this.worstP.add(wPremise);
+	public void addWorseP(WPremise wPremise) {
+		this.worseP.add(wPremise);
 	}
 
 	public List<EPremise> getEqualP() {
@@ -73,7 +73,7 @@ public class Rule {
 				return false;
 			}
 		}
-		for(WPremise wPremise : worstP) {
+		for(WPremise wPremise : worseP) {
 			if(wPremise.getCriteria().getName().equals(criteria.getName())) {
 				return false;
 			}
@@ -91,7 +91,7 @@ public class Rule {
 		availableCriterias.add("-");
 		
 		boolean available = true;
-		for(Criteria criteria : data.getCriterias()) {
+		for(Criteria criteria : data.getDataManagerCriteria().getCriterias()) {
 			String name = criteria.getName();
 			if(available) {
 				for(BPremise bPremise : betterP) {
@@ -102,7 +102,7 @@ public class Rule {
 				}
 			}
 			if(available) {
-				for(WPremise wPremise : worstP) {
+				for(WPremise wPremise : worseP) {
 					if(wPremise.getCriteria().getName().equals(name)) {
 						available = false;
 						break;
@@ -140,9 +140,9 @@ public class Rule {
 			}
 		}
 		if(!ready) {
-			for(int i=0; i<worstP.size(); i++) {
-				if(worstP.get(i).getCriteria().getName().equals(criteriaName)) {
-					worstP.remove(i);
+			for(int i=0; i<worseP.size(); i++) {
+				if(worseP.get(i).getCriteria().getName().equals(criteriaName)) {
+					worseP.remove(i);
 					ready = true;
 					break;
 				}
@@ -165,8 +165,8 @@ public class Rule {
 				return true;
 			}
 		}
-		for(int i=0; i<worstP.size(); i++) {
-			if(worstP.get(i).getCriteria().getName().equals(criteriaName)) {
+		for(int i=0; i<worseP.size(); i++) {
+			if(worseP.get(i).getCriteria().getName().equals(criteriaName)) {
 				return true;
 			}
 		}
@@ -190,10 +190,10 @@ public class Rule {
 			description += equalP.get(i).getDescription();
 			if(i<equalP.size()-1) description += ", tambien ";
 		}
-		for(int i=0; i<worstP.size(); i++) {
+		for(int i=0; i<worseP.size(); i++) {
 			if(i==0) description += ". Por ultimo, estoy dispuesto a sacrificar ";
-			description += worstP.get(i).getDescription();
-			if(i<worstP.size()-1) description += ", ademas puedo sacrificar ";
+			description += worseP.get(i).getDescription();
+			if(i<worseP.size()-1) description += ", ademas puedo sacrificar ";
 		}
 		return description;
 	}
@@ -209,10 +209,10 @@ public class Rule {
 			toString += equalP.get(i).getPremise();
 			if(i<equalP.size()-1) toString += ",";
 		}
-		for(int i=0; i<worstP.size(); i++) {
+		for(int i=0; i<worseP.size(); i++) {
 			if(i==0) toString += ",";
-			toString += worstP.get(i).getPremise();
-			if(i<worstP.size()-1) toString += ",";
+			toString += worseP.get(i).getPremise();
+			if(i<worseP.size()-1) toString += ",";
 		}
 		toString += " ==> pref(X,Y)";
 		return toString;
@@ -221,7 +221,21 @@ public class Rule {
 	public void update(Rule newData) {
 		this.name = newData.getName();
 		this.betterP = newData.getBetterP();
-		this.worstP = newData.getWorstP();
+		this.worseP = newData.getWorstP();
 		this.equalP = newData.getEqualP();
+	}
+	
+	public Rule clone() {
+		Rule ruleClone = new Rule(name);
+		for(BPremise bp : betterP) {
+			ruleClone.addBetterP(bp.clone());
+		}
+		for(EPremise ep : equalP) {
+			ruleClone.addEqualP(ep.clone());
+		}
+		for(WPremise wp : worseP) {
+			ruleClone.addWorseP(wp.clone());
+		}
+		return ruleClone;
 	}
 }

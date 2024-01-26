@@ -65,7 +65,7 @@ public class DataManagerRule {
     		}
     	}
 		
-		for(Participant participant : data.getParticipants()) {
+		for(Participant participant : data.getDataManagerParticipant().getParticipants()) {
 			for(int i=0; i<participant.getPreferences().size(); i++) {
 				if(participant.getPreferences().get(i).getMorePriority().equals(ruleName) || participant.getPreferences().get(i).getLessPriority().equals(ruleName)) {
 					participant.getPreferences().remove(i);
@@ -94,8 +94,8 @@ public class DataManagerRule {
 		
 		rules = new ArrayList<Rule>();
 		
-		for(Rule r : newData.getRules()) {
-			rules.add(r);
+		for(Rule r : newData.getDataManagerRule().getRules()) {
+			rules.add(r.clone());
 		}
 	}
 }

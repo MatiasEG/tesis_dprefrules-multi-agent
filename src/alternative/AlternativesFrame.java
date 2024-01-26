@@ -52,7 +52,7 @@ public class AlternativesFrame extends JFrame {
 			public void run() {
 				try {
 					DataManager data = new DataManager("evidenceTest","C:\\Users\\Matia\\Desktop\\Archivos");
-					data.addParticipant(new Participant("Matias"));
+					data.getDataManagerParticipant().addParticipant(new Participant("Matias"));
 					
 					//Criteria entretenimiento = new Criteria("Entretenimiento", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
 					//Criteria clima = new Criteria("Clima", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
@@ -66,9 +66,9 @@ public class AlternativesFrame extends JFrame {
 					Criteria days = new Criteria("days", new String[]{"1","30"}, true);
 					Criteria entrmnt = new Criteria("entrmnt", new String[]{"vbad","bad","reg","good","vgood"}, false);
 					Criteria service = new Criteria("service", new String[]{"vbad","bad","reg","good","vgood"}, false);
-					data.addCriteria(days);
-					data.addCriteria(entrmnt);
-					data.addCriteria(service);
+					data.getDataManagerCriteria().addCriteria(days);
+					data.getDataManagerCriteria().addCriteria(entrmnt);
+					data.getDataManagerCriteria().addCriteria(service);
 					
 					AlternativesFrame frame = new AlternativesFrame(data, false);
 					frame.setVisible(true);
@@ -106,7 +106,7 @@ public class AlternativesFrame extends JFrame {
 		lblNewLabel_2.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		
-		List<Criteria> criterias = data.getCriterias();
+		List<Criteria> criterias = data.getDataManagerCriteria().getCriterias();
 		String[] criteriaNames = new String[criterias.size()];
 		for(int i=0; i<criterias.size(); i++) {
 			criteriaNames[i] = criterias.get(i).getName();
@@ -124,9 +124,9 @@ public class AlternativesFrame extends JFrame {
 		table = new JTable(new DefaultTableModel(tableData, columnNames));
 		model = (DefaultTableModel) table.getModel();
 		
-		for(int i=0; i<data.getAlternatives().size(); i++) {
+		for(int i=0; i<data.getDataManagerEvidence().getAlternatives().size(); i++) {
 			//model.addRow(new Object[] {data.getAlternatives().get(i).getName(), Arrays.copyOf(noInfo, noInfo.length)});
-			model.addRow(new Object[] {data.getAlternatives().get(i).getName()});
+			model.addRow(new Object[] {data.getDataManagerEvidence().getAlternatives().get(i).getName()});
 			for (int j = 1; j <= criteriaNames.length; j++) {
 		        model.setValueAt("-", i, j);
 		    }
@@ -178,7 +178,7 @@ public class AlternativesFrame extends JFrame {
                 	 if (option == JOptionPane.YES_OPTION) {
                 		 // user want to delete selected alternative
                 		 model.removeRow(selectedRow);
-                		 AlternativesFrame.this.data.removeAlternative(alternativeName);
+                		 AlternativesFrame.this.data.getDataManagerEvidence().removeAlternative(alternativeName);
                 		 JOptionPane.showMessageDialog(null, "La alternativa seleccionada fue correctamente removido");
                 	 }else {
                 		 // user do not want to delete selected alternative
@@ -238,13 +238,13 @@ public class AlternativesFrame extends JFrame {
 		String name = JOptionPane.showInputDialog(this, "Ingrese el nombre de la alternativa que desea agregar:");
         String validation = DataManager.validateStringWithOnlyLettersAndNumbers(name);
         if(validation==null) {
-        	if(DataManager.validateStringListNotContainNewElement(data.getAlternativesNames(), name)) {
+        	if(DataManager.validateStringListNotContainNewElement(data.getDataManagerEvidence().getAlternativesNames(), name)) {
         		DefaultTableModel model = (DefaultTableModel) table.getModel();
         		model.addRow(new Object[] {name});
     			for (int j = 1; j < model.getColumnCount(); j++) {
     		        model.setValueAt("-", model.getRowCount()-1, j);
     		    }
-    			data.addAlternative(new Alternative(name));
+    			data.getDataManagerEvidence().addAlternative(new Alternative(name));
     		}else {
     			JOptionPane.showMessageDialog(null, "Error, la alternativa \""+name+"\" ya se encuentra en la lista de alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
     		}
@@ -258,11 +258,11 @@ public class AlternativesFrame extends JFrame {
 		for (int row = 0; row < model.getRowCount(); row++) {
 		    for (int col = 1; col < model.getColumnCount(); col++) {
 		    	value = (String) model.getValueAt(row, col);
-		    	if(data.getCriterias().get(col-1).valueIsValid(value)) {
-		    		data.getAlternatives().get(row).updateOrAddCriteriaValue(data.getCriterias().get(col-1), value);
+		    	if(data.getDataManagerCriteria().getCriterias().get(col-1).valueIsValid(value)) {
+		    		data.getDataManagerEvidence().getAlternatives().get(row).updateOrAddCriteriaValue(data.getDataManagerCriteria().getCriterias().get(col-1), value);
 		    	}else {
-		    		JOptionPane.showMessageDialog(null, "Error, ingreso un valor no valido para la alternativa ("+data.getAlternatives().get(row).getName()+") en el criterio ("+data.getCriterias().get(col-1).getName()+")", "Advertencia", JOptionPane.WARNING_MESSAGE);
-		    		data.getAlternatives().clear();
+		    		JOptionPane.showMessageDialog(null, "Error, ingreso un valor no valido para la alternativa ("+data.getDataManagerEvidence().getAlternatives().get(row).getName()+") en el criterio ("+data.getDataManagerCriteria().getCriterias().get(col-1).getName()+")", "Advertencia", JOptionPane.WARNING_MESSAGE);
+		    		data.getDataManagerEvidence().getAlternatives().clear();
 		    		return false;
 		    	}
 		    }
@@ -272,13 +272,13 @@ public class AlternativesFrame extends JFrame {
 	
 	private void checkData(DataManager data) {
 		model.setRowCount(0);
-		for(int i=0; i<data.getCriterias().size(); i++) {
-			if(!data.getCriterias().get(i).isNumeric()) {
+		for(int i=0; i<data.getDataManagerCriteria().getCriterias().size(); i++) {
+			if(!data.getDataManagerCriteria().getCriterias().get(i).isNumeric()) {
 				TableColumn comboBoxColumn = table.getColumnModel().getColumn(i+1);
-	            comboBoxColumn.setCellEditor(new DefaultCellEditor(data.getCriterias().get(i).getComboValues()));
+	            comboBoxColumn.setCellEditor(new DefaultCellEditor(data.getDataManagerCriteria().getCriterias().get(i).getComboValues()));
 			}
 		}
-		for (Alternative alt : data.getAlternatives()) {
+		for (Alternative alt : data.getDataManagerEvidence().getAlternatives()) {
 	        Object[] rowData = new Object[model.getColumnCount()];
 	        rowData[0] = alt.getName();
 	        for(int col=1; col<model.getColumnCount(); col++) {

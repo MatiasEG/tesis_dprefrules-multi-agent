@@ -13,7 +13,6 @@ import criteria.Criteria;
 import dataManager.DataManager;
 import exceptions.RuleFileErrorException;
 import participant.Participant;
-
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
@@ -47,6 +46,7 @@ public class PrefRulesFrame extends JFrame {
 	private DefaultListModel<String> listModelRules;
 	private JList<String> listRules;
 	private DataManager data;
+	private DataManager dataClone;
 
 	/**
 	 * Launch the application.
@@ -56,14 +56,14 @@ public class PrefRulesFrame extends JFrame {
 			public void run() {
 				try {
 					DataManager data = new DataManager("evidenceTest","C:\\Users\\Matia\\Desktop\\Archivos");
-					data.addParticipant(new Participant("Matias"));
+					data.getDataManagerParticipant().addParticipant(new Participant("Matias"));
 					
 					Criteria days = new Criteria("days", new String[]{"1","30"}, true);
 					Criteria entrmnt = new Criteria("entrmnt", new String[]{"vbad","bad","reg","good","vgood"}, false);
 					Criteria service = new Criteria("service", new String[]{"vbad","bad","reg","good","vgood"}, false);
-					data.addCriteria(days);
-					data.addCriteria(entrmnt);
-					data.addCriteria(service);
+					data.getDataManagerCriteria().addCriteria(days);
+					data.getDataManagerCriteria().addCriteria(entrmnt);
+					data.getDataManagerCriteria().addCriteria(service);
 					
 					PrefRulesFrame frame = new PrefRulesFrame(data, false);
 					frame.setVisible(true);
@@ -184,10 +184,10 @@ public class PrefRulesFrame extends JFrame {
 		                    "Confirmar Eliminación",
 		                    JOptionPane.YES_NO_OPTION);
 		            if (option == JOptionPane.YES_OPTION) {
-		            	PrefRulesFrame.this.data.removeRule(ruleName);
-		            	for(int i=0; i<PrefRulesFrame.this.data.getRules().size(); i++) {
-		            		if(PrefRulesFrame.this.data.getRules().get(i).getName().equals(ruleName)) {
-		            			PrefRulesFrame.this.data.getRules().remove(i);
+		            	PrefRulesFrame.this.data.getDataManagerRule().removeRule(ruleName);
+		            	for(int i=0; i<PrefRulesFrame.this.data.getDataManagerRule().getRules().size(); i++) {
+		            		if(PrefRulesFrame.this.data.getDataManagerRule().getRules().get(i).getName().equals(ruleName)) {
+		            			PrefRulesFrame.this.data.getDataManagerRule().getRules().remove(i);
 		            			break;
 		            		}
 		            	}
@@ -207,9 +207,9 @@ public class PrefRulesFrame extends JFrame {
 				Rule rule = null;
 		        if (selectedIndex != -1) {
 		        	String ruleName = listRules.getSelectedValue();
-	            	for(int i=0; i<PrefRulesFrame.this.data.getRules().size(); i++) {
-	            		if(PrefRulesFrame.this.data.getRules().get(i).getName().equals(ruleName)) {
-	            			rule = PrefRulesFrame.this.data.getRules().get(i);
+	            	for(int i=0; i<PrefRulesFrame.this.data.getDataManagerRule().getRules().size(); i++) {
+	            		if(PrefRulesFrame.this.data.getDataManagerRule().getRules().get(i).getName().equals(ruleName)) {
+	            			rule = PrefRulesFrame.this.data.getDataManagerRule().getRules().get(i);
 	            			break;
 	            		}
 	            	}
@@ -239,9 +239,9 @@ public class PrefRulesFrame extends JFrame {
 				int selectedIndex = listRules.getSelectedIndex();
 		        if (selectedIndex != -1) {
 		        	String ruleName = listRules.getSelectedValue();
-	            	for(int i=0; i<PrefRulesFrame.this.data.getRules().size(); i++) {
-	            		if(PrefRulesFrame.this.data.getRules().get(i).getName().equals(ruleName)) {
-	            			JOptionPane.showMessageDialog(null, PrefRulesFrame.this.data.getRules().get(i).getRuleDescription(), "Error", JOptionPane.INFORMATION_MESSAGE);
+	            	for(int i=0; i<PrefRulesFrame.this.data.getDataManagerRule().getRules().size(); i++) {
+	            		if(PrefRulesFrame.this.data.getDataManagerRule().getRules().get(i).getName().equals(ruleName)) {
+	            			JOptionPane.showMessageDialog(null, PrefRulesFrame.this.data.getDataManagerRule().getRules().get(i).getRuleDescription(), "Error", JOptionPane.INFORMATION_MESSAGE);
 	            			break;
 	            		}
 	            	}
@@ -280,8 +280,26 @@ public class PrefRulesFrame extends JFrame {
 		panelPreferences.add(btnEditRulePreferences);
 		btnEditRulePreferences.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PrefRulePreferencesFrame frame = new PrefRulePreferencesFrame(PrefRulesFrame.this.data, false);
+				dataClone = PrefRulesFrame.this.data.clone();
+				PrefRulesFrame.this.onlyViewMod(true);
+				
+				PrefRulePreferencesFrame frame = new PrefRulePreferencesFrame(dataClone, false);
 				frame.setVisible(true);
+				
+				// WindowListener for detect when the frame is closed
+				frame.addWindowListener(new WindowAdapter() {
+		            @Override
+		            public void windowClosing(WindowEvent e) {
+		            	if(dataClone.getDataValidated()) {
+		            		PrefRulesFrame.this.data.updateData(dataClone);
+		            	}else {
+		            		// The user close the window without save.
+		            	}
+		            	dataClone = null;
+		            	
+		            	PrefRulesFrame.this.onlyViewMod(false);
+		            }
+		        });
 			}
 		});
 		btnEditRulePreferences.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -308,14 +326,14 @@ public class PrefRulesFrame extends JFrame {
 	}
 	
 	private void updateRules(DataManager data) {
-		for(Rule rule : data.getRules()) {
+		for(Rule rule : data.getDataManagerRule().getRules()) {
 			listModelRules.addElement(rule.getName());
 		}
 	}
 
 	private void updateRules() {
 		listModelRules.removeAllElements();
-		for(Rule rule : data.getRules()) {
+		for(Rule rule : data.getDataManagerRule().getRules()) {
 			listModelRules.addElement(rule.getName());
 		}
 	}

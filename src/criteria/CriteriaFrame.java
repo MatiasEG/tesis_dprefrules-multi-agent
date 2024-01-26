@@ -58,14 +58,14 @@ public class CriteriaFrame extends JFrame {
 			public void run() {
 				try {
 					DataManager data = new DataManager("ruleTest","C:\\Users\\Matia\\Desktop\\Archivos");
-					data.addParticipant(new Participant("Matias"));
+					data.getDataManagerParticipant().addParticipant(new Participant("Matias"));
 					
 					Criteria days = new Criteria("days", new String[]{"1","30"}, true);
 					Criteria entrmnt = new Criteria("entrmnt", new String[]{"vbad","bad","reg","good","vgood"}, false);
 					Criteria service = new Criteria("service", new String[]{"vbad","bad","reg","good","vgood"}, false);
-					data.addCriteria(days);
-					data.addCriteria(entrmnt);
-					data.addCriteria(service);
+					data.getDataManagerCriteria().addCriteria(days);
+					data.getDataManagerCriteria().addCriteria(entrmnt);
+					data.getDataManagerCriteria().addCriteria(service);
 					
 					CriteriaFrame frame = new CriteriaFrame(data, false);
 					frame.setVisible(true);
@@ -176,9 +176,11 @@ public class CriteriaFrame extends JFrame {
 						// user want to delete selected criteria
 						int index = table.getSelectedRow();
 						model.removeRow(index);
-						CriteriaFrame.this.data.removeCriteria(criteriaName);
-						CriteriaFrame.this.data.removeEvidence(criteriaName);
-						CriteriaFrame.this.data.removeRules(criteriaName);
+						CriteriaFrame.this.data.getDataManagerCriteria().removeCriteria(criteriaName);
+						CriteriaFrame.this.data.getDataManagerEvidence().removeEvidence(criteriaName);
+						CriteriaFrame.this.data.getDataManagerRule().removeRules(criteriaName);
+						CriteriaFrame.this.data.getDataManagerParticipant().removeParticipantPreferencesByCriteria(criteriaName);
+						
 						JOptionPane.showMessageDialog(null, "El criterio seleccionado fue correctamente removido");
 					}else {
 						// user do not want to delete selected criteria
@@ -198,7 +200,7 @@ public class CriteriaFrame extends JFrame {
 				String criteriaName = (String) model.getValueAt(table.getSelectedRow(), 0);
 				
 				Criteria criteriaSelected = null;
-				for(Criteria auxCriteria: CriteriaFrame.this.data.getCriterias()) {
+				for(Criteria auxCriteria: CriteriaFrame.this.data.getDataManagerCriteria().getCriterias()) {
 					if(auxCriteria.getName().equals(criteriaName)) {
 						criteriaSelected = auxCriteria;
 						break;
@@ -238,7 +240,7 @@ public class CriteriaFrame extends JFrame {
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.setRowCount(0);
 		table.repaint();
-		for(Criteria cr: data.getCriterias()) {
+		for(Criteria cr: data.getDataManagerCriteria().getCriterias()) {
 			if(cr.isNumeric) {
 				String[] numericValues = cr.getValues();
 				model.addRow(new Object[] {cr.getName(), "between("+numericValues[0]+","+numericValues[1]+")"});
@@ -264,8 +266,8 @@ public class CriteriaFrame extends JFrame {
 		if(criteriaUpdate==null) {
 			model.addRow(new Object[] {criteriaName, "between("+splittedValues[0]+","+splittedValues[1]+")"});
 			Criteria criteria = new Criteria(criteriaName, splittedValues, isNumeric);
-			data.addCriteria(criteria);
-			for(Alternative alt: data.getAlternatives()) {
+			data.getDataManagerCriteria().addCriteria(criteria);
+			for(Alternative alt: data.getDataManagerEvidence().getAlternatives()) {
 				alt.updateOrAddCriteriaValue(criteria, "-");
 			}
 		}else {
@@ -293,8 +295,8 @@ public class CriteriaFrame extends JFrame {
 		if(criteriaUpdate==null) {
 			model.addRow(new Object[] {criteriaName, valueFormatted});
 			Criteria criteria = new Criteria(criteriaName, splittedValues, isNumeric);
-			data.addCriteria(criteria);
-			for(Alternative alt: data.getAlternatives()) {
+			data.getDataManagerCriteria().addCriteria(criteria);
+			for(Alternative alt: data.getDataManagerEvidence().getAlternatives()) {
 				alt.updateOrAddCriteriaValue(criteria, "-");
 			}
 		}else {
