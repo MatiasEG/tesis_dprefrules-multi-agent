@@ -13,7 +13,8 @@ public class DataManagerCriteria {
 	protected List<Criteria> criterias;
 	
 	protected DataManager data;
-	
+	protected boolean dataValidated;
+
 	public DataManagerCriteria(DataManager data) {
 		this.data = data;
 		
@@ -31,6 +32,10 @@ public class DataManagerCriteria {
 	}
 	
 	// get --------------------------------------------------------------------------------------------------------------
+	public DataManager getDataManager() {
+		return data;
+	}
+	
 	public List<Criteria> getCriterias(){
 		return criterias;
 	}
@@ -106,13 +111,22 @@ public class DataManagerCriteria {
 	}
 	
 	// update --------------------------------------------------------------------------------------------------------------
-	public void updateData(DataManager newData) {
-		this.data = newData;
+	public void updateData(DataManagerCriteria newData) {
+		this.data = newData.getDataManager();
 		
 		criterias = new ArrayList<Criteria>();
 		
 		for(Criteria c : newData.getCriterias()) {
 			criterias.add(c);
 		}
+	}
+	
+	// data validated --------------------------------------------------------------------------------------------------------------
+	public void setDataValidated() {
+		dataValidated = true;
+	}
+	
+	public boolean getDataValidated() {
+		return dataValidated;
 	}
 }

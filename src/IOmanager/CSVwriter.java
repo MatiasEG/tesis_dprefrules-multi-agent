@@ -5,6 +5,7 @@ import java.io.IOException;
 import alternative.Alternative;
 import criteria.Criteria;
 import dataManager.DataManager;
+import dataManager.DataManagerCriteria;
 import dataManager.DataManagerParticipant;
 import dataManager.Priority;
 import participant.Participant;
@@ -12,8 +13,8 @@ import prefRules.Rule;
 
 public class CSVwriter {
 
-	public static void saveCriteriasToCSV(DataManager data) {
-		String filePath = data.getSaveFolder()+"\\"+data.getProjectName()+"_criteria.csv";
+	public static void saveCriteriasToCSV(DataManagerCriteria data) {
+		String filePath = data.getDataManager().getSaveFolder()+"\\"+data.getDataManager().getProjectName()+"_criteria.csv";
 		filePath = checkCSVextension(filePath);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
 
@@ -88,7 +89,7 @@ public class CSVwriter {
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
 
 			String header = "alternative";
-			for(Criteria criteria: data.getCriterias()) {
+			for(Criteria criteria: data.getDataManagerCriteria().getCriterias()) {
 				header += ";"+criteria.getName();
 			}
 			
@@ -108,7 +109,7 @@ public class CSVwriter {
             	for(int i=1; i<values.length; i++) {
             		System.out.print(values[i]+" - - ");
             		if(values[i].equals("-")) {
-            			writer.write(";"+data.getCriterias().get(i-1).getNoInformationValue());
+            			writer.write(";"+data.getDataManagerCriteria().getCriterias().get(i-1).getNoInformationValue());
             		}else {
             			writer.write(";"+values[i]);
             		}

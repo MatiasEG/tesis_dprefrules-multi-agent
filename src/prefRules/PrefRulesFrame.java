@@ -61,9 +61,9 @@ public class PrefRulesFrame extends JFrame {
 					Criteria days = new Criteria("days", new String[]{"1","30"}, true);
 					Criteria entrmnt = new Criteria("entrmnt", new String[]{"vbad","bad","reg","good","vgood"}, false);
 					Criteria service = new Criteria("service", new String[]{"vbad","bad","reg","good","vgood"}, false);
-					data.addCriteria(days);
-					data.addCriteria(entrmnt);
-					data.addCriteria(service);
+					data.getDataManagerCriteria().addCriteria(days);
+					data.getDataManagerCriteria().addCriteria(entrmnt);
+					data.getDataManagerCriteria().addCriteria(service);
 					
 					PrefRulesFrame frame = new PrefRulesFrame(data, false);
 					frame.setVisible(true);

@@ -9,6 +9,7 @@ import IOmanager.CSVwriter;
 import IOmanager.FileChooser;
 import alternative.Alternative;
 import dataManager.DataManager;
+import dataManager.DataManagerCriteria;
 import exceptions.CriteriaFileException;
 import participant.Participant;
 import java.awt.BorderLayout;
@@ -46,7 +47,7 @@ public class CriteriaFrame extends JFrame {
 	private JButton btnLoadFile;
 	private JScrollPane scrollPaneCriteria;
 	
-	private DataManager data;
+	private DataManagerCriteria data;
 	private Component verticalStrut;
 	private Component verticalStrut_1;
 	
@@ -63,11 +64,11 @@ public class CriteriaFrame extends JFrame {
 					Criteria days = new Criteria("days", new String[]{"1","30"}, true);
 					Criteria entrmnt = new Criteria("entrmnt", new String[]{"vbad","bad","reg","good","vgood"}, false);
 					Criteria service = new Criteria("service", new String[]{"vbad","bad","reg","good","vgood"}, false);
-					data.addCriteria(days);
-					data.addCriteria(entrmnt);
-					data.addCriteria(service);
+					data.getDataManagerCriteria().addCriteria(days);
+					data.getDataManagerCriteria().addCriteria(entrmnt);
+					data.getDataManagerCriteria().addCriteria(service);
 					
-					CriteriaFrame frame = new CriteriaFrame(data, false);
+					CriteriaFrame frame = new CriteriaFrame(data.getDataManagerCriteria(), false);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -79,7 +80,7 @@ public class CriteriaFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public CriteriaFrame(DataManager data, boolean onlyView) {
+	public CriteriaFrame(DataManagerCriteria data, boolean onlyView) {
 		this.data = data;
 		
 		setTitle("Criterios a evaluar");
@@ -177,10 +178,10 @@ public class CriteriaFrame extends JFrame {
 						int index = table.getSelectedRow();
 						model.removeRow(index);
 						CriteriaFrame.this.data.removeCriteria(criteriaName);
-						for(Alternative alt : CriteriaFrame.this.data.getAlternatives()) {
+						for(Alternative alt : CriteriaFrame.this.data.getDataManager().getAlternatives()) {
 							alt.removeCriteria(criteriaName);
 						}
-						CriteriaFrame.this.data.removeRules(criteriaName);
+						CriteriaFrame.this.data.getDataManager().removeRules(criteriaName);
 						JOptionPane.showMessageDialog(null, "El criterio seleccionado fue correctamente removido");
 					}else {
 						// user do not want to delete selected criteria
@@ -236,7 +237,7 @@ public class CriteriaFrame extends JFrame {
 		}
 	}
 	
-	private void checkData(DataManager data) {
+	private void checkData(DataManagerCriteria data) {
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.setRowCount(0);
 		table.repaint();
@@ -267,7 +268,7 @@ public class CriteriaFrame extends JFrame {
 			model.addRow(new Object[] {criteriaName, "between("+splittedValues[0]+","+splittedValues[1]+")"});
 			Criteria criteria = new Criteria(criteriaName, splittedValues, isNumeric);
 			data.addCriteria(criteria);
-			for(Alternative alt: data.getAlternatives()) {
+			for(Alternative alt: data.getDataManager().getAlternatives()) {
 				alt.updateOrAddCriteriaValue(criteria, "-");
 			}
 		}else {
@@ -296,7 +297,7 @@ public class CriteriaFrame extends JFrame {
 			model.addRow(new Object[] {criteriaName, valueFormatted});
 			Criteria criteria = new Criteria(criteriaName, splittedValues, isNumeric);
 			data.addCriteria(criteria);
-			for(Alternative alt: data.getAlternatives()) {
+			for(Alternative alt: data.getDataManager().getAlternatives()) {
 				alt.updateOrAddCriteriaValue(criteria, "-");
 			}
 		}else {
