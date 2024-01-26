@@ -79,7 +79,7 @@ public class RuleParser {
 		matcher.find();
         String criteriaName = matcher.group(2);
         
-        Criteria criteria = data.getDataManagerCriteria().getCriteria(criteriaName);
+        Criteria criteria = data.getCriteria(criteriaName);
         if(criteria!=null) {
         	BPremise bPremise = new BPremise(criteria);
         	if(rule.availableCriteria(criteria)) {
@@ -235,7 +235,7 @@ public class RuleParser {
 		matcher.find();
         String criteriaName = matcher.group(2);
         
-        Criteria criteria = data.getDataManagerCriteria().getCriteria(criteriaName);
+        Criteria criteria = data.getCriteria(criteriaName);
         if(criteria!=null) {
         	WPremise wPremise = new WPremise(criteria);
         	if(rule.availableCriteria(criteria)) {
@@ -321,7 +321,7 @@ public class RuleParser {
 		matcher.find();
         String criteriaName = matcher.group(2);
         
-        Criteria criteria = data.getDataManagerCriteria().getCriteria(criteriaName);
+        Criteria criteria = data.getCriteria(criteriaName);
         if(criteria!=null) {
         	EPremise ePremise = new EPremise(criteria);
         	if(rule.availableCriteria(criteria)) {

@@ -97,7 +97,7 @@ public class EPremiseFrame extends JFrame {
 		btnConfirmCriteria = new JButton("Confirmar criterio seleccionado");
 		btnConfirmCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				criteria = EPremiseFrame.this.data.getDataManagerCriteria().getCriteria((String)EPremiseFrame.this.comboBoxAvailableCriterias.getSelectedItem());
+				criteria = EPremiseFrame.this.data.getCriteria((String)EPremiseFrame.this.comboBoxAvailableCriterias.getSelectedItem());
 				if(criteria != null) {
 					lblCriteria1.setText("en el criterio "+criteria.getName()+".");
 					lblCriteria2.setText("en el criterio "+criteria.getName()+".");

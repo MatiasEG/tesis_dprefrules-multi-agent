@@ -248,7 +248,7 @@ public class MainWindow extends JFrame {
 		btnViewCriteria = new JButton("Ver criterios");
 		btnViewCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CriteriaFrame frame = new CriteriaFrame(data.getDataManagerCriteria(), true);
+				CriteriaFrame frame = new CriteriaFrame(data, true);
 				frame.setVisible(true);
 			}
 		});
@@ -258,18 +258,18 @@ public class MainWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				dataClone = data.clone();
 				
-				CriteriaFrame frame = new CriteriaFrame(dataClone.getDataManagerCriteria(), false);
+				CriteriaFrame frame = new CriteriaFrame(dataClone, false);
 				frame.setVisible(true);
 				
 				if(state<2) state = 2;
 				MainWindow.this.modifyingData = false;
-				if(data.getDataManagerCriteria().getCriterias().size()>0) modifyingData = true;
+				if(data.getCriterias().size()>0) modifyingData = true;
 				
 				// WindowListener for detect when the frame is closed
 				frame.addWindowListener(new WindowAdapter() {
 		            @Override
 		            public void windowClosing(WindowEvent e) {
-		            	if(dataClone.getDataManagerCriteria().getDataValidated()) {
+		            	if(dataClone.getDataValidated()) {
 		            		data.updateData(dataClone);
 		            	}else {
 		            		// The user close the window without save.
@@ -277,14 +277,14 @@ public class MainWindow extends JFrame {
 		            	dataClone = null;
 		            	
 		            	if(!modifyingData) {
-			                if(data.getDataManagerCriteria().getCriterias().size()>0) {
+			                if(data.getCriterias().size()>0) {
 			                	setState3(false);
 			                }else {
 			                	setState2(false);
 			                	JOptionPane.showMessageDialog(null, "Debe definir al menos un criterio de comparacion para poder seguir con el problema y definir las alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 			                }
 			            }else {
-			            	if(data.getDataManagerCriteria().getCriterias().size()>0) {
+			            	if(data.getCriterias().size()>0) {
 			            		checkState(false);
 			            	}else {
 			            		setState2(false);

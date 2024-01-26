@@ -4,8 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import dataManager.DataManagerCriteria;
-
+import dataManager.DataManager;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -37,12 +36,12 @@ public class CriteriaCreationFrame extends JFrame {
 	
 	private CriteriaFrame criteriaFrame;
 	private Criteria criteriaToUpdate;
-	private DataManagerCriteria data;
+	private DataManager data;
 
 	/**
 	 * Create the frame.
 	 */
-	public CriteriaCreationFrame(CriteriaFrame criteriaTable, DataManagerCriteria data, Criteria criteria) {
+	public CriteriaCreationFrame(CriteriaFrame criteriaTable, DataManager data, Criteria criteria) {
 		this.data = data;
 		criteriaFrame = criteriaTable;
 		criteriaToUpdate = criteria;

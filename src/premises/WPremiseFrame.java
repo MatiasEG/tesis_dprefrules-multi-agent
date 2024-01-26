@@ -95,7 +95,7 @@ public class WPremiseFrame extends JFrame {
 		btnConfirmCriteria = new JButton("Confirmar criterio seleccionado");
 		btnConfirmCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				criteria = WPremiseFrame.this.data.getDataManagerCriteria().getCriteria((String)WPremiseFrame.this.comboBoxAvailableCriterias.getSelectedItem());
+				criteria = WPremiseFrame.this.data.getCriteria((String)WPremiseFrame.this.comboBoxAvailableCriterias.getSelectedItem());
 				if(criteria != null) {
 					textFieldMaxDist.setEnabled(true);
 					lblMaxDist.setText("La distancia minima entre los valores posibles para el criterio "+criteria.getName()+" debe ser:");

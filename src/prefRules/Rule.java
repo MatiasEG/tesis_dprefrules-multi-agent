@@ -91,7 +91,7 @@ public class Rule {
 		availableCriterias.add("-");
 		
 		boolean available = true;
-		for(Criteria criteria : data.getDataManagerCriteria().getCriterias()) {
+		for(Criteria criteria : data.getCriterias()) {
 			String name = criteria.getName();
 			if(available) {
 				for(BPremise bPremise : betterP) {

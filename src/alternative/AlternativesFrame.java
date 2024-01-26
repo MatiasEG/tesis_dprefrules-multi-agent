@@ -66,9 +66,9 @@ public class AlternativesFrame extends JFrame {
 					Criteria days = new Criteria("days", new String[]{"1","30"}, true);
 					Criteria entrmnt = new Criteria("entrmnt", new String[]{"vbad","bad","reg","good","vgood"}, false);
 					Criteria service = new Criteria("service", new String[]{"vbad","bad","reg","good","vgood"}, false);
-					data.getDataManagerCriteria().addCriteria(days);
-					data.getDataManagerCriteria().addCriteria(entrmnt);
-					data.getDataManagerCriteria().addCriteria(service);
+					data.addCriteria(days);
+					data.addCriteria(entrmnt);
+					data.addCriteria(service);
 					
 					AlternativesFrame frame = new AlternativesFrame(data, false);
 					frame.setVisible(true);
@@ -106,7 +106,7 @@ public class AlternativesFrame extends JFrame {
 		lblNewLabel_2.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		
-		List<Criteria> criterias = data.getDataManagerCriteria().getCriterias();
+		List<Criteria> criterias = data.getCriterias();
 		String[] criteriaNames = new String[criterias.size()];
 		for(int i=0; i<criterias.size(); i++) {
 			criteriaNames[i] = criterias.get(i).getName();
@@ -258,10 +258,10 @@ public class AlternativesFrame extends JFrame {
 		for (int row = 0; row < model.getRowCount(); row++) {
 		    for (int col = 1; col < model.getColumnCount(); col++) {
 		    	value = (String) model.getValueAt(row, col);
-		    	if(data.getDataManagerCriteria().getCriterias().get(col-1).valueIsValid(value)) {
-		    		data.getAlternatives().get(row).updateOrAddCriteriaValue(data.getDataManagerCriteria().getCriterias().get(col-1), value);
+		    	if(data.getCriterias().get(col-1).valueIsValid(value)) {
+		    		data.getAlternatives().get(row).updateOrAddCriteriaValue(data.getCriterias().get(col-1), value);
 		    	}else {
-		    		JOptionPane.showMessageDialog(null, "Error, ingreso un valor no valido para la alternativa ("+data.getAlternatives().get(row).getName()+") en el criterio ("+data.getDataManagerCriteria().getCriterias().get(col-1).getName()+")", "Advertencia", JOptionPane.WARNING_MESSAGE);
+		    		JOptionPane.showMessageDialog(null, "Error, ingreso un valor no valido para la alternativa ("+data.getAlternatives().get(row).getName()+") en el criterio ("+data.getCriterias().get(col-1).getName()+")", "Advertencia", JOptionPane.WARNING_MESSAGE);
 		    		data.getAlternatives().clear();
 		    		return false;
 		    	}
@@ -272,10 +272,10 @@ public class AlternativesFrame extends JFrame {
 	
 	private void checkData(DataManager data) {
 		model.setRowCount(0);
-		for(int i=0; i<data.getDataManagerCriteria().getCriterias().size(); i++) {
-			if(!data.getDataManagerCriteria().getCriterias().get(i).isNumeric()) {
+		for(int i=0; i<data.getCriterias().size(); i++) {
+			if(!data.getCriterias().get(i).isNumeric()) {
 				TableColumn comboBoxColumn = table.getColumnModel().getColumn(i+1);
-	            comboBoxColumn.setCellEditor(new DefaultCellEditor(data.getDataManagerCriteria().getCriterias().get(i).getComboValues()));
+	            comboBoxColumn.setCellEditor(new DefaultCellEditor(data.getCriterias().get(i).getComboValues()));
 			}
 		}
 		for (Alternative alt : data.getAlternatives()) {

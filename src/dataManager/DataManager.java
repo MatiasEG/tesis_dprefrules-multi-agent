@@ -2,6 +2,7 @@ package dataManager;
 
 import java.util.List;
 import alternative.Alternative;
+import criteria.Criteria;
 import prefRules.Rule;
 
 public class DataManager {
@@ -34,8 +35,32 @@ public class DataManager {
 	}
 	
 	// criteria data manager --------------------------------------------------------------------------------------------------------------
-	public DataManagerCriteria getDataManagerCriteria() {
-		return dataCriterias;
+	public void addCriteria(Criteria criteria) {
+		dataCriterias.addCriteria(criteria);
+	}
+	
+	public void setCriterias(List<Criteria> newCriterias) {
+		dataCriterias.setCriterias(newCriterias);
+	}
+	
+	public List<Criteria> getCriterias(){
+		return dataCriterias.getCriterias();
+	}
+	
+	public Criteria getCriteria(String name) {
+		return dataCriterias.getCriteria(name);
+	}
+	
+	public void removeCriteria(String name) {
+		dataCriterias.removeCriteria(name);
+	}
+	
+	public boolean validCriteriaName(String name) {
+		return dataCriterias.validCriteriaName(name);
+	}
+	
+	public boolean validCriteriaValues(String[] values, boolean isNumeric) {
+		return dataCriterias.validCriteriaValues(values, isNumeric);
 	}
 	
 	// evidence data manager --------------------------------------------------------------------------------------------------------------
@@ -124,7 +149,7 @@ public class DataManager {
 		this.folderPath = newData.getSaveFolder();
 		
 		this.dataParticipants.updateData(newData.getDataManagerParticipant());
-		this.dataCriterias.updateData(newData.getDataManagerCriteria());
+		this.dataCriterias.updateData(newData);
 		this.dataEvidence.updateData(newData);
 		this.dataRules.updateData(newData);
 	}

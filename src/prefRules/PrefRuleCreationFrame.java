@@ -69,10 +69,10 @@ public class PrefRuleCreationFrame extends JFrame {
 					Criteria clima = new Criteria("Clima", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
 					Criteria costo = new Criteria("Costo", new String[]{"caro", "medio", "normal", "economico"}, false);
 					Criteria dias = new Criteria("Dias", new String[]{"1", "30"}, true);
-					data.getDataManagerCriteria().addCriteria(entretenimiento);
-					data.getDataManagerCriteria().addCriteria(clima);
-					data.getDataManagerCriteria().addCriteria(costo);
-					data.getDataManagerCriteria().addCriteria(dias);
+					data.addCriteria(entretenimiento);
+					data.addCriteria(clima);
+					data.addCriteria(costo);
+					data.addCriteria(dias);
 					
 					
 					

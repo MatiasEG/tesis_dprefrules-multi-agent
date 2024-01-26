@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 import alternative.Alternative;
 import criteria.Criteria;
 import dataManager.DataManager;
-import dataManager.DataManagerCriteria;
 import dataManager.DataManagerParticipant;
 import dataManager.Priority;
 import exceptions.AgentPriorityException;
@@ -24,8 +23,8 @@ import prefRules.Rule;
 
 public class CSVreader {
 
-	public static void readCriteriasCSV(String csvFile, DataManagerCriteria oldData) throws CriteriaFileException{
-		DataManagerCriteria newData = new DataManagerCriteria(oldData.getDataManager());
+	public static void readCriteriasCSV(String csvFile, DataManager oldData) throws CriteriaFileException{
+		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
 		newData.updateData(oldData);
 		
 		List<Criteria> criterias = new ArrayList<Criteria>();
@@ -139,7 +138,7 @@ public class CSVreader {
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 			String header = "alternative";
-			for(Criteria criteria: newData.getDataManagerCriteria().getCriterias()) {
+			for(Criteria criteria: newData.getCriterias()) {
 				header += ";"+criteria.getName();
 			}
 			
@@ -147,17 +146,17 @@ public class CSVreader {
 	    		String line;
 		        while ((line = br.readLine()) != null) {
 		            String[] parts = line.split(";");
-					if (parts.length == (newData.getDataManagerCriteria().getCriterias().size()+1)) {
+					if (parts.length == (newData.getCriterias().size()+1)) {
 						String altName = parts[0].trim();
 						Alternative alt = new Alternative(altName);
 						newData.addAlternative(alt);
 						int altIndex = newData.getAlternatives().size()-1;
 						
 						for(int i=1; i<parts.length; i++) {
-							if(newData.getDataManagerCriteria().getCriterias().get(i-1).valueIsValid(parts[i].trim())) {
-								newData.getAlternatives().get(altIndex).updateOrAddCriteriaValue(newData.getDataManagerCriteria().getCriterias().get(i-1), parts[i].trim());
+							if(newData.getCriterias().get(i-1).valueIsValid(parts[i].trim())) {
+								newData.getAlternatives().get(altIndex).updateOrAddCriteriaValue(newData.getCriterias().get(i-1), parts[i].trim());
 							}else {
-				            	throw new EvidenceFileException("El criterio ("+newData.getDataManagerCriteria().getCriterias().get(i-1).getName()+") contiene una valor no valido ("+parts[i].trim()+") en el archivo de evidencia.");
+				            	throw new EvidenceFileException("El criterio ("+newData.getCriterias().get(i-1).getName()+") contiene una valor no valido ("+parts[i].trim()+") en el archivo de evidencia.");
 							}
 						}
 		            }else {
