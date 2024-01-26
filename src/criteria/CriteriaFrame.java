@@ -177,9 +177,7 @@ public class CriteriaFrame extends JFrame {
 						int index = table.getSelectedRow();
 						model.removeRow(index);
 						CriteriaFrame.this.data.removeCriteria(criteriaName);
-						for(Alternative alt : CriteriaFrame.this.data.getAlternatives()) {
-							alt.removeCriteria(criteriaName);
-						}
+						CriteriaFrame.this.data.removeEvidence(criteriaName);
 						CriteriaFrame.this.data.removeRules(criteriaName);
 						JOptionPane.showMessageDialog(null, "El criterio seleccionado fue correctamente removido");
 					}else {

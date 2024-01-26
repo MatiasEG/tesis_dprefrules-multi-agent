@@ -141,6 +141,10 @@ public class DataManager {
 		dataEvidence.removeAlternative(alternative);
 	}
 	
+	public void removeEvidence(String criteriaName) {
+		dataEvidence.removeEvidence(criteriaName);
+	}
+	
 	// rule data manager --------------------------------------------------------------------------------------------------------------
 	public void addRule(Rule rule) {
 		dataRules.addRule(rule);

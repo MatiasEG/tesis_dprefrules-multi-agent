@@ -57,8 +57,6 @@ public class Alternative {
 	
 	public String[] evidenceFileContent() {
 		String[] toString = new String[valuesObject.size()+1];
-		check(toString);
-		checkCriterias();
 		toString[0] = name;
 		List<String> values = getValues();
 		for(int i=1; i<=values.size(); i++) {
@@ -68,21 +66,11 @@ public class Alternative {
 		return toString;
 	}
 	
-	//TODO borrar --------------------------------------------------------------------------
-	private void check(String[] str) {
-		System.out.println("CHECK");
-		for(int i=0; i<str.length; i++) {
-			System.out.print(" - "+str[i]);
+	public Alternative clone() {
+		Alternative altClone = new Alternative(name);
+		for(CriteriaValue cv : valuesObject) {
+			altClone.updateOrAddCriteriaValue(cv.getCriteria(), cv.getValue());
 		}
-		System.out.println();
+		return altClone;
 	}
-	
-	private void checkCriterias() {
-		System.out.println("CHECK CRITERIAS");
-		for(int i=0; i<valuesObject.size(); i++) {
-			System.out.print(" - ("+valuesObject.get(i).getCriteria().getName()+","+valuesObject.get(i).getValue()+")");
-		}
-		System.out.println();
-	}
-	
 }

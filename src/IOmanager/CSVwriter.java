@@ -103,9 +103,7 @@ public class CSVwriter {
 //            		System.out.print(" - "+values[i]);
 //            	}
             	
-            	System.out.println();
             	for(int i=1; i<values.length; i++) {
-            		System.out.print(values[i]+" - - ");
             		if(values[i].equals("-")) {
             			writer.write(";"+data.getCriterias().get(i-1).getNoInformationValue());
             		}else {
@@ -113,7 +111,6 @@ public class CSVwriter {
             		}
             	}
             	writer.newLine();
-            	System.out.println();
             }
 
             System.out.println("Archivo CSV creado con éxito.");

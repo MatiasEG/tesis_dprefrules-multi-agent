@@ -198,7 +198,6 @@ public class CSVreader {
 						String[] premises = parts[1].split("\\s*==>\\s*");
 						if(premises.length==2 && premises[1].equals("pref(X,Y)")) {
 							boolean validation = RuleParser.analizeRule(premises[0], auxRule, newData);
-							System.out.println("Rule final --> "+auxRule.toString());
 							if(validation) {
 								if(auxRule.getBetterP().size()>0) {
 									newData.addRule(auxRule);

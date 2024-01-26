@@ -50,6 +50,12 @@ public class DataManagerEvidence {
 		}
 	}
 	
+	public void removeEvidence(String criteriaName) {
+		for(Alternative alt : alternatives) {
+			alt.removeCriteria(criteriaName);
+		}
+	}
+	
 	// check --------------------------------------------------------------------------------------------------------------
 	
 	// update --------------------------------------------------------------------------------------------------------------
@@ -59,7 +65,7 @@ public class DataManagerEvidence {
 		alternatives = new ArrayList<Alternative>();
 		
 		for(Alternative a : newData.getAlternatives()) {
-			alternatives.add(a);
+			alternatives.add(a.clone());
 		}
 	}
 }
