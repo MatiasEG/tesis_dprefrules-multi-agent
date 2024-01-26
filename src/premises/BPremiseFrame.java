@@ -148,6 +148,7 @@ public class BPremiseFrame extends JFrame {
 						textFieldYMaxValue.setColumns(10);
 						panelNumeric2.add(textFieldYMaxValue);
 					}
+					btnValidateDataAndSave.setEnabled(true);
 				}else {
 					JOptionPane.showMessageDialog(null, "Error: El criterio seleccionado no se encuentra disponible", "Advertencia", JOptionPane.WARNING_MESSAGE);
 				}
@@ -418,5 +419,18 @@ public class BPremiseFrame extends JFrame {
 		BPremiseFrame.this.rule.addBetterP(bPremise);
 		btnValidateDataAndSave.setEnabled(false);
 		JOptionPane.showMessageDialog(null, "Exito: Los datos se han guardado correctamente, ya puede cerrar esta ventana.", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+		disableEdit();
+	}
+	
+	private void disableEdit() {
+		comboBoxAvailableCriterias.setEnabled(false);
+		textFieldMinDist.setEnabled(false);
+		if(!criteria.isNumeric()) {
+			comboBoxXMinValue.setEnabled(false);
+			comboBoxYMaxValue.setEnabled(false);
+		}else {
+			textFieldXMinValue.setEnabled(false);
+			textFieldYMaxValue.setEnabled(false);
+		}
 	}
 }

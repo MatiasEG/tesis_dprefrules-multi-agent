@@ -143,6 +143,7 @@ public class EPremiseFrame extends JFrame {
 						textFieldYMaxValue.setEnabled(false);
 						panelNumeric2.add(textFieldYMaxValue);
 					}
+					btnValidateDataAndSave.setEnabled(true);
 				}else {
 					JOptionPane.showMessageDialog(null, "Error: El criterio seleccionado no se encuentra disponible", "Advertencia", JOptionPane.WARNING_MESSAGE);
 				}
@@ -261,6 +262,7 @@ public class EPremiseFrame extends JFrame {
 		contentPane.add(verticalStrut_5);
 		
 		btnValidateDataAndSave = new JButton("Validar datos y guardar");
+		btnValidateDataAndSave.setEnabled(false);
 		btnValidateDataAndSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int minXIndex = -1;
@@ -316,5 +318,19 @@ public class EPremiseFrame extends JFrame {
 		EPremiseFrame.this.rule.addEqualP(ePremise);
 		btnValidateDataAndSave.setEnabled(false);
 		JOptionPane.showMessageDialog(null, "Exito: Los datos se han guardado correctamente, ya puede cerrar esta ventana.", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+		disableEdit();
+	}
+	
+	private void disableEdit() {
+		comboBoxAvailableCriterias.setEnabled(false);
+		rdbtnMinValueX.setEnabled(false);
+		rdbtnMaxValueY.setEnabled(false);
+		if(!criteria.isNumeric()) {
+			comboBoxXMinValue.setEnabled(false);
+			comboBoxYMaxValue.setEnabled(false);
+		}else {
+			textFieldXMinValue.setEnabled(false);
+			textFieldYMaxValue.setEnabled(false);
+		}
 	}
 }

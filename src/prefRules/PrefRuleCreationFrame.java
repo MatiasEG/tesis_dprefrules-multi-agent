@@ -47,6 +47,7 @@ public class PrefRuleCreationFrame extends JFrame {
 	private JButton btnNewBPremise;
 	private JButton btnNewWPremise;
 	private JButton btnNewEPremise;
+	private JButton btnSaveRuleName;
 	
 	private Rule rule;
 	private DefaultListModel<String> listModelRuleContent;
@@ -124,7 +125,7 @@ public class PrefRuleCreationFrame extends JFrame {
 		contentPane.add(textFieldRuleName);
 		textFieldRuleName.setColumns(10);
 		
-		JButton btnSaveRuleName = new JButton("Guardar nombre");
+		btnSaveRuleName = new JButton("Guardar nombre");
 		btnSaveRuleName.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(btnSaveRuleName);
 		
@@ -164,6 +165,7 @@ public class PrefRuleCreationFrame extends JFrame {
 		btnNewBPremise.setEnabled(false);
 		btnNewBPremise.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				PrefRuleCreationFrame.this.onlyViewMod(true);
 				BPremiseFrame frame = new BPremiseFrame(PrefRuleCreationFrame.this.data, PrefRuleCreationFrame.this.rule);
 				frame.setVisible(true);
 				
@@ -172,6 +174,7 @@ public class PrefRuleCreationFrame extends JFrame {
 		            @Override
 		            public void windowClosing(WindowEvent e) {
 		            	updateRuleDescription();
+		            	PrefRuleCreationFrame.this.onlyViewMod(false);
 		            }
 		        });
 			}
@@ -290,6 +293,15 @@ public class PrefRuleCreationFrame extends JFrame {
 			btnNewEPremise.setEnabled(true);
 			btnDeletePremise.setEnabled(true);
 		}
+	}
+	
+	private void onlyViewMod(boolean onlyView) {
+		textFieldRuleName.setEnabled(!onlyView);
+		btnDeletePremise.setEnabled(!onlyView);
+		btnNewBPremise.setEnabled(!onlyView);
+		btnNewWPremise.setEnabled(!onlyView);
+		btnNewEPremise.setEnabled(!onlyView);
+		btnSaveRuleName.setEnabled(!onlyView);
 	}
 	
 	private void updateRuleDescription() {

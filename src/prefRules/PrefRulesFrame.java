@@ -42,6 +42,7 @@ public class PrefRulesFrame extends JFrame {
 	private JButton btnNewRule;
 	private JButton btnLoadFile;
 	private JButton btnSaveFile;
+	private JButton btnEditRulePreferences;
 	
 	private DefaultListModel<String> listModelRules;
 	private JList<String> listRules;
@@ -156,6 +157,7 @@ public class PrefRulesFrame extends JFrame {
 		btnNewRule = new JButton("Nueva regla");
 		btnNewRule.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				PrefRulesFrame.this.onlyViewMod(true);
 				PrefRuleCreationFrame frame = new PrefRuleCreationFrame(PrefRulesFrame.this.data, null);
 				frame.setVisible(true);
 				
@@ -164,6 +166,7 @@ public class PrefRulesFrame extends JFrame {
 		            @Override
 		            public void windowClosing(WindowEvent e) {
 		            	updateRules();
+		            	PrefRulesFrame.this.onlyViewMod(false);
 		            }
 		        });
 			}
@@ -273,7 +276,7 @@ public class PrefRulesFrame extends JFrame {
 		panelPreferences.setPreferredSize(panelBtnDimensions);
 		panelPreferences.setMaximumSize(panelBtnDimensions);
 		
-		JButton btnEditRulePreferences = new JButton("Definir preferencias");
+		btnEditRulePreferences = new JButton("Definir preferencias");
 		panelPreferences.add(btnEditRulePreferences);
 		btnEditRulePreferences.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -296,13 +299,12 @@ public class PrefRulesFrame extends JFrame {
 	}
 	
 	private void onlyViewMod(boolean onlyView) {
-		if(onlyView) {
-			btnEditRule.setEnabled(false);
-			btnDeleteRule.setEnabled(false);
-			btnNewRule.setEnabled(false);
-			btnLoadFile.setEnabled(false);
-			btnSaveFile.setEnabled(false);
-		}
+		btnEditRule.setEnabled(!onlyView);
+		btnDeleteRule.setEnabled(!onlyView);
+		btnNewRule.setEnabled(!onlyView);
+		btnLoadFile.setEnabled(!onlyView);
+		btnSaveFile.setEnabled(!onlyView);
+		btnEditRulePreferences.setEnabled(!onlyView);
 	}
 	
 	private void updateRules(DataManager data) {

@@ -11,7 +11,6 @@ import IOmanager.CSVwriter;
 import IOmanager.FileChooser;
 import dataManager.DataManager;
 import exceptions.AgentPriorityException;
-
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 
@@ -25,6 +24,8 @@ import java.awt.FlowLayout;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 
 public class ParticipantFrame extends JFrame {
@@ -170,8 +171,18 @@ public class ParticipantFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String validation = canDefineAgentPriority(ParticipantFrame.this.data);
 				if(validation.equals("OK")) {
+					ParticipantFrame.this.viewOnlyMod(true);
 					ParticipantPriorityFrame frame = new ParticipantPriorityFrame(ParticipantFrame.this.data, false);
 					frame.setVisible(true);
+					
+					// WindowListener for detect when the frame is closed
+					frame.addWindowListener(new WindowAdapter() {
+			            @Override
+			            public void windowClosing(WindowEvent e) {
+			            	ParticipantFrame.this.viewOnlyMod(false);
+			            }
+			        });
+					
 				}else {
 					JOptionPane.showMessageDialog(null, validation, "Advertencia", JOptionPane.WARNING_MESSAGE);
 				}
@@ -187,13 +198,11 @@ public class ParticipantFrame extends JFrame {
 	}
 	
 	private void viewOnlyMod(boolean viewOnly) {
-		if(viewOnly) {
-			btnLoadFile.setEnabled(false);
-			btnAddUser.setEnabled(false);;
-			btnDeleteUser.setEnabled(false);;
-			btnEditParticipantsPriority.setEnabled(false);;
-			btnSaveParticipantsFile.setEnabled(false);
-		}
+		btnLoadFile.setEnabled(!viewOnly);
+		btnAddUser.setEnabled(!viewOnly);;
+		btnDeleteUser.setEnabled(!viewOnly);;
+		btnEditParticipantsPriority.setEnabled(!viewOnly);;
+		btnSaveParticipantsFile.setEnabled(!viewOnly);
 	}
 	
 	private void deleteSelectedParticipant() {
