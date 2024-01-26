@@ -58,7 +58,7 @@ public class CriteriaFrame extends JFrame {
 			public void run() {
 				try {
 					DataManager data = new DataManager("ruleTest","C:\\Users\\Matia\\Desktop\\Archivos");
-					data.getDataManagerParticipant().addParticipant(new Participant("Matias"));
+					data.addParticipant(new Participant("Matias"));
 					
 					Criteria days = new Criteria("days", new String[]{"1","30"}, true);
 					Criteria entrmnt = new Criteria("entrmnt", new String[]{"vbad","bad","reg","good","vgood"}, false);

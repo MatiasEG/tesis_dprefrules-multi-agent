@@ -3,6 +3,7 @@ package dataManager;
 import java.util.List;
 import alternative.Alternative;
 import criteria.Criteria;
+import participant.Participant;
 import prefRules.Rule;
 
 public class DataManager {
@@ -30,8 +31,64 @@ public class DataManager {
 	}
 	
 	// participants data manager --------------------------------------------------------------------------------------------------------------
-	public DataManagerParticipant getDataManagerParticipant() {
-		return dataParticipants;
+	public void addParticipant(Participant newParticipant) {
+		dataParticipants.addParticipant(newParticipant);
+	}
+	
+	public void addParticipantsPriority(Priority newParticipantsPriority) {
+		dataParticipants.addParticipantsPriority(newParticipantsPriority);
+	}
+	
+	public void addParticipantsPriorityTransitive(Priority newParticipantsPriority) {
+		dataParticipants.addParticipantsPriorityTransitive(newParticipantsPriority);
+	}
+	
+	public void setParticipantsPriorityTransitive(List<Priority> participantsPriorityTransitive){
+		dataParticipants.setParticipantsPriorityTransitive(participantsPriorityTransitive);
+	}
+	
+	public void setParticipants(List<Participant> participants) {
+		dataParticipants.setParticipants(participants);
+	}
+	
+	public void setParticipantsPriority(List<Priority> participantsPriority) {
+		dataParticipants.setParticipantsPriority(participantsPriority);
+	}
+	
+	public Participant getParticipantByName(String name) {
+		return dataParticipants.getParticipantByName(name);
+	}
+	
+	public List<Participant> getParticipants(){
+		return dataParticipants.getParticipants();
+	}
+	
+	public List<String> getParticipantsNames() {
+		return dataParticipants.getParticipantsNames();
+	}
+	
+	public String[] getParticipantsArrayString() {
+		return dataParticipants.getParticipantsArrayString();
+	}
+	
+	public List<Priority> getParticipantsPriority(){
+		return dataParticipants.getParticipantsPriority();
+	}
+	
+	public List<Priority> getParticipantsPriorityTransitive(){
+		return dataParticipants.getParticipantsPriorityTransitive();
+	}
+	
+	public void removeParticipant(String participant) {
+		dataParticipants.removeParticipant(participant);
+	}
+	
+	public boolean validParticipantName(String name) {
+		return dataParticipants.validParticipantName(name);
+	}
+	
+	public void checkParticipantsPriorityTransitivity() {
+		dataParticipants.checkParticipantsPriorityTransitivity();
 	}
 	
 	// criteria data manager --------------------------------------------------------------------------------------------------------------
@@ -148,7 +205,7 @@ public class DataManager {
 		this.projectName = newData.getProjectName();
 		this.folderPath = newData.getSaveFolder();
 		
-		this.dataParticipants.updateData(newData.getDataManagerParticipant());
+		this.dataParticipants.updateData(newData);
 		this.dataCriterias.updateData(newData);
 		this.dataEvidence.updateData(newData);
 		this.dataRules.updateData(newData);

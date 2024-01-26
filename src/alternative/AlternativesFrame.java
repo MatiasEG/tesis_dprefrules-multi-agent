@@ -52,7 +52,7 @@ public class AlternativesFrame extends JFrame {
 			public void run() {
 				try {
 					DataManager data = new DataManager("evidenceTest","C:\\Users\\Matia\\Desktop\\Archivos");
-					data.getDataManagerParticipant().addParticipant(new Participant("Matias"));
+					data.addParticipant(new Participant("Matias"));
 					
 					//Criteria entretenimiento = new Criteria("Entretenimiento", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
 					//Criteria clima = new Criteria("Clima", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);

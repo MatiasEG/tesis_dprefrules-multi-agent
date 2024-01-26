@@ -63,7 +63,7 @@ public class PrefRuleCreationFrame extends JFrame {
 				try {
 					
 					DataManager data = new DataManager("ruleTest","C:\\Users\\Matia\\Desktop\\tesis_dprefrules-multi-agent\\src\\files");
-					data.getDataManagerParticipant().addParticipant(new Participant("Matias"));
+					data.addParticipant(new Participant("Matias"));
 					
 					Criteria entretenimiento = new Criteria("Entretenimiento", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
 					Criteria clima = new Criteria("Clima", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);

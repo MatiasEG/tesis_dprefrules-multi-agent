@@ -58,7 +58,7 @@ public class Priority {
 		return "OK";
 	}
 	
-	public String isValid(DataManagerParticipant data) {
+	public String isValid(DataManager data) {
 		List<Priority> participants = data.getParticipantsPriority();
 		for(Priority pprior: participants) {
 			if(pprior.getLessPriority().equals(lessPriority) && pprior.getMorePriority().equals(morePriority)) {

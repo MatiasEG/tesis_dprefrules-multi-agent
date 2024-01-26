@@ -123,7 +123,7 @@ public class PrefRulePreferencesFrame extends JFrame {
 		JLabel lblNewLabel_2 = new JLabel("El participante");
 		panelPreference.add(lblNewLabel_2);
 		
-		comboBoxParticipant = new JComboBox<String>(data.getDataManagerParticipant().getParticipantsArrayString());
+		comboBoxParticipant = new JComboBox<String>(data.getParticipantsArrayString());
 		panelPreference.add(comboBoxParticipant);
 		
 		JLabel lblNewLabel_3 = new JLabel("prefiere la regla");
@@ -155,10 +155,10 @@ public class PrefRulePreferencesFrame extends JFrame {
 					String worstRule = (String) comboBoxWorst.getSelectedItem();
 					if(!bestRule.equals(worstRule)) {
 						Priority prior = new Priority(bestRule, worstRule);
-						String validation = prior.isValid(PrefRulePreferencesFrame.this.data.getDataManagerParticipant().getParticipantByName(participantName));
+						String validation = prior.isValid(PrefRulePreferencesFrame.this.data.getParticipantByName(participantName));
 						if(validation.equals("OK")) {
-							PrefRulePreferencesFrame.this.data.getDataManagerParticipant().getParticipantByName(participantName).addPreference(prior);
-							int index = PrefRulePreferencesFrame.this.data.getDataManagerParticipant().getParticipantByName(participantName).getPreferences().size()-1;
+							PrefRulePreferencesFrame.this.data.getParticipantByName(participantName).addPreference(prior);
+							int index = PrefRulePreferencesFrame.this.data.getParticipantByName(participantName).getPreferences().size()-1;
 							listModelRulePriority.addElement("El participante <"+participantName+"("+index+")> considera que la regla "+bestRule+" tiene mayor prioridad que la regla "+worstRule);
 							updateRulePriorityTransitiveList();
 						}else {
@@ -188,7 +188,7 @@ public class PrefRulePreferencesFrame extends JFrame {
 				int selectedIndex = listPriority.getSelectedIndex();
 		        if (selectedIndex != -1) {
 		        	String[] participantAndIndex =  extraerDatos(listPriority.getSelectedValue());
-		        	Participant participant = PrefRulePreferencesFrame.this.data.getDataManagerParticipant().getParticipantByName(participantAndIndex[0]);
+		        	Participant participant = PrefRulePreferencesFrame.this.data.getParticipantByName(participantAndIndex[0]);
 		        	Priority prior = participant.getPreferences().get(Integer.parseInt(participantAndIndex[1]));
 		        	
 		        	int option = JOptionPane.showConfirmDialog(PrefRulePreferencesFrame.this,
@@ -238,8 +238,8 @@ public class PrefRulePreferencesFrame extends JFrame {
 	
 	private void updateIndexRulePriority() {
 		listModelRulePriority.removeAllElements();
-		for(int i=0; i<data.getDataManagerParticipant().getParticipants().size(); i++) {
-			Participant participant = data.getDataManagerParticipant().getParticipants().get(i);
+		for(int i=0; i<data.getParticipants().size(); i++) {
+			Participant participant = data.getParticipants().get(i);
 			for(int index=0; index<participant.getPreferences().size(); index++) {
 				listModelRulePriority.addElement("El participante <"+participant.getName()+"("+index+")> considera que la regla "+participant.getPreferences().get(index).getMorePriority()+" tiene mayor prioridad que la regla "+participant.getPreferences().get(index).getLessPriority());
 			}
@@ -248,7 +248,7 @@ public class PrefRulePreferencesFrame extends JFrame {
 	
 	private void updateRulePriorityTransitiveList() {
 		listModelParticipantsPriorityTransitive.removeAllElements();
-		for(Participant participant : data.getDataManagerParticipant().getParticipants()) {
+		for(Participant participant : data.getParticipants()) {
 			participant.checkRulePriorityTransitivity();
 			for(Priority prior : participant.getPreferencesTransitive()) {
 				listModelParticipantsPriorityTransitive.addElement("El participante "+participant.getName()+" considera que la regla "+prior.getMorePriority()+" tiene mayor prioridad que la regla "+prior.getLessPriority());

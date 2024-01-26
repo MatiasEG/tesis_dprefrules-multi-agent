@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 import alternative.Alternative;
 import criteria.Criteria;
 import dataManager.DataManager;
-import dataManager.DataManagerParticipant;
 import dataManager.Priority;
 import exceptions.AgentPriorityException;
 import exceptions.CriteriaFileException;
@@ -25,7 +24,8 @@ public class CSVreader {
 
 	public static void readCriteriasCSV(String csvFile, DataManager oldData) throws CriteriaFileException{
 		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
-		newData.updateData(oldData);
+		newData.setParticipants(oldData.getParticipants());
+		newData.setParticipantsPriority(oldData.getParticipantsPriority());
 		
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
@@ -89,9 +89,10 @@ public class CSVreader {
     }
 	
 	
-	public static void readAgentPriorityCSV(String csvFile, DataManagerParticipant oldData) throws AgentPriorityException {
-		DataManagerParticipant newData = new DataManagerParticipant(oldData.getDataManager());
-		newData.updateData(oldData);
+	public static void readAgentPriorityCSV(String csvFile, DataManager oldData) throws AgentPriorityException {
+		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
+		newData.setCriterias(oldData.getCriterias());
+		newData.setAlternatives(oldData.getAlternatives());
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 	    	if(br.readLine().equals("priority_order")) {
@@ -134,7 +135,10 @@ public class CSVreader {
 	
 	public static void readEvidenceCSV(String csvFile, DataManager oldData) throws EvidenceFileException {
 		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
-		newData.updateData(oldData);
+		newData.setCriterias(oldData.getCriterias());
+		newData.setParticipants(oldData.getParticipants());
+		newData.setParticipantsPriority(oldData.getParticipantsPriority());
+		newData.setParticipantsPriorityTransitive(oldData.getParticipantsPriorityTransitive());
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 			String header = "alternative";
@@ -174,7 +178,11 @@ public class CSVreader {
 	
 	public static void readRulesCSV(String csvFile, DataManager oldData) throws RuleFileErrorException {
 		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
-		newData.updateData(oldData);
+		newData.setCriterias(oldData.getCriterias());
+		newData.setParticipants(oldData.getParticipants());
+		newData.setParticipantsPriority(oldData.getParticipantsPriority());
+		newData.setParticipantsPriorityTransitive(oldData.getParticipantsPriorityTransitive());
+		newData.setAlternatives(oldData.getAlternatives());
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 			String header = "id;rule";
@@ -220,7 +228,7 @@ public class CSVreader {
 	public static void readRulePriorityCSV(String csvFile, DataManager oldData) throws RulePriorityException {
 		DataManager newData = new DataManager(oldData.getProjectName(), oldData.getSaveFolder());
 		newData.updateData(oldData);
-		for(Participant participant : newData.getDataManagerParticipant().getParticipants()) {
+		for(Participant participant : newData.getParticipants()) {
 			participant.setRulePriority(new ArrayList<Priority>());
 		}
 		
@@ -233,7 +241,7 @@ public class CSVreader {
 		        		String participantName = namePref[0].trim();
 						String rulePreferences = namePref[1].trim();
 						
-						Participant participant = newData.getDataManagerParticipant().getParticipantByName(participantName);
+						Participant participant = newData.getParticipantByName(participantName);
 						if(participant!=null) {
 							String[] preferences = rulePreferences.split(",");
 							for(String preference : preferences) {
