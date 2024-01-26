@@ -12,6 +12,7 @@ public class DataManagerParticipant {
 	protected List<Priority> participantsPriorityTransitive;
 	
 	protected DataManager data;
+	protected boolean dataValidated;
 	
 	public DataManagerParticipant(DataManager data) {
 		this.data = data;
@@ -48,6 +49,10 @@ public class DataManagerParticipant {
 	}
 	
 	// get --------------------------------------------------------------------------------------------------------------
+	public DataManager getDataManager() {
+		return data;
+	}
+	
 	public Participant getParticipantByName(String name) {
 		for(Participant agent : participants) {
 			if(agent.getName().equals(name)) {
@@ -126,8 +131,8 @@ public class DataManagerParticipant {
 	}
 	
 	// update --------------------------------------------------------------------------------------------------------------
-	public void updateData(DataManager newData) {
-		this.data = newData;
+	public void updateData(DataManagerParticipant newData) {
+		this.data = newData.getDataManager();
 		
 		participants = new ArrayList<Participant>();
 		participantsPriority = new ArrayList<Priority>();
@@ -142,5 +147,14 @@ public class DataManagerParticipant {
 		for(Priority p : newData.getParticipantsPriorityTransitive()) {
 			participantsPriorityTransitive.add(p);
 		}
+	}
+	
+	// data validated --------------------------------------------------------------------------------------------------------------
+	public void setDataValidated() {
+		dataValidated = true;
+	}
+	
+	public boolean getDataValidated() {
+		return dataValidated;
 	}
 }

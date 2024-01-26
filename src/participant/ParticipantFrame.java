@@ -10,6 +10,7 @@ import IOmanager.CSVreader;
 import IOmanager.CSVwriter;
 import IOmanager.FileChooser;
 import dataManager.DataManager;
+import dataManager.DataManagerParticipant;
 import exceptions.AgentPriorityException;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -41,7 +42,7 @@ public class ParticipantFrame extends JFrame {
 	
 	private DefaultListModel<String> listModelParticipants;
     private JList<String> listParticipants;
-    private DataManager data;
+    private DataManagerParticipant data;
     
 	/**
 	 * Launch the application.
@@ -50,7 +51,9 @@ public class ParticipantFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ParticipantFrame frame = new ParticipantFrame(new DataManager("",""), false);
+					DataManager dm = new DataManager("","");
+					
+					ParticipantFrame frame = new ParticipantFrame(new DataManagerParticipant(dm), false);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -62,7 +65,7 @@ public class ParticipantFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ParticipantFrame(DataManager data, boolean viewOnly) {
+	public ParticipantFrame(DataManagerParticipant data, boolean viewOnly) {
 		this.data = data;
 		
 		setTitle("Definir participantes");
@@ -221,7 +224,7 @@ public class ParticipantFrame extends JFrame {
         }
     }
 	
-	private void addParticipantName(DataManager data) {
+	private void addParticipantName(DataManagerParticipant data) {
         String name = JOptionPane.showInputDialog(this, "Ingrese el nombre del participante que desea agregar:");
         if(data.validParticipantName(name)) {
         	listModelParticipants.addElement(name);
@@ -231,14 +234,14 @@ public class ParticipantFrame extends JFrame {
         }
     }
 	
-	private void updateVisualComponents(DataManager data) {		
+	private void updateVisualComponents(DataManagerParticipant data) {		
 		listModelParticipants.clear();
 		for(String agent: data.getParticipantsNames()) {
 			listModelParticipants.addElement(agent);
 		}
 	}
 	
-	private String canDefineAgentPriority(DataManager data) {
+	private String canDefineAgentPriority(DataManagerParticipant data) {
 		if(data.getParticipants().size()>1) {
 			return "OK";
 		}else {

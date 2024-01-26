@@ -183,18 +183,18 @@ public class MainWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				dataClone = data.clone();
 				
-				ParticipantFrame frame = new ParticipantFrame(dataClone, false);
+				ParticipantFrame frame = new ParticipantFrame(dataClone.getDataManagerParticipant(), false);
 		        frame.setVisible(true);
 		        
 		        if(state<1) state = 1;
 		        MainWindow.this.modifyingData = false;
-		        if(data.getParticipants().size()>0) modifyingData = true;
+		        if(data.getDataManagerParticipant().getParticipants().size()>0) modifyingData = true;
 		        
 		        // WindowListener for detect when the frame is closed
 		        frame.addWindowListener(new WindowAdapter() {
 		            @Override
 		            public void windowClosing(WindowEvent e) {
-		            	if(dataClone.getDataValidated()) {
+		            	if(dataClone.getDataManagerParticipant().getDataValidated()) {
 		            		data.updateData(dataClone);
 		            	}else {
 		            		// The user close the window without save.
@@ -202,7 +202,7 @@ public class MainWindow extends JFrame {
 		            	dataClone = null;
 		            	
 		            	if(!modifyingData) {
-			                if(data.getParticipants().size()>0) {
+			                if(data.getDataManagerParticipant().getParticipants().size()>0) {
 			                	setState2(false);
 			                }else {
 			                	setState1(false);
@@ -222,7 +222,7 @@ public class MainWindow extends JFrame {
 		btnViewParticipants = new JButton("Ver participantes y prioridades");
 		btnViewParticipants.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ParticipantFrame frame = new ParticipantFrame(data, true);
+				ParticipantFrame frame = new ParticipantFrame(data.getDataManagerParticipant(), true);
 		        frame.setVisible(true);
 			}
 		});

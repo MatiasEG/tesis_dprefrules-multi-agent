@@ -5,6 +5,7 @@ import java.io.IOException;
 import alternative.Alternative;
 import criteria.Criteria;
 import dataManager.DataManager;
+import dataManager.DataManagerParticipant;
 import dataManager.Priority;
 import participant.Participant;
 import prefRules.Rule;
@@ -55,8 +56,8 @@ public class CSVwriter {
 		return values;
 	}
 	
-	public static void saveAgentPriorityToCSV(DataManager data) {
-		String filePath = data.getSaveFolder()+"\\"+data.getProjectName()+"_participants_priority_order.csv";
+	public static void saveAgentPriorityToCSV(DataManagerParticipant data) {
+		String filePath = data.getDataManager().getSaveFolder()+"\\"+data.getDataManager().getProjectName()+"_participants_priority_order.csv";
 		filePath = checkCSVextension(filePath);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
 
@@ -160,7 +161,7 @@ public class CSVwriter {
             writer.newLine();
 
             // write data
-            for(Participant participant : data.getParticipants()) {
+            for(Participant participant : data.getDataManagerParticipant().getParticipants()) {
             	writer.write(participant.getName()+";");
             	for(int i=0; i<participant.getPreferences().size(); i++) {
             		writer.write(participant.getPreferences().get(i).getPriorityFormatted());

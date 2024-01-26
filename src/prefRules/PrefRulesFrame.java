@@ -56,7 +56,7 @@ public class PrefRulesFrame extends JFrame {
 			public void run() {
 				try {
 					DataManager data = new DataManager("evidenceTest","C:\\Users\\Matia\\Desktop\\Archivos");
-					data.addParticipant(new Participant("Matias"));
+					data.getDataManagerParticipant().addParticipant(new Participant("Matias"));
 					
 					Criteria days = new Criteria("days", new String[]{"1","30"}, true);
 					Criteria entrmnt = new Criteria("entrmnt", new String[]{"vbad","bad","reg","good","vgood"}, false);

@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import dataManager.DataManager;
+import dataManager.DataManagerParticipant;
 import dataManager.Priority;
 
 import javax.swing.BoxLayout;
@@ -35,12 +35,12 @@ public class ParticipantPriorityFrame extends JFrame {
     private JButton btnAddPriority;
     private JButton btnDeletePriority;
 
-	private DataManager data;
+	private DataManagerParticipant data;
 
 	/**
 	 * Create the frame.
 	 */
-	public ParticipantPriorityFrame(DataManager data, boolean onlyView) {
+	public ParticipantPriorityFrame(DataManagerParticipant data, boolean onlyView) {
 		this.data = data;
 		
 		setTitle("Prioridades entre agentes");
@@ -104,10 +104,10 @@ public class ParticipantPriorityFrame extends JFrame {
 					String bestAgent = (String) comboBoxBest.getSelectedItem();
 					String worstAgent = (String) comboBoxWorst.getSelectedItem();
 					if(!bestAgent.equals(worstAgent)) {
-						Priority pprior = new Priority(bestAgent, worstAgent);
-						String validation = pprior.isValid(ParticipantPriorityFrame.this.data);
+						Priority prior = new Priority(bestAgent, worstAgent);
+						String validation = prior.isValid(ParticipantPriorityFrame.this.data);
 						if(validation.equals("OK")) {
-							ParticipantPriorityFrame.this.data.addParticipantsPriority(pprior);
+							ParticipantPriorityFrame.this.data.addParticipantsPriority(prior);
 							listModelParticipantsPriority.addElement("El participante "+bestAgent+" tiene mayor prioridad que el participante "+worstAgent);
 							updateParticipantsPriorityTransitiveList();
 						}else {
