@@ -120,17 +120,10 @@ public class RuleParser {
 		matcher.find();
         String minDistCriteriaName = matcher.group(2);
         String minDistValueString = matcher.group(3);
-        int minDistValue = 0;
-        
-        try {
-        	minDistValue = Integer.parseInt(minDistValueString);
-        }catch(NumberFormatException e) {
-        	JOptionPane.showMessageDialog(null, "Error: Existe un valor invalido en la regla "+rule.getName()+" en el campo \"min_dist\".", "Advertencia", JOptionPane.WARNING_MESSAGE);
-        }
         
         if(minDistCriteriaName.equals(bPremise.getCriteria().getName())) {
-        	if(bPremise.validMinDistValue(minDistValue)) {
-        		bPremise.setMinDist(minDistValue);
+        	if(bPremise.validMinDistValue(minDistValueString)) {
+        		bPremise.setMinDist(minDistValueString);
         		index++;
         		if(index==conditions.length) {
             		return true;
@@ -276,17 +269,10 @@ public class RuleParser {
 		matcher.find();
         String maxDistCriteriaName = matcher.group(2);
         String maxDistValueString = matcher.group(3);
-        int maxDistValue = 0;
-        
-        try {
-        	maxDistValue = Integer.parseInt(maxDistValueString);
-        }catch(NumberFormatException e) {
-        	JOptionPane.showMessageDialog(null, "Error: Existe un valor invalido en la regla "+rule.getName()+" en el campo \"max_dist\".", "Advertencia", JOptionPane.WARNING_MESSAGE);
-        }
         
         if(maxDistCriteriaName.equals(wPremise.getCriteria().getName())) {
-        	if(wPremise.validMaxDistValue(maxDistValue)) {
-        		wPremise.setMaxDist(maxDistValue);
+        	if(wPremise.validMaxDistValue(maxDistValueString)) {
+        		wPremise.setMaxDist(maxDistValueString);
         		index++;
         		if(index==conditions.length) {
             		return true;
