@@ -19,14 +19,29 @@ public class WPremise extends Premise{
 		this.maxDistBetweenXY = maxDistBetweenXY;
 	}
 	
-	public boolean validMaxDistValue(int maxDist) {
-		if(!criteria.isNumeric()) {
-			if(maxDist>criteria.getValues().length || maxDist<0) {
+	public void setMaxDist(String maxDist) {
+		if(!maxDist.equals("-")) {
+			this.maxDistBetweenXY = Integer.parseInt(maxDist);
+		}
+	}
+	
+	public boolean validMaxDistValue(String maxDistString) {
+		if(!maxDistString.equals("-")) {
+			int maxDist = 0;
+			try {
+				maxDist = Integer.parseInt(maxDistString);
+			}catch(NumberFormatException e) {
 				return false;
 			}
-		}else {
-			if(maxDist>(Integer.parseInt(criteria.getValues()[1])-Integer.parseInt(criteria.getValues()[0])) || maxDist<0) {
-				return false;
+		
+			if(!criteria.isNumeric()) {
+				if(maxDist>criteria.getValues().length || maxDist<0) {
+					return false;
+				}
+			}else {
+				if(maxDist>(Integer.parseInt(criteria.getValues()[1])-Integer.parseInt(criteria.getValues()[0])) || maxDist<0) {
+					return false;
+				}
 			}
 		}
 		return true;

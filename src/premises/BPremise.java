@@ -19,14 +19,29 @@ public class BPremise extends Premise{
 		this.minDistBetweenXY = minDist;
 	}
 	
-	public boolean validMinDistValue(int minDist) {
-		if(!criteria.isNumeric()) {
-			if(minDist>criteria.getValues().length || minDist<0) {
+	public void setMinDist(String minDist) {
+		if(!minDist.equals("-")) {
+			this.minDistBetweenXY = Integer.parseInt(minDist);
+		}
+	}
+	
+	public boolean validMinDistValue(String minDistString) {
+		if(!minDistString.equals("-")) {
+			int minDist = 0;
+			try {
+				minDist = Integer.parseInt(minDistString);
+			}catch(NumberFormatException e) {
 				return false;
 			}
-		}else {
-			if(minDist>(Integer.parseInt(criteria.getValues()[1])-Integer.parseInt(criteria.getValues()[0])) || minDist<0) {
-				return false;
+			
+			if(!criteria.isNumeric()) {
+				if(minDist>criteria.getValues().length || minDist<0) {
+					return false;
+				}
+			}else {
+				if(minDist>(Integer.parseInt(criteria.getValues()[1])-Integer.parseInt(criteria.getValues()[0])) || minDist<0) {
+					return false;
+				}
 			}
 		}
 		return true;

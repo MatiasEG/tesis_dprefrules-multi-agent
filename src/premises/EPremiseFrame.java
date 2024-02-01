@@ -52,6 +52,7 @@ public class EPremiseFrame extends JFrame {
 	private DataManager data;
 	private Rule rule;
 	private boolean minXValueDefined;
+	private EPremise ePremise;
 
 	/**
 	 * Launch the application.
@@ -86,7 +87,6 @@ public class EPremiseFrame extends JFrame {
 		lblNewLabel_5.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(lblNewLabel_5);
 		
-		// TODO ver si definir las opciones asi esta bien o si debo agregar algun elemento o algo
 		comboBoxAvailableCriterias = new JComboBox<String>(rule.getAvailableCriterias(data));
 		contentPane.add(comboBoxAvailableCriterias);
 		
@@ -103,6 +103,7 @@ public class EPremiseFrame extends JFrame {
 					lblCriteria2.setText("en el criterio "+criteria.getName()+".");
 					btnValidateDataAndSave.setEnabled(true);
 					btnConfirmCriteria.setEnabled(false);
+					ePremise = new EPremise(criteria);
 					
 					if(!criteria.isNumeric()) {
 						lblSelectedCriteriaValues.setText("["+criteria.getCriteriaValuesString()+"]");
@@ -265,56 +266,45 @@ public class EPremiseFrame extends JFrame {
 		btnValidateDataAndSave.setEnabled(false);
 		btnValidateDataAndSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int minXIndex = -1;
-				int maxYIndex = -1;
+				boolean valid = true;
 				
-				String valueDefined = "";
-				int auxIndexDefined = -1;
-				
-				if(!criteria.isNumeric()) {
-					valueDefined = (String)comboBoxXMinValue.getSelectedItem();
-					
-					for(int i=0; i<criteria.getValues().length; i++) {
-						if(criteria.getValues()[i].equals(valueDefined)) {
-							auxIndexDefined = i;
-						}
-						if(auxIndexDefined!=-1) break;
-					}
-				}else {
-					valueDefined = textFieldXMinValue.getText();
-					
-					if(!valueDefined.equals("-")) {
-						try {
-							auxIndexDefined = Integer.parseInt(valueDefined);
-							
-							if((auxIndexDefined<Integer.parseInt(criteria.getValues()[0]) || auxIndexDefined>Integer.parseInt(criteria.getValues()[1]))) {
-								JOptionPane.showMessageDialog(null, "Error: El valor definido no esta dentro del rango permitido para el criterio.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-								return;
-							}
-							
-						}catch(NumberFormatException e) {
-							JOptionPane.showMessageDialog(null, "Error: Los valores definidos son incorrectos, solo pueden definirse numeros.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-							return;
-						}
-					}
-				}
+				String value = "";
 				
 				if(minXValueDefined) {
-					minXIndex = auxIndexDefined;
+					if(!criteria.isNumeric()) {
+						value = (String)comboBoxXMinValue.getSelectedItem();
+					}else {
+						value = textFieldXMinValue.getText();
+					}
+					if(ePremise.validMinXValue(value)) {
+						ePremise.setMinValueForX(value);
+					}else {
+						JOptionPane.showMessageDialog(null, "Error: El valor minimo para X ingresado no es valida.", "Advertencia", JOptionPane.ERROR_MESSAGE);
+						valid = false;
+					}
 				}else {
-					maxYIndex = auxIndexDefined;
+					if(!criteria.isNumeric()) {
+						value = (String)comboBoxYMaxValue.getSelectedItem();
+					}else {
+						value = textFieldYMaxValue.getText();
+					}
+					if(ePremise.validMaxYValue(value)) {
+						ePremise.setMaxValueForY(value);
+					}else {
+						JOptionPane.showMessageDialog(null, "Error: El valor minimo para X ingresado no es valida.", "Advertencia", JOptionPane.ERROR_MESSAGE);
+						valid = false;
+					}
 				}
-				saveData(minXIndex, maxYIndex);
+				if(valid) {
+					saveData();
+				}
 			}
 		});
 		btnValidateDataAndSave.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(btnValidateDataAndSave);
 	}
 	
-	private void saveData(int minXIndex, int maxYIndex) {
-		EPremise ePremise = new EPremise(criteria);
-		ePremise.setMinValueForX(minXIndex);
-		ePremise.setMaxValueForY(maxYIndex);
+	private void saveData() {
 		EPremiseFrame.this.rule.addEqualP(ePremise);
 		btnValidateDataAndSave.setEnabled(false);
 		JOptionPane.showMessageDialog(null, "Exito: Los datos se han guardado correctamente, ya puede cerrar esta ventana.", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
