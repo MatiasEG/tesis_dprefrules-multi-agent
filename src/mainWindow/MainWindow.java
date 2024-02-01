@@ -29,8 +29,10 @@ import java.awt.Dimension;
 import javax.swing.Box;
 import java.awt.FlowLayout;
 
+@SuppressWarnings("serial")
 public class MainWindow extends JFrame {
-	private static final long serialVersionUID = 1L;
+	public static boolean intoSystemFlag = true;
+	
 	private JPanel contentPane;
     public JButton btnEditNameAndFolder;
     public JButton btnViewNameAndFolder;
@@ -44,6 +46,7 @@ public class MainWindow extends JFrame {
     public JButton btnViewRules;
     public JButton btnSaveFiles;
     private JButton btnManual;
+    private JPanel panelBtnSaveFolder;
 
 	private DataManager data;
 	private DataManager dataClone;
@@ -58,8 +61,13 @@ public class MainWindow extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainWindow frame = new MainWindow(new Scout());
+					Scout scout = new Scout();
+					MainWindow frame = new MainWindow(scout);
 					frame.setVisible(true);
+					
+					if(scout.isDataSaved()) {
+						System.out.println("Datos guardadossssssssssssssssssssssssssssssssssssss");
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -77,7 +85,7 @@ public class MainWindow extends JFrame {
 		
 		setTitle("Sistema de Decision Multi-Agente");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 700, 506);
+		setBounds(100, 100, 700, 450);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -91,28 +99,34 @@ public class MainWindow extends JFrame {
 		btnManual.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(btnManual);
 		
-		Component verticalStrut_2 = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut_2);
-		
-		JPanel panelSaveFolder = new JPanel();
-		contentPane.add(panelSaveFolder);
-		panelSaveFolder.setLayout(new BoxLayout(panelSaveFolder, BoxLayout.Y_AXIS));
-		
-		JLabel lblNewLabel_5 = new JLabel("- Ingrese un nombre para el problema y selecciones una carpeta donde desea guardar los archivos resultantes -");
-		lblNewLabel_5.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panelSaveFolder.add(lblNewLabel_5);
-		
-		JPanel panelBtnSaveFolder = new JPanel();
-		panelSaveFolder.add(panelBtnSaveFolder);
-		panelBtnSaveFolder.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
 		btnEditNameAndFolder = new JButton("Definir nombre y carpeta");
-		panelBtnSaveFolder.add(btnEditNameAndFolder);
-		btnEditNameAndFolder.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
 		btnViewNameAndFolder = new JButton("Ver nombre y carpeta");
-		panelBtnSaveFolder.add(btnViewNameAndFolder);
-		btnViewNameAndFolder.setAlignmentX(Component.CENTER_ALIGNMENT);
+		if(!MainWindow.intoSystemFlag) {
+			state.setState(1);
+			
+			Component verticalStrut_2 = Box.createVerticalStrut(20);
+			contentPane.add(verticalStrut_2);
+			
+			JPanel panelSaveFolder = new JPanel();
+			contentPane.add(panelSaveFolder);
+			panelSaveFolder.setLayout(new BoxLayout(panelSaveFolder, BoxLayout.Y_AXIS));
+			
+			JLabel lblNewLabel_5 = new JLabel("- Ingrese un nombre para el problema y selecciones una carpeta donde desea guardar los archivos resultantes -");
+			lblNewLabel_5.setAlignmentX(Component.CENTER_ALIGNMENT);
+			panelSaveFolder.add(lblNewLabel_5);
+			
+			panelBtnSaveFolder = new JPanel();
+			panelSaveFolder.add(panelBtnSaveFolder);
+			panelBtnSaveFolder.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			
+			panelBtnSaveFolder.add(btnEditNameAndFolder);
+			btnEditNameAndFolder.setAlignmentX(Component.CENTER_ALIGNMENT);
+			
+			panelBtnSaveFolder.add(btnViewNameAndFolder);
+			btnViewNameAndFolder.setAlignmentX(Component.CENTER_ALIGNMENT);
+			
+			setBounds(100, 100, 700, 500);
+		}
 		
 		Component verticalStrut_3 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_3);
@@ -211,8 +225,6 @@ public class MainWindow extends JFrame {
 		contentPane.add(btnSaveFiles);
 		
 		Dimension panelDimensions = new Dimension(700, 40);
-		panelBtnSaveFolder.setPreferredSize(panelDimensions);
-		panelBtnSaveFolder.setMaximumSize(panelDimensions);
 		panelBtnAgents.setPreferredSize(panelDimensions);
 		panelBtnAgents.setMaximumSize(panelDimensions);
 		panelBtnCriterias.setPreferredSize(panelDimensions);
@@ -222,7 +234,17 @@ public class MainWindow extends JFrame {
 		panelBtnRules.setPreferredSize(panelDimensions);
 		panelBtnRules.setMaximumSize(panelDimensions);
 		
-		state.setState0(false);
+		if(!MainWindow.intoSystemFlag) {
+			panelBtnSaveFolder.setPreferredSize(panelDimensions);
+			panelBtnSaveFolder.setMaximumSize(panelDimensions);
+		}
+		
+		if(MainWindow.intoSystemFlag) {
+			state.setState1(false);
+		}else {
+			state.setState0(false);
+		}
+		
 		actionListeners();
 	}
 	
@@ -232,6 +254,7 @@ public class MainWindow extends JFrame {
 				openManual();
 			}
 		});
+		
 		btnEditNameAndFolder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				defineNameAndFolder();
