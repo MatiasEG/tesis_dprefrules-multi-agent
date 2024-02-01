@@ -79,11 +79,10 @@ public class CriteriaFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public CriteriaFrame(DataManager data, boolean onlyView) {
+	public CriteriaFrame(DataManager data, boolean viewOnly) {
 		this.data = data;
 		
 		setTitle("Criterios a evaluar");
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 850, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -138,6 +137,26 @@ public class CriteriaFrame extends JFrame {
 		panelButtons.setLayout(fl_panelButtons);
 		
 		btnLoadFile = new JButton("Cargar archivo");
+		panelButtons.add(btnLoadFile);
+		
+		btnAddCriteria = new JButton("Agregar nuevo criterio");
+		panelButtons.add(btnAddCriteria);
+		
+		btnDeleteCriteria = new JButton("Eliminar criterio seleccionado");
+		panelButtons.add(btnDeleteCriteria);
+		
+		btnEditCriteria = new JButton("Editar criterio seleccionado");
+		panelButtons.add(btnEditCriteria);
+		
+		btnSaveFile = new JButton("Guardar archivo");
+		panelButtons.add(btnSaveFile);
+		
+		checkData(data);
+		actionListeners();
+		viewOnlyMod(viewOnly);
+	}
+	
+	private void actionListeners() {
 		btnLoadFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String path = FileChooser.showFileChooser();
@@ -150,19 +169,29 @@ public class CriteriaFrame extends JFrame {
 				}
 			}
 		});
-		panelButtons.add(btnLoadFile);
-		
-		btnAddCriteria = new JButton("Agregar nuevo criterio");
-		panelButtons.add(btnAddCriteria);
 		btnAddCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CriteriaCreationFrame frame = new CriteriaCreationFrame(CriteriaFrame.this, CriteriaFrame.this.data, null);
 				frame.setVisible(true);
 			}
 		});
-		
-		btnDeleteCriteria = new JButton("Eliminar criterio seleccionado");
-		panelButtons.add(btnDeleteCriteria);
+		btnEditCriteria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DefaultTableModel model = (DefaultTableModel) table.getModel();
+				String criteriaName = (String) model.getValueAt(table.getSelectedRow(), 0);
+				
+				Criteria criteriaSelected = null;
+				for(Criteria auxCriteria: CriteriaFrame.this.data.getDataManagerCriteria().getCriterias()) {
+					if(auxCriteria.getName().equals(criteriaName)) {
+						criteriaSelected = auxCriteria;
+						break;
+					}
+				}
+				
+				CriteriaCreationFrame frame = new CriteriaCreationFrame(CriteriaFrame.this, CriteriaFrame.this.data, criteriaSelected);
+				frame.setVisible(true);
+			}
+		});
 		btnDeleteCriteria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				// check for selected row first
@@ -191,43 +220,18 @@ public class CriteriaFrame extends JFrame {
 				}
 			}
 		});
-		
-		btnEditCriteria = new JButton("Editar criterio seleccionado");
-		panelButtons.add(btnEditCriteria);
-		btnEditCriteria.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				String criteriaName = (String) model.getValueAt(table.getSelectedRow(), 0);
-				
-				Criteria criteriaSelected = null;
-				for(Criteria auxCriteria: CriteriaFrame.this.data.getDataManagerCriteria().getCriterias()) {
-					if(auxCriteria.getName().equals(criteriaName)) {
-						criteriaSelected = auxCriteria;
-						break;
-					}
-				}
-				
-				CriteriaCreationFrame frame = new CriteriaCreationFrame(CriteriaFrame.this, CriteriaFrame.this.data, criteriaSelected);
-				frame.setVisible(true);
-			}
-		});
-		
-		btnSaveFile = new JButton("Guardar archivo");
-		panelButtons.add(btnSaveFile);
 		btnSaveFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CSVwriter.saveCriteriasToCSV(CriteriaFrame.this.data);
 				JOptionPane.showMessageDialog(null, "Criterios guardadas correctamente, ya puede cerrar esta ventana.","Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 				CriteriaFrame.this.data.setDataValidated();
-				onlyViewMod(true);
+				viewOnlyMod(true);
 			}
 		});
-		checkData(data);
-		onlyViewMod(onlyView);
 	}
 	
-	private void onlyViewMod(boolean onlyView) {
-		if(onlyView) {
+	private void viewOnlyMod(boolean viewOnly) {
+		if(viewOnly) {
 			btnSaveFile.setEnabled(false);
 			btnLoadFile.setEnabled(false);
 			btnAddCriteria.setEnabled(false);

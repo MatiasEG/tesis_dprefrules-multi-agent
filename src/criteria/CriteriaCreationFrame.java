@@ -34,6 +34,8 @@ public class CriteriaCreationFrame extends JFrame {
 	private JRadioButton rdbtnNumericValues;
 	private JRadioButton rdbtnCategoricValues;
 	
+	private JButton btnAcept;
+	
 	private CriteriaFrame criteriaFrame;
 	private Criteria criteriaToUpdate;
 	private DataManager data;
@@ -75,25 +77,9 @@ public class CriteriaCreationFrame extends JFrame {
 		contentPane.add(panelTypeValues);
 		
 		rdbtnNumericValues = new JRadioButton("Valores numericos");
-		rdbtnNumericValues.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textFieldNumericValue1.setEnabled(true);
-				textFieldNumericValue2.setEnabled(true);
-				isNumericEnabled = true;
-				textFieldSimbolicValues.setEnabled(false);
-			}
-		});
 		panelTypeValues.add(rdbtnNumericValues);
 		
 		rdbtnCategoricValues = new JRadioButton("Valores categoricos");
-		rdbtnCategoricValues.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textFieldNumericValue1.setEnabled(false);
-				textFieldNumericValue2.setEnabled(false);
-				isNumericEnabled = false;
-				textFieldSimbolicValues.setEnabled(true);
-			}
-		});
 		panelTypeValues.add(rdbtnCategoricValues);
 		
 		ButtonGroup buttonGroup = new ButtonGroup();
@@ -134,13 +120,52 @@ public class CriteriaCreationFrame extends JFrame {
 		textFieldSimbolicValues = new JTextField();
 		textFieldSimbolicValues.setEnabled(false);
 		panelCategoricalValues.add(textFieldSimbolicValues);
-		//textFieldSimbolicValues.setColumns(10);
 		
 		JLabel lblNewLabel_5 = new JLabel("]");
 		panelCategoricalValues.add(lblNewLabel_5);
 		
-		JButton btnAcept = new JButton("Aceptar y Guardar criterio");
+		btnAcept = new JButton("Aceptar y Guardar criterio");
 		btnAcept.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		Component verticalStrut_1 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_1);
+		contentPane.add(btnAcept);
+		
+		Dimension panelDimensions = new Dimension(550, 30);
+		panelCategoricalValues.setPreferredSize(panelDimensions);
+		panelCategoricalValues.setMaximumSize(panelDimensions);
+		panelNumericValues.setPreferredSize(panelDimensions);
+		panelNumericValues.setMaximumSize(panelDimensions);
+		panelTypeValues.setPreferredSize(panelDimensions);
+		panelTypeValues.setMaximumSize(panelDimensions);
+		
+		Dimension textFieldCriteriaNameDimensions = new Dimension(325, 20);
+		textFieldCriteriaName.setPreferredSize(textFieldCriteriaNameDimensions);
+		textFieldCriteriaName.setMaximumSize(textFieldCriteriaNameDimensions);
+		textFieldSimbolicValues.setPreferredSize(textFieldCriteriaNameDimensions);
+		textFieldSimbolicValues.setMaximumSize(textFieldCriteriaNameDimensions);
+		
+		actionListeners();
+		editMode(criteria);
+	}
+	
+	private void actionListeners() {
+		rdbtnNumericValues.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textFieldNumericValue1.setEnabled(true);
+				textFieldNumericValue2.setEnabled(true);
+				isNumericEnabled = true;
+				textFieldSimbolicValues.setEnabled(false);
+			}
+		});
+		rdbtnCategoricValues.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textFieldNumericValue1.setEnabled(false);
+				textFieldNumericValue2.setEnabled(false);
+				isNumericEnabled = false;
+				textFieldSimbolicValues.setEnabled(true);
+			}
+		});
 		btnAcept.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if((criteriaToUpdate!=null && criteriaToUpdate.getName().equals(textFieldCriteriaName.getText())) || CriteriaCreationFrame.this.data.getDataManagerCriteria().validCriteriaName(textFieldCriteriaName.getText())) {
@@ -170,25 +195,9 @@ public class CriteriaCreationFrame extends JFrame {
 				}
 			}
 		});
-		
-		Component verticalStrut_1 = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut_1);
-		contentPane.add(btnAcept);
-		
-		Dimension panelDimensions = new Dimension(550, 30);
-		panelCategoricalValues.setPreferredSize(panelDimensions);
-		panelCategoricalValues.setMaximumSize(panelDimensions);
-		panelNumericValues.setPreferredSize(panelDimensions);
-		panelNumericValues.setMaximumSize(panelDimensions);
-		panelTypeValues.setPreferredSize(panelDimensions);
-		panelTypeValues.setMaximumSize(panelDimensions);
-		
-		Dimension textFieldCriteriaNameDimensions = new Dimension(325, 20);
-		textFieldCriteriaName.setPreferredSize(textFieldCriteriaNameDimensions);
-		textFieldCriteriaName.setMaximumSize(textFieldCriteriaNameDimensions);
-		textFieldSimbolicValues.setPreferredSize(textFieldCriteriaNameDimensions);
-		textFieldSimbolicValues.setMaximumSize(textFieldCriteriaNameDimensions);
-		
+	}
+	
+	public void editMode(Criteria criteria) {
 		if(criteria!=null) {
 			textFieldCriteriaName.setText(criteria.getName());
 			if(criteria.isNumeric) {

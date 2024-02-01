@@ -38,6 +38,7 @@ public class ParticipantFrame extends JFrame {
 	private JButton btnDeleteUser;
 	private JButton btnEditParticipantsPriority;
 	private JButton btnSaveParticipantsFile;
+	private JButton btnViewParticipantsPriority;
 	
 	private DefaultListModel<String> listModelParticipants;
     private JList<String> listParticipants;
@@ -106,11 +107,6 @@ public class ParticipantFrame extends JFrame {
 		btnDeleteUser = new JButton("Eliminar participante");
 		contentPane.add(btnDeleteUser);
 		btnDeleteUser.setAlignmentX(0.5f);
-		btnDeleteUser.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				deleteSelectedParticipant();
-			}
-		});
 		
 		Component verticalStrut_2 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_2);
@@ -133,19 +129,30 @@ public class ParticipantFrame extends JFrame {
 		btnEditParticipantsPriority.setAlignmentX(0.5f);
 		panelAgentsButtons.add(btnEditParticipantsPriority);
 		
-		JButton btnViewParticipantsPriority = new JButton("Ver prioridad entre participantes");
-		btnViewParticipantsPriority.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ParticipantPriorityFrame frame = new ParticipantPriorityFrame(ParticipantFrame.this.data, true);
-				frame.setVisible(true);
-			}
-		});
+		btnViewParticipantsPriority = new JButton("Ver prioridad entre participantes");
 		btnViewParticipantsPriority.setAlignmentX(0.5f);
 		panelAgentsButtons.add(btnViewParticipantsPriority);
 		
 		btnSaveParticipantsFile = new JButton("Guardar cambios");
 		btnSaveParticipantsFile.setAlignmentX(0.5f);
 		panelAgentsButtons.add(btnSaveParticipantsFile);
+		
+		updateVisualComponents(data);
+		actionListeners();
+		viewOnlyMod(viewOnly);
+	}
+	
+	private void actionListeners() {
+		btnAddUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addParticipantName(ParticipantFrame.this.data);
+			}
+		});
+		btnDeleteUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				deleteSelectedParticipant();
+			}
+		});
 		btnSaveParticipantsFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(ParticipantFrame.this.data.getDataManagerParticipant().getParticipants().size()>0) {
@@ -156,7 +163,6 @@ public class ParticipantFrame extends JFrame {
 				}
 			}
 		});
-		
 		btnLoadFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String path = FileChooser.showFileChooser();
@@ -170,41 +176,44 @@ public class ParticipantFrame extends JFrame {
 		});
 		btnEditParticipantsPriority.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String validation = canDefineAgentPriority(ParticipantFrame.this.data);
-				if(validation.equals("OK")) {
-					dataClone = ParticipantFrame.this.data.clone();
-					ParticipantFrame.this.viewOnlyMod(true);
-					
-					ParticipantPriorityFrame frame = new ParticipantPriorityFrame(ParticipantFrame.this.dataClone, false);
-					frame.setVisible(true);
-					
-					// WindowListener for detect when the frame is closed
-					frame.addWindowListener(new WindowAdapter() {
-			            @Override
-			            public void windowClosing(WindowEvent e) {
-			            	if(dataClone.getDataValidated()) {
-			            		ParticipantFrame.this.data.updateData(dataClone);
-			            	}else {
-			            		// The user close the window without save.
-			            	}
-			            	dataClone = null;
-			            	
-			            	ParticipantFrame.this.viewOnlyMod(false);
-			            }
-			        });
-					
-				}else {
-					JOptionPane.showMessageDialog(null, validation, "Advertencia", JOptionPane.WARNING_MESSAGE);
-				}
+				editParticipantsPriority();
 			}
 		});
-		btnAddUser.addActionListener(new ActionListener() {
+		btnViewParticipantsPriority.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				addParticipantName(ParticipantFrame.this.data);
+				ParticipantPriorityFrame frame = new ParticipantPriorityFrame(ParticipantFrame.this.data, true);
+				frame.setVisible(true);
 			}
 		});
-		updateVisualComponents(data);
-		viewOnlyMod(viewOnly);
+	}
+	
+	private void editParticipantsPriority() {
+		String validation = canDefineAgentPriority(ParticipantFrame.this.data);
+		if(validation.equals("OK")) {
+			dataClone = ParticipantFrame.this.data.clone();
+			ParticipantFrame.this.viewOnlyMod(true);
+			
+			ParticipantPriorityFrame frame = new ParticipantPriorityFrame(ParticipantFrame.this.dataClone, false);
+			frame.setVisible(true);
+			
+			// WindowListener for detect when the frame is closed
+			frame.addWindowListener(new WindowAdapter() {
+	            @Override
+	            public void windowClosing(WindowEvent e) {
+	            	if(dataClone.getDataValidated()) {
+	            		ParticipantFrame.this.data.updateData(dataClone);
+	            	}else {
+	            		// The user close the window without save.
+	            	}
+	            	dataClone = null;
+	            	
+	            	ParticipantFrame.this.viewOnlyMod(false);
+	            }
+	        });
+			
+		}else {
+			JOptionPane.showMessageDialog(null, validation, "Advertencia", JOptionPane.WARNING_MESSAGE);
+		}
 	}
 	
 	private void viewOnlyMod(boolean viewOnly) {

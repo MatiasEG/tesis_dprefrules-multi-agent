@@ -42,6 +42,8 @@ public class PrefRulesFrame extends JFrame {
 	private JButton btnLoadFile;
 	private JButton btnSaveFile;
 	private JButton btnEditRulePreferences;
+	private JButton btnViewRulePreferences;
+	private JButton btnDescriptionRule;
 	
 	private DefaultListModel<String> listModelRules;
 	private JList<String> listRules;
@@ -77,9 +79,7 @@ public class PrefRulesFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public PrefRulesFrame(DataManager data, boolean onlyView) {
-		//TODO ver como mejorar esta ventanta
-		
+	public PrefRulesFrame(DataManager data, boolean viewOnly) {
 		this.data = data;
 		setTitle("Reglas de preferencia definidas");
 		setBounds(100, 100, 450, 450);
@@ -97,9 +97,6 @@ public class PrefRulesFrame extends JFrame {
 		contentPane.add(verticalStrut);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		Dimension panelDimensionsScrollPane = new Dimension(450, 200);
-		scrollPane.setPreferredSize(panelDimensionsScrollPane);
-		scrollPane.setMaximumSize(panelDimensionsScrollPane);
 		contentPane.add(scrollPane);
 		
 		listModelRules = new DefaultListModel<>();
@@ -109,15 +106,83 @@ public class PrefRulesFrame extends JFrame {
 		Component verticalStrut_4 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_4);
 		
-		Dimension panelBtnDimensions = new Dimension(450, 40);
-		
 		JPanel panelFileButtons = new JPanel();
 		contentPane.add(panelFileButtons);
-		panelFileButtons.setPreferredSize(panelBtnDimensions);
-		panelFileButtons.setMaximumSize(panelBtnDimensions);
 		panelFileButtons.setLayout(new GridLayout(0, 2, 0, 0));
 		
 		btnLoadFile = new JButton("Cargar desde archivo");
+		panelFileButtons.add(btnLoadFile);
+		btnLoadFile.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		btnSaveFile = new JButton("Guardar archivo");
+		panelFileButtons.add(btnSaveFile);
+		
+		Component verticalStrut_1 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_1);
+		
+		JPanel panelButtons = new JPanel();
+		contentPane.add(panelButtons);
+		panelButtons.setLayout(new GridLayout(1, 0, 0, 0));
+		
+		btnNewRule = new JButton("Nueva regla");
+		panelButtons.add(btnNewRule);
+		
+		btnDeleteRule = new JButton("Eliminar");
+		panelButtons.add(btnDeleteRule);
+		
+		btnEditRule = new JButton("Editar");
+		panelButtons.add(btnEditRule);
+		
+		btnDescriptionRule = new JButton("Descripcion");
+		panelButtons.add(btnDescriptionRule);
+		
+		Component verticalStrut_2 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_2);
+		
+		JLabel lblNewLabel_1 = new JLabel("A continuacion puede definir las preferencias");
+		lblNewLabel_1.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("que tienen los participantes sobre las reglas");
+		lblNewLabel_2.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_3 = new JLabel("que comparan las alternativas en base a los criterios");
+		lblNewLabel_3.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblNewLabel_3);
+		
+		Component verticalStrut_3 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_3);
+		
+		JPanel panelPreferences = new JPanel();
+		contentPane.add(panelPreferences);
+		panelPreferences.setLayout(new GridLayout(1, 0, 0, 0));
+		
+		btnEditRulePreferences = new JButton("Definir preferencias");
+		panelPreferences.add(btnEditRulePreferences);
+		btnEditRulePreferences.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		btnViewRulePreferences = new JButton("Ver preferencias");
+		panelPreferences.add(btnViewRulePreferences);
+		
+		Dimension panelDimensionsScrollPane = new Dimension(450, 200);
+		scrollPane.setPreferredSize(panelDimensionsScrollPane);
+		scrollPane.setMaximumSize(panelDimensionsScrollPane);
+		
+		Dimension panelBtnDimensions = new Dimension(450, 40);
+		panelFileButtons.setPreferredSize(panelBtnDimensions);
+		panelFileButtons.setMaximumSize(panelBtnDimensions);
+		panelButtons.setPreferredSize(panelBtnDimensions);
+		panelButtons.setMaximumSize(panelBtnDimensions);
+		panelPreferences.setPreferredSize(panelBtnDimensions);
+		panelPreferences.setMaximumSize(panelBtnDimensions);
+		
+		actionListeners();
+		viewOnlyMod(viewOnly);
+		updateRules(data);
+	}
+	
+	private void actionListeners() {
 		btnLoadFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String path = FileChooser.showFileChooser();
@@ -130,34 +195,9 @@ public class PrefRulesFrame extends JFrame {
 				}
 			}
 		});
-		panelFileButtons.add(btnLoadFile);
-		btnLoadFile.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
-		btnSaveFile = new JButton("Guardar archivo");
-		btnSaveFile.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				CSVwriter.saveRulesToCSV(PrefRulesFrame.this.data);
-				JOptionPane.showMessageDialog(null, "Alternativas guardadas correctamente, ya puede cerrar esta ventana.","Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
-				PrefRulesFrame.this.data.setDataValidated();
-				onlyViewMod(true);
-			}
-		});
-		panelFileButtons.add(btnSaveFile);
-		
-		Component verticalStrut_1 = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut_1);
-		
-		JPanel panelButtons = new JPanel();
-		
-		panelButtons.setPreferredSize(panelBtnDimensions);
-		panelButtons.setMaximumSize(panelBtnDimensions);
-		contentPane.add(panelButtons);
-		panelButtons.setLayout(new GridLayout(1, 0, 0, 0));
-		
-		btnNewRule = new JButton("Nueva regla");
 		btnNewRule.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				PrefRulesFrame.this.onlyViewMod(true);
+				PrefRulesFrame.this.viewOnlyMod(true);
 				PrefRuleCreationFrame frame = new PrefRuleCreationFrame(PrefRulesFrame.this.data, null);
 				frame.setVisible(true);
 				
@@ -166,41 +206,11 @@ public class PrefRulesFrame extends JFrame {
 		            @Override
 		            public void windowClosing(WindowEvent e) {
 		            	updateRules();
-		            	PrefRulesFrame.this.onlyViewMod(false);
+		            	PrefRulesFrame.this.viewOnlyMod(false);
 		            }
 		        });
 			}
 		});
-		panelButtons.add(btnNewRule);
-		
-		btnDeleteRule = new JButton("Eliminar");
-		btnDeleteRule.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int selectedIndex = listRules.getSelectedIndex();
-		        if (selectedIndex != -1) {
-		        	String ruleName = listRules.getSelectedValue();
-		        	int option = JOptionPane.showConfirmDialog(PrefRulesFrame.this,
-		                    "¿Seguro que desea eliminar la regla seleccionada ("+ruleName+")?",
-		                    "Confirmar Eliminación",
-		                    JOptionPane.YES_NO_OPTION);
-		            if (option == JOptionPane.YES_OPTION) {
-		            	PrefRulesFrame.this.data.getDataManagerRule().removeRule(ruleName);
-		            	for(int i=0; i<PrefRulesFrame.this.data.getDataManagerRule().getRules().size(); i++) {
-		            		if(PrefRulesFrame.this.data.getDataManagerRule().getRules().get(i).getName().equals(ruleName)) {
-		            			PrefRulesFrame.this.data.getDataManagerRule().getRules().remove(i);
-		            			break;
-		            		}
-		            	}
-		                updateRules();
-		            }
-		        } else {
-		            JOptionPane.showMessageDialog(PrefRulesFrame.this, "Debe seleccionar a un regla para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
-		        }
-			}
-		});
-		panelButtons.add(btnDeleteRule);
-		
-		btnEditRule = new JButton("Editar");
 		btnEditRule.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int selectedIndex = listRules.getSelectedIndex();
@@ -231,9 +241,6 @@ public class PrefRulesFrame extends JFrame {
 		        });
 			}
 		});
-		panelButtons.add(btnEditRule);
-		
-		JButton btnDescriptionRule = new JButton("Descripcion");
 		btnDescriptionRule.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int selectedIndex = listRules.getSelectedIndex();
@@ -250,38 +257,34 @@ public class PrefRulesFrame extends JFrame {
 		        }
 			}
 		});
-		panelButtons.add(btnDescriptionRule);
-		
-		Component verticalStrut_2 = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut_2);
-		
-		JLabel lblNewLabel_1 = new JLabel("A continuacion puede definir las preferencias");
-		lblNewLabel_1.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentPane.add(lblNewLabel_1);
-		
-		JLabel lblNewLabel_2 = new JLabel("que tienen los participantes sobre las reglas");
-		lblNewLabel_2.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentPane.add(lblNewLabel_2);
-		
-		JLabel lblNewLabel_3 = new JLabel("que comparan las alternativas en base a los criterios");
-		lblNewLabel_3.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentPane.add(lblNewLabel_3);
-		
-		Component verticalStrut_3 = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut_3);
-		
-		JPanel panelPreferences = new JPanel();
-		contentPane.add(panelPreferences);
-		panelPreferences.setLayout(new GridLayout(1, 0, 0, 0));
-		panelPreferences.setPreferredSize(panelBtnDimensions);
-		panelPreferences.setMaximumSize(panelBtnDimensions);
-		
-		btnEditRulePreferences = new JButton("Definir preferencias");
-		panelPreferences.add(btnEditRulePreferences);
+		btnDeleteRule.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selectedIndex = listRules.getSelectedIndex();
+		        if (selectedIndex != -1) {
+		        	String ruleName = listRules.getSelectedValue();
+		        	int option = JOptionPane.showConfirmDialog(PrefRulesFrame.this,
+		                    "¿Seguro que desea eliminar la regla seleccionada ("+ruleName+")?",
+		                    "Confirmar Eliminación",
+		                    JOptionPane.YES_NO_OPTION);
+		            if (option == JOptionPane.YES_OPTION) {
+		            	PrefRulesFrame.this.data.getDataManagerRule().removeRule(ruleName);
+		            	for(int i=0; i<PrefRulesFrame.this.data.getDataManagerRule().getRules().size(); i++) {
+		            		if(PrefRulesFrame.this.data.getDataManagerRule().getRules().get(i).getName().equals(ruleName)) {
+		            			PrefRulesFrame.this.data.getDataManagerRule().getRules().remove(i);
+		            			break;
+		            		}
+		            	}
+		                updateRules();
+		            }
+		        } else {
+		            JOptionPane.showMessageDialog(PrefRulesFrame.this, "Debe seleccionar a un regla para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+		        }
+			}
+		});
 		btnEditRulePreferences.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dataClone = PrefRulesFrame.this.data.clone();
-				PrefRulesFrame.this.onlyViewMod(true);
+				PrefRulesFrame.this.viewOnlyMod(true);
 				
 				PrefRulePreferencesFrame frame = new PrefRulePreferencesFrame(dataClone, false);
 				frame.setVisible(true);
@@ -297,32 +300,34 @@ public class PrefRulesFrame extends JFrame {
 		            	}
 		            	dataClone = null;
 		            	
-		            	PrefRulesFrame.this.onlyViewMod(false);
+		            	PrefRulesFrame.this.viewOnlyMod(false);
 		            }
 		        });
 			}
 		});
-		btnEditRulePreferences.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
-		JButton btnViewRulePreferences = new JButton("Ver preferencias");
 		btnViewRulePreferences.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				PrefRulePreferencesFrame frame = new PrefRulePreferencesFrame(PrefRulesFrame.this.data, true);
 				frame.setVisible(true);
 			}
 		});
-		panelPreferences.add(btnViewRulePreferences);
-		onlyViewMod(onlyView);
-		updateRules(data);
+		btnSaveFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CSVwriter.saveRulesToCSV(PrefRulesFrame.this.data);
+				JOptionPane.showMessageDialog(null, "Alternativas guardadas correctamente, ya puede cerrar esta ventana.","Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+				PrefRulesFrame.this.data.setDataValidated();
+				viewOnlyMod(true);
+			}
+		});
 	}
 	
-	private void onlyViewMod(boolean onlyView) {
-		btnEditRule.setEnabled(!onlyView);
-		btnDeleteRule.setEnabled(!onlyView);
-		btnNewRule.setEnabled(!onlyView);
-		btnLoadFile.setEnabled(!onlyView);
-		btnSaveFile.setEnabled(!onlyView);
-		btnEditRulePreferences.setEnabled(!onlyView);
+	private void viewOnlyMod(boolean viewOnly) {
+		btnEditRule.setEnabled(!viewOnly);
+		btnDeleteRule.setEnabled(!viewOnly);
+		btnNewRule.setEnabled(!viewOnly);
+		btnLoadFile.setEnabled(!viewOnly);
+		btnSaveFile.setEnabled(!viewOnly);
+		btnEditRulePreferences.setEnabled(!viewOnly);
 	}
 	
 	private void updateRules(DataManager data) {

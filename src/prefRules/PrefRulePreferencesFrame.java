@@ -46,17 +46,17 @@ public class PrefRulePreferencesFrame extends JFrame {
     private JButton btnSaveRulePreferenes;
     private JButton btnAddPriority;
     private JButton btnDeletePriority;
+    private JButton btnConfirmChanges;
 
 	private DataManager data;
 
 	/**
 	 * Create the frame.
 	 */
-	public PrefRulePreferencesFrame(DataManager data, boolean onlyView) {
+	public PrefRulePreferencesFrame(DataManager data, boolean viewOnly) {
 		this.data = data;
 		
 		setTitle("Prioridades entre agentes");
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 550);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -91,28 +91,10 @@ public class PrefRulePreferencesFrame extends JFrame {
 		
 		btnLoadRulePreferencesFromFiles = new JButton("Cargar archivo de preferencias");
 		panel.add(btnLoadRulePreferencesFromFiles);
-		btnLoadRulePreferencesFromFiles.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				String path = FileChooser.showFileChooser();
-				try {
-					CSVreader.readRulePriorityCSV(path, PrefRulePreferencesFrame.this.data);
-					PrefRulePreferencesFrame.this.updateIndexRulePriority();
-					PrefRulePreferencesFrame.this.updateRulePriorityTransitiveList();;
-				} catch (RulePriorityException e1) {
-	    			JOptionPane.showMessageDialog(null, e1.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
-				}
-			}
-		});
 		btnLoadRulePreferencesFromFiles.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		btnSaveRulePreferenes = new JButton("Guardar archivo de preferencias");
 		panel.add(btnSaveRulePreferenes);
-		btnSaveRulePreferenes.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				CSVwriter.saveRulePriorityToCSV(PrefRulePreferencesFrame.this.data);
-				JOptionPane.showMessageDialog(null, "Datos validados y guardados, ya puede cerrar esta ventana", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
-			}
-		});
 		btnSaveRulePreferenes.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		Component verticalStrut = Box.createVerticalStrut(20);
@@ -145,6 +127,47 @@ public class PrefRulePreferencesFrame extends JFrame {
 		
 		btnAddPriority = new JButton("Agregar prioridad");
 		btnAddPriority.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(btnAddPriority, BorderLayout.NORTH);
+		
+		Component verticalStrut_4 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_4);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		contentPane.add(scrollPane, BorderLayout.CENTER);
+		listModelRulePriority = new DefaultListModel<>();
+		listPriority = new JList<String>(listModelRulePriority);
+		scrollPane.setViewportView(listPriority);
+		
+		btnDeletePriority = new JButton("Eliminar prioridad seleccionada");
+		btnDeletePriority.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(btnDeletePriority, BorderLayout.SOUTH);
+		
+		Component verticalStrut_2 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_2);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		contentPane.add(scrollPane_1);
+		listModelParticipantsPriorityTransitive = new DefaultListModel<>();
+		listPriorityTransitive = new JList<String>(listModelParticipantsPriorityTransitive);
+		scrollPane_1.setViewportView(listPriorityTransitive);
+		
+		JLabel lblNewLabel_6 = new JLabel("A continuacion puede ver las relaciones transitivas implicitas.");
+		scrollPane_1.setColumnHeaderView(lblNewLabel_6);
+		
+		Component verticalStrut_6 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_6);
+		
+		btnConfirmChanges = new JButton("Confirmar cambios");
+		btnConfirmChanges.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(btnConfirmChanges);
+		
+		updateIndexRulePriority();
+		updateRulePriorityTransitiveList();
+		actionListeners();
+		viewOnlyMod(viewOnly);
+	}
+
+	private void actionListeners() {
 		btnAddPriority.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int participant = comboBoxParticipant.getSelectedIndex();
@@ -172,24 +195,11 @@ public class PrefRulePreferencesFrame extends JFrame {
 				}
 			}
 		});
-		contentPane.add(btnAddPriority, BorderLayout.NORTH);
-		
-		Component verticalStrut_4 = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut_4);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		contentPane.add(scrollPane, BorderLayout.CENTER);
-		listModelRulePriority = new DefaultListModel<>();
-		listPriority = new JList<String>(listModelRulePriority);
-		scrollPane.setViewportView(listPriority);
-		
-		btnDeletePriority = new JButton("Eliminar prioridad seleccionada");
-		btnDeletePriority.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnDeletePriority.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int selectedIndex = listPriority.getSelectedIndex();
 		        if (selectedIndex != -1) {
-		        	String[] participantAndIndex =  extraerDatos(listPriority.getSelectedValue());
+		        	String[] participantAndIndex =  extractNameAndPosition(listPriority.getSelectedValue());
 		        	Participant participant = PrefRulePreferencesFrame.this.data.getDataManagerParticipant().getParticipantByName(participantAndIndex[0]);
 		        	Priority prior = participant.getPreferences().get(Integer.parseInt(participantAndIndex[1]));
 		        	
@@ -206,41 +216,35 @@ public class PrefRulePreferencesFrame extends JFrame {
 		        }
 			}
 		});
-		contentPane.add(btnDeletePriority, BorderLayout.SOUTH);
-		
-		Component verticalStrut_2 = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut_2);
-		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		contentPane.add(scrollPane_1);
-		listModelParticipantsPriorityTransitive = new DefaultListModel<>();
-		listPriorityTransitive = new JList<String>(listModelParticipantsPriorityTransitive);
-		scrollPane_1.setViewportView(listPriorityTransitive);
-		
-		JLabel lblNewLabel_6 = new JLabel("A continuacion puede ver las relaciones transitivas implicitas.");
-		scrollPane_1.setColumnHeaderView(lblNewLabel_6);
-		
-		Component verticalStrut_6 = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut_6);
-		
-		JButton btnConfirmChanges = new JButton("Confirmar cambios");
+		btnLoadRulePreferencesFromFiles.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String path = FileChooser.showFileChooser();
+				try {
+					CSVreader.readRulePriorityCSV(path, PrefRulePreferencesFrame.this.data);
+					PrefRulePreferencesFrame.this.updateIndexRulePriority();
+					PrefRulePreferencesFrame.this.updateRulePriorityTransitiveList();;
+				} catch (RulePriorityException e1) {
+	    			JOptionPane.showMessageDialog(null, e1.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
 		btnConfirmChanges.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null, "Datos validados y guardados, ya puede cerrar esta ventana", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 				PrefRulePreferencesFrame.this.data.setDataValidated();
-				onlyViewMod(true);
+				viewOnlyMod(true);
 			}
 		});
-		btnConfirmChanges.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentPane.add(btnConfirmChanges);
-		
-		updateIndexRulePriority();
-		updateRulePriorityTransitiveList();
-		onlyViewMod(onlyView);
+		btnSaveRulePreferenes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CSVwriter.saveRulePriorityToCSV(PrefRulePreferencesFrame.this.data);
+				JOptionPane.showMessageDialog(null, "Datos validados y guardados, ya puede cerrar esta ventana", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
 	}
-
-	private void onlyViewMod(boolean onlyView) {
-		if(onlyView) {
+	
+	private void viewOnlyMod(boolean viewOnly) {
+		if(viewOnly) {
 			comboBoxParticipant.setEnabled(false);
 			comboBoxBest.setEnabled(false);
 			comboBoxWorst.setEnabled(false);
@@ -272,32 +276,32 @@ public class PrefRulePreferencesFrame extends JFrame {
 		}
 	}
 	
-	private static String[] extraerDatos(String texto) {
-        // Utilizar expresiones regulares para encontrar la cadena entre '<' y '>'
-        Pattern patronPrincipal = Pattern.compile("<(.*?)>");
-        Matcher matcherPrincipal = patronPrincipal.matcher(texto);
+	private static String[] extractNameAndPosition(String texto) {
+        // Find the content between '<' y '>'
+        Pattern mainPattern = Pattern.compile("<(.*?)>");
+        Matcher mainMatcher = mainPattern.matcher(texto);
 
-        // Verificar si hay una coincidencia principal
-        if (matcherPrincipal.find()) {
-            // Obtener la cadena entre '<' y '>'
-            String cadenaCompleta = matcherPrincipal.group(1);
+        // Verify if there is a match
+        if (mainMatcher.find()) {
+            // Get the content between '<' y '>'
+            String fullString = mainMatcher.group(1);
 
-            // Utilizar expresiones regulares para encontrar el nombre y el número
-            Pattern patronSecundario = Pattern.compile("(\\w+)\\((\\d+)\\)");
-            Matcher matcherSecundario = patronSecundario.matcher(cadenaCompleta);
+            // Find name and position
+            Pattern secondaryPattern = Pattern.compile("(\\w+)\\((\\d+)\\)");
+            Matcher secondaryMatcher = secondaryPattern.matcher(fullString);
 
-            // Verificar si hay una coincidencia secundaria
-            if (matcherSecundario.find()) {
-                // Obtener el nombre y el número
-                String nombre = matcherSecundario.group(1);
-                String numero = matcherSecundario.group(2);
+         // Verify if there is a match
+            if (secondaryMatcher.find()) {
+                // Get name and position
+                String name = secondaryMatcher.group(1);
+                String position = secondaryMatcher.group(2);
 
-                // Devolver los resultados en un array de strings
-                return new String[]{nombre, numero};
+                // Values to return
+                return new String[]{name, position};
             }
         }
 
-        // Devolver un array vacío si no se encontraron coincidencias
+        // If there is no match, return empty value
         return new String[]{"", ""};
     }
 }

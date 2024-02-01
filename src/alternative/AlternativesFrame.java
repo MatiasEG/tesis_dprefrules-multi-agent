@@ -54,15 +54,6 @@ public class AlternativesFrame extends JFrame {
 					DataManager data = new DataManager("evidenceTest","C:\\Users\\Matia\\Desktop\\Archivos");
 					data.getDataManagerParticipant().addParticipant(new Participant("Matias"));
 					
-					//Criteria entretenimiento = new Criteria("Entretenimiento", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
-					//Criteria clima = new Criteria("Clima", new String[]{"pesimo", "malo", "bueno", "exelente"}, false);
-					//Criteria costo = new Criteria("Costo", new String[]{"caro", "medio", "normal", "economico"}, false);
-					//Criteria dias = new Criteria("Dias", new String[]{"1", "30"}, true);
-					//data.addCriteria(entretenimiento);
-					//data.addCriteria(clima);
-					//data.addCriteria(costo);
-					//data.addCriteria(dias);
-					
 					Criteria days = new Criteria("days", new String[]{"1","30"}, true);
 					Criteria entrmnt = new Criteria("entrmnt", new String[]{"vbad","bad","reg","good","vgood"}, false);
 					Criteria service = new Criteria("service", new String[]{"vbad","bad","reg","good","vgood"}, false);
@@ -82,7 +73,7 @@ public class AlternativesFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AlternativesFrame(DataManager data, boolean onlyView) {
+	public AlternativesFrame(DataManager data, boolean viewOnly) {
 		this.data = data;
 		
 		setTitle("Datos del problema - evidencia");
@@ -125,7 +116,6 @@ public class AlternativesFrame extends JFrame {
 		model = (DefaultTableModel) table.getModel();
 		
 		for(int i=0; i<data.getDataManagerEvidence().getAlternatives().size(); i++) {
-			//model.addRow(new Object[] {data.getAlternatives().get(i).getName(), Arrays.copyOf(noInfo, noInfo.length)});
 			model.addRow(new Object[] {data.getDataManagerEvidence().getAlternatives().get(i).getName()});
 			for (int j = 1; j <= criteriaNames.length; j++) {
 		        model.setValueAt("-", i, j);
@@ -144,6 +134,31 @@ public class AlternativesFrame extends JFrame {
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		btnLoadFile = new JButton("Cargar archivo");
+		panel.add(btnLoadFile);
+		
+		btnNewAlternative = new JButton("Nueva alternativa");
+		panel.add(btnNewAlternative);
+		
+		btnDeleteAlternative = new JButton("Eliminar alternativa");
+		panel.add(btnDeleteAlternative);
+		
+		btnAcept = new JButton("Guardar archivo");
+		panel.add(btnAcept);
+		
+		for(int i=0; i<criterias.size(); i++) {
+			if(!criterias.get(i).isNumeric()) {
+				TableColumn comboBoxColumn = table.getColumnModel().getColumn(i+1);
+	            comboBoxColumn.setCellEditor(new DefaultCellEditor(criterias.get(i).getComboValues()));
+			}
+		}
+		
+		table.repaint();
+		checkData(data);
+		actionListeners();
+		viewOnlyMod(viewOnly);
+	}
+
+	private void actionListeners() {
 		btnLoadFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String path = FileChooser.showFileChooser();
@@ -156,17 +171,11 @@ public class AlternativesFrame extends JFrame {
 				checkData(AlternativesFrame.this.data);
 			}
 		});
-		panel.add(btnLoadFile);
-		
-		btnNewAlternative = new JButton("Nueva alternativa");
 		btnNewAlternative.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addAlternative(AlternativesFrame.this.data);
 			}
 		});
-		panel.add(btnNewAlternative);
-		
-		btnDeleteAlternative = new JButton("Eliminar alternativa");
 		btnDeleteAlternative.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				 int selectedRow = table.getSelectedRow();
@@ -189,9 +198,6 @@ public class AlternativesFrame extends JFrame {
                  }
 			}
 		});
-		panel.add(btnDeleteAlternative);
-		
-		btnAcept = new JButton("Guardar archivo");
 		btnAcept.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (table.isEditing()) {
@@ -203,28 +209,17 @@ public class AlternativesFrame extends JFrame {
 						CSVwriter.saveEvidenceToCSV(AlternativesFrame.this.data);
 						JOptionPane.showMessageDialog(null, "Alternativas guardadas correctamente, ya puede cerrar esta ventana.","Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 						AlternativesFrame.this.data.setDataValidated();
-						onlyViewMod(true);
+						viewOnlyMod(true);
 					}
 				}else {
                 	JOptionPane.showMessageDialog(null, "Debe definir al menos dos alternativas para poder realizar una comparacion.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});
-		panel.add(btnAcept);
-		
-		for(int i=0; i<criterias.size(); i++) {
-			if(!criterias.get(i).isNumeric()) {
-				TableColumn comboBoxColumn = table.getColumnModel().getColumn(i+1);
-	            comboBoxColumn.setCellEditor(new DefaultCellEditor(criterias.get(i).getComboValues()));
-			}
-		}
-		table.repaint();
-		checkData(data);
-		onlyViewMod(onlyView);
 	}
-
-	private void onlyViewMod(boolean onlyView) {
-		if(onlyView) {
+	
+	private void viewOnlyMod(boolean viewOnly) {
+		if(viewOnly) {
 			btnAcept.setEnabled(false);
 			btnDeleteAlternative.setEnabled(false);
 			btnLoadFile.setEnabled(false);

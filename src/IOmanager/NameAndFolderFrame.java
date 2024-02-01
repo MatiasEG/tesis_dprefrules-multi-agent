@@ -89,12 +89,6 @@ public class NameAndFolderFrame extends JFrame {
 		contentPane.add(verticalStrut_3);
 		
 		btnSelectFolder = new JButton("Seleccionar carpeta");
-		btnSelectFolder.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				folderPath = FileChooser.showFolderChooser();
-				lblFolderPath.setText("Ruta actual: "+folderPath);
-			}
-		});
 		btnSelectFolder.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(btnSelectFolder);
 		
@@ -106,6 +100,24 @@ public class NameAndFolderFrame extends JFrame {
 		contentPane.add(verticalStrut_4);
 		
 		btnSaveData = new JButton("Guardar");
+		btnSaveData.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(btnSaveData);
+		
+		Dimension textFieldDimensions = new Dimension(200, 20);
+		textFieldProjectName.setPreferredSize(textFieldDimensions);
+		textFieldProjectName.setMaximumSize(textFieldDimensions);
+		
+		actionListeners();
+		viewOnlyMod(viewOnly);
+	}
+	
+	private void actionListeners() {
+		btnSelectFolder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				folderPath = FileChooser.showFolderChooser();
+				lblFolderPath.setText("Ruta actual: "+folderPath);
+			}
+		});
 		btnSaveData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(validateInput()) {
@@ -115,14 +127,6 @@ public class NameAndFolderFrame extends JFrame {
 				}
 			}
 		});
-		btnSaveData.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentPane.add(btnSaveData);
-		
-		Dimension textFieldDimensions = new Dimension(200, 20);
-		textFieldProjectName.setPreferredSize(textFieldDimensions);
-		textFieldProjectName.setMaximumSize(textFieldDimensions);
-		
-		viewOnlyMod(viewOnly);
 	}
 	
 	private void viewOnlyMod(boolean viewOnly) {

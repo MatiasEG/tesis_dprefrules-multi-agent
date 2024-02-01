@@ -84,7 +84,6 @@ public class BPremiseFrame extends JFrame {
 		lblNewLabel_5.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(lblNewLabel_5);
 		
-		// TODO ver si definir las opciones asi esta bien o si debo agregar algun elemento o algo
 		comboBoxAvailableCriterias = new JComboBox<String>(rule.getAvailableCriterias(data));
 		contentPane.add(comboBoxAvailableCriterias);
 		

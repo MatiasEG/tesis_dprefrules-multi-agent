@@ -91,11 +91,11 @@ public class PrefRuleCreationFrame extends JFrame {
 	public PrefRuleCreationFrame(DataManager data, Rule rule) {
 		this.data = data;
 		this.rule = rule;
+		
 		setTitle("Especificacion de la regla");
 		setBounds(100, 100, 850, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
 		setContentPane(contentPane);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 		
@@ -163,9 +163,41 @@ public class PrefRuleCreationFrame extends JFrame {
 		
 		btnNewBPremise = new JButton("Agregar X mejor que Y");
 		btnNewBPremise.setEnabled(false);
+		panelButtons1.add(btnNewBPremise);
+		
+		btnNewWPremise = new JButton("Agregar X peor que Y");
+		btnNewWPremise.setEnabled(false);
+		panelButtons1.add(btnNewWPremise);
+		
+		btnNewEPremise = new JButton("Agregar X igual a Y");
+		btnNewEPremise.setEnabled(false);
+		panelButtons1.add(btnNewEPremise);
+		
+		Component verticalStrut_3 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_3);
+		
+		Dimension panelButtonsDimensions = new Dimension(800, 25);
+		panelButtons1.setPreferredSize(panelButtonsDimensions);
+		panelButtons1.setMaximumSize(panelButtonsDimensions);
+		
+		btnDeletePremise = new JButton("Eliminar condicion");
+		panelButtons1.add(btnDeletePremise);
+		btnDeletePremise.setEnabled(false);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		contentPane.add(scrollPane_1);
+		
+		textPaneDescription = new JTextPane();
+		scrollPane_1.setViewportView(textPaneDescription);
+		
+		actionListeners();
+		editMode(rule);
+	}
+	
+	private void actionListeners() {
 		btnNewBPremise.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				PrefRuleCreationFrame.this.onlyViewMod(true);
+				PrefRuleCreationFrame.this.viewOnlyMod(true);
 				BPremiseFrame frame = new BPremiseFrame(PrefRuleCreationFrame.this.data, PrefRuleCreationFrame.this.rule);
 				frame.setVisible(true);
 				
@@ -174,15 +206,11 @@ public class PrefRuleCreationFrame extends JFrame {
 		            @Override
 		            public void windowClosing(WindowEvent e) {
 		            	updateRuleDescription();
-		            	PrefRuleCreationFrame.this.onlyViewMod(false);
+		            	PrefRuleCreationFrame.this.viewOnlyMod(false);
 		            }
 		        });
 			}
 		});
-		panelButtons1.add(btnNewBPremise);
-		
-		btnNewWPremise = new JButton("Agregar X peor que Y");
-		btnNewWPremise.setEnabled(false);
 		btnNewWPremise.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				WPremiseFrame frame = new WPremiseFrame(PrefRuleCreationFrame.this.data, PrefRuleCreationFrame.this.rule);
@@ -197,10 +225,6 @@ public class PrefRuleCreationFrame extends JFrame {
 		        });
 			}
 		});
-		panelButtons1.add(btnNewWPremise);
-		
-		btnNewEPremise = new JButton("Agregar X igual a Y");
-		btnNewEPremise.setEnabled(false);
 		btnNewEPremise.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				EPremiseFrame frame = new EPremiseFrame(PrefRuleCreationFrame.this.data, PrefRuleCreationFrame.this.rule);
@@ -215,18 +239,6 @@ public class PrefRuleCreationFrame extends JFrame {
 		        });
 			}
 		});
-		panelButtons1.add(btnNewEPremise);
-		
-		Component verticalStrut_3 = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut_3);
-		
-		Dimension panelButtonsDimensions = new Dimension(800, 25);
-		panelButtons1.setPreferredSize(panelButtonsDimensions);
-		panelButtons1.setMaximumSize(panelButtonsDimensions);
-		
-		btnDeletePremise = new JButton("Eliminar condicion");
-		panelButtons1.add(btnDeletePremise);
-		btnDeletePremise.setEnabled(false);
 		btnDeletePremise.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int selectedIndex = listRuleConditions.getSelectedIndex();
@@ -251,13 +263,6 @@ public class PrefRuleCreationFrame extends JFrame {
 		        }
 			}
 		});
-		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		contentPane.add(scrollPane_1);
-		
-		textPaneDescription = new JTextPane();
-		scrollPane_1.setViewportView(textPaneDescription);
-		
 		btnSaveRuleName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String validation = DataManager.validateStringWithOnlyLettersAndNumbers(textFieldRuleName.getText());
@@ -283,7 +288,9 @@ public class PrefRuleCreationFrame extends JFrame {
 				}
 			}
 		});
-		
+	}
+	
+	public void editMode(Rule rule) {
 		if(rule!=null) {
 			textFieldRuleName.setText(this.rule.getName());
 			lblRuleName.setText("Nombre establecido: "+this.rule.getName());
@@ -295,13 +302,13 @@ public class PrefRuleCreationFrame extends JFrame {
 		}
 	}
 	
-	private void onlyViewMod(boolean onlyView) {
-		textFieldRuleName.setEnabled(!onlyView);
-		btnDeletePremise.setEnabled(!onlyView);
-		btnNewBPremise.setEnabled(!onlyView);
-		btnNewWPremise.setEnabled(!onlyView);
-		btnNewEPremise.setEnabled(!onlyView);
-		btnSaveRuleName.setEnabled(!onlyView);
+	private void viewOnlyMod(boolean viewOnly) {
+		textFieldRuleName.setEnabled(!viewOnly);
+		btnDeletePremise.setEnabled(!viewOnly);
+		btnNewBPremise.setEnabled(!viewOnly);
+		btnNewWPremise.setEnabled(!viewOnly);
+		btnNewEPremise.setEnabled(!viewOnly);
+		btnSaveRuleName.setEnabled(!viewOnly);
 	}
 	
 	private void updateRuleDescription() {
