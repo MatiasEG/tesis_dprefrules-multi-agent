@@ -43,6 +43,7 @@ public class MainWindow extends JFrame {
     public JButton btnEditRules;
     public JButton btnViewRules;
     public JButton btnSaveFiles;
+    private JButton btnManual;
 
 	private DataManager data;
 	private DataManager dataClone;
@@ -70,11 +71,11 @@ public class MainWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public MainWindow(Scout scout) {
-		setTitle("Sistema de Decision Multi-Agente");
 		this.scout = scout;
 		data = new DataManager("", "");
 		state = new BtnStates(this);
 		
+		setTitle("Sistema de Decision Multi-Agente");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 506);
 		contentPane = new JPanel();
@@ -83,20 +84,15 @@ public class MainWindow extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 		
-		Component verticalStrut_6 = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut_6);
+		Component verticalStrut_1 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_1);
 		
-		JButton btnManual = new JButton("Manual de usuario");
-		btnManual.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				openManual();
-			}
-		});
+		btnManual = new JButton("Manual de usuario");
 		btnManual.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(btnManual);
 		
-		Component verticalStrut_5 = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut_5);
+		Component verticalStrut_2 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_2);
 		
 		JPanel panelSaveFolder = new JPanel();
 		contentPane.add(panelSaveFolder);
@@ -112,66 +108,21 @@ public class MainWindow extends JFrame {
 		
 		btnEditNameAndFolder = new JButton("Definir nombre y carpeta");
 		panelBtnSaveFolder.add(btnEditNameAndFolder);
-		btnEditNameAndFolder.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dataClone = data.clone();
-				
-				NameAndFolderFrame frame = new NameAndFolderFrame(dataClone, false);
-				frame.setVisible(true);
-				
-				if(state.getState()<0) state.setState(0);
-				
-				MainWindow.this.modifyingData = false;
-				if(!data.getProjectName().equals("") && !data.getSaveFolder().equals("")) modifyingData = true; 
-				
-				// WindowListener for detect when the frame is closed
-				frame.addWindowListener(new WindowAdapter() {
-		            @Override
-		            public void windowClosing(WindowEvent e) {
-		            	if(dataClone.getDataValidated()) {
-		            		data.updateData(dataClone);
-		            	}else {
-		            		// The user close the window without save.
-		            	}
-		            	dataClone = null;
-		            	
-	            		if(!modifyingData) {
-		            		if(!data.getProjectName().equals("") && !data.getSaveFolder().equals("")) {
-			                	state.setState1(false);
-			                }else {
-			                	state.setState0(false);
-			                	JOptionPane.showMessageDialog(null, "Debe indicar nombre y carpeta destino de los archivos para poder iniciar la definicion del problema.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-			                }
-		            	}else {
-		            		state.checkState(false);
-		            	}
-		            }
-		        });
-				
-				state.checkState(true);
-			}
-		});
 		btnEditNameAndFolder.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		btnViewNameAndFolder = new JButton("Ver nombre y carpeta");
-		btnViewNameAndFolder.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				NameAndFolderFrame frame = new NameAndFolderFrame(data, true);
-				frame.setVisible(true);
-			}
-		});
 		panelBtnSaveFolder.add(btnViewNameAndFolder);
 		btnViewNameAndFolder.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
-		Component verticalStrut_1 = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut_1);
+		Component verticalStrut_3 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_3);
 		
 		JPanel panelAgents = new JPanel();
 		contentPane.add(panelAgents);
 		panelAgents.setLayout(new BoxLayout(panelAgents, BoxLayout.Y_AXIS));
 		
-		Component verticalStrut_2 = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut_2);
+		Component verticalStrut_4 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_4);
 		
 		JLabel lblNewLabel = new JLabel("- Defina los participantes involucrados en el problema de eleccion -");
 		lblNewLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -183,53 +134,9 @@ public class MainWindow extends JFrame {
 		
 		btnEditParticipants = new JButton("Definir participantes y prioridades");
 		panelBtnAgents.add(btnEditParticipants);
-		btnEditParticipants.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dataClone = data.clone();
-				
-				ParticipantFrame frame = new ParticipantFrame(dataClone, false);
-		        frame.setVisible(true);
-		        
-		        if(state.getState()<1) state.setState(1);
-		        MainWindow.this.modifyingData = false;
-		        if(data.getDataManagerParticipant().getParticipants().size()>0) modifyingData = true;
-		        
-		        // WindowListener for detect when the frame is closed
-		        frame.addWindowListener(new WindowAdapter() {
-		            @Override
-		            public void windowClosing(WindowEvent e) {
-		            	if(dataClone.getDataValidated()) {
-		            		data.updateData(dataClone);
-		            	}else {
-		            		// The user close the window without save.
-		            	}
-		            	dataClone = null;
-		            	
-		            	if(!modifyingData) {
-			                if(data.getDataManagerParticipant().getParticipants().size()>0) {
-			                	state.setState2(false);
-			                }else {
-			                	state.setState1(false);
-			                	JOptionPane.showMessageDialog(null, "Debe definir al menos un participante para poder seguir con el problema y definir los criterios de comparacion.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-			                }
-			            }else {
-			            	state.checkState(false);
-			            }
-		            }
-		        });
-		        
-		        state.checkState(true);
-			}
-		});
 		btnEditParticipants.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		btnViewParticipants = new JButton("Ver participantes y prioridades");
-		btnViewParticipants.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ParticipantFrame frame = new ParticipantFrame(data, true);
-		        frame.setVisible(true);
-			}
-		});
 		panelBtnAgents.add(btnViewParticipants);
 		btnViewParticipants.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
@@ -250,60 +157,11 @@ public class MainWindow extends JFrame {
 		btnEditCriteria.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		btnViewCriteria = new JButton("Ver criterios");
-		btnViewCriteria.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CriteriaFrame frame = new CriteriaFrame(data, true);
-				frame.setVisible(true);
-			}
-		});
 		panelBtnCriterias.add(btnViewCriteria);
 		btnViewCriteria.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnEditCriteria.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dataClone = data.clone();
-				
-				CriteriaFrame frame = new CriteriaFrame(dataClone, false);
-				frame.setVisible(true);
-				
-				if(state.getState()<2) state.setState(2);
-				MainWindow.this.modifyingData = false;
-				if(data.getDataManagerCriteria().getCriterias().size()>0) modifyingData = true;
-				
-				// WindowListener for detect when the frame is closed
-				frame.addWindowListener(new WindowAdapter() {
-		            @Override
-		            public void windowClosing(WindowEvent e) {
-		            	if(dataClone.getDataValidated()) {
-		            		data.updateData(dataClone);
-		            	}else {
-		            		// The user close the window without save.
-		            	}
-		            	dataClone = null;
-		            	
-		            	if(!modifyingData) {
-			                if(data.getDataManagerCriteria().getCriterias().size()>0) {
-			                	state.setState3(false);
-			                }else {
-			                	state.setState2(false);
-			                	JOptionPane.showMessageDialog(null, "Debe definir al menos un criterio de comparacion para poder seguir con el problema y definir las alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-			                }
-			            }else {
-			            	if(data.getDataManagerCriteria().getCriterias().size()>0) {
-			            		state.checkState(false);
-			            	}else {
-			            		state.setState2(false);
-			                	JOptionPane.showMessageDialog(null, "Debe definir al menos un criterio de comparacion para poder seguir con el problema y definir las alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-			            	}
-			            }
-		            }
-		        });
-				
-				state.checkState(true);
-			}
-		});
 		
-		Component verticalStrut_3 = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut_3);
+		Component verticalStrut_5 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_5);
 		
 		JPanel panelAlternatives = new JPanel();
 		contentPane.add(panelAlternatives);
@@ -322,55 +180,11 @@ public class MainWindow extends JFrame {
 		btnEditEvidence.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		btnViewEvidence = new JButton("Ver evidencia");
-		btnViewEvidence.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				AlternativesFrame frame = new AlternativesFrame(data, true);
-				frame.setVisible(true);
-			}
-		});
 		panelBtnAlternatives.add(btnViewEvidence);
 		btnViewEvidence.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnEditEvidence.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dataClone = data.clone();
-				
-				AlternativesFrame frame = new AlternativesFrame(dataClone, false);
-				frame.setVisible(true);
-				
-				if(state.getState()<3) state.setState(3);
-				MainWindow.this.modifyingData = false;
-				if(data.getDataManagerEvidence().getAlternatives().size()>1) modifyingData = true;
-					
-				// WindowListener for detect when the frame is closed
-				frame.addWindowListener(new WindowAdapter() {
-		            @Override
-		            public void windowClosing(WindowEvent e) {
-		            	if(MainWindow.this.dataClone!=null && MainWindow.this.dataClone.getDataValidated()) {
-		            		data.updateData(MainWindow.this.dataClone);
-		            	}else {
-		            		// The user close the window without save.
-		            	}
-		            	MainWindow.this.dataClone = null;
-		            	
-		            	if(!modifyingData) {
-			            	if(data.getDataManagerEvidence().getAlternatives().size()>1) {
-			            		state.setState4(false);
-			                }else {
-			                	state.setState3(false);
-			                	JOptionPane.showMessageDialog(null, "Debe definir al menos dos alternativas para poder realizar una comparacion.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-			                }
-		            	}else {
-		            		state.checkState(false);
-		            	}
-		            }
-		        });
-				
-				state.checkState(true);
-			}
-		});
 		
-		Component verticalStrut = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut);
+		Component verticalStrut_6 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_6);
 		
 		JPanel panelRules = new JPanel();
 		contentPane.add(panelRules);
@@ -384,62 +198,17 @@ public class MainWindow extends JFrame {
 		panelRules.add(panelBtnRules);
 		
 		btnEditRules = new JButton("Definir reglas");
-		btnEditRules.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dataClone = data.clone();
-				
-				PrefRulesFrame frame = new PrefRulesFrame(dataClone, false);
-				frame.setVisible(true);
-				
-				if(state.getState()<4) state.setState(4);
-				MainWindow.this.modifyingData = false;
-				if(data.getDataManagerRule().getRules().size()>0) modifyingData = true;
-				
-				// WindowListener for detect when the frame is closed
-				frame.addWindowListener(new WindowAdapter() {
-		            @Override
-		            public void windowClosing(WindowEvent e) {
-		            	if(MainWindow.this.dataClone.getDataValidated()) {
-		            		data.updateData(MainWindow.this.dataClone);
-		            	}else {
-		            		// The user close the window without save.
-		            	}
-		            	MainWindow.this.dataClone = null;
-		            	
-		            	if(!modifyingData) {
-			                if(data.getDataManagerRule().getRules().size()>0) {
-			                	state.setState5(false);
-			                }else {
-			                	state.setState4(false);
-			                	JOptionPane.showMessageDialog(null, "Debe definir al menos un criterio de comparacion para poder seguir con el problema y definir las alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-			                }
-			            }else {
-			            	if(data.getDataManagerRule().getRules().size()>0) {
-			            		state.checkState(false);
-			            	}else {
-			            		state.setState4(false);
-			                	JOptionPane.showMessageDialog(null, "Debe definir al menos un criterio de comparacion para poder seguir con el problema y definir las alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-			            	}
-			            }
-		            }
-		        });
-				
-				state.checkState(true);
-			}
-		});
 		panelBtnRules.add(btnEditRules);
 		
 		btnViewRules = new JButton("Ver reglas");
-		btnViewRules.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				PrefRulesFrame frame = new PrefRulesFrame(data, true);
-				frame.setVisible(true);
-			}
-		});
 		panelBtnRules.add(btnViewRules);
 		
-		Component verticalStrut_4 = Box.createVerticalStrut(20);
-		contentPane.add(verticalStrut_4);
+		Component verticalStrut_7 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_7);
+		
+		btnSaveFiles = new JButton("Guardar archivos");
+		btnSaveFiles.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(btnSaveFiles);
 		
 		Dimension panelDimensions = new Dimension(700, 40);
 		panelBtnSaveFolder.setPreferredSize(panelDimensions);
@@ -453,7 +222,71 @@ public class MainWindow extends JFrame {
 		panelBtnRules.setPreferredSize(panelDimensions);
 		panelBtnRules.setMaximumSize(panelDimensions);
 		
-		btnSaveFiles = new JButton("Guardar archivos");
+		state.setState0(false);
+		actionListeners();
+	}
+	
+	private void actionListeners() {
+		btnManual.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				openManual();
+			}
+		});
+		btnEditNameAndFolder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				defineNameAndFolder();
+			}
+		});
+		btnViewNameAndFolder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				NameAndFolderFrame frame = new NameAndFolderFrame(data, true);
+				frame.setVisible(true);
+			}
+		});
+		btnEditParticipants.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				defineParticipants();
+			}
+		});
+		btnViewParticipants.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ParticipantFrame frame = new ParticipantFrame(data, true);
+		        frame.setVisible(true);
+			}
+		});
+		btnEditCriteria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				defineCriterias();
+			}
+		});
+		btnViewCriteria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CriteriaFrame frame = new CriteriaFrame(data, true);
+				frame.setVisible(true);
+			}
+		});
+		btnEditEvidence.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				defineEvidence();
+			}
+		});
+		btnViewEvidence.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AlternativesFrame frame = new AlternativesFrame(data, true);
+				frame.setVisible(true);
+			}
+		});
+		btnEditRules.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				defineRules();
+			}
+		});
+		btnViewRules.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PrefRulesFrame frame = new PrefRulesFrame(data, true);
+				frame.setVisible(true);
+			}
+		});
 		btnSaveFiles.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				CSVwriter.saveAgentPriorityToCSV(data);
@@ -464,10 +297,6 @@ public class MainWindow extends JFrame {
 				MainWindow.this.scout.setDataSaved(true);
 			}
 		});
-		btnSaveFiles.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentPane.add(btnSaveFiles);
-		
-		state.setState0(false);
 	}
 	
 	private void openManual() {
@@ -479,5 +308,201 @@ public class MainWindow extends JFrame {
         } catch (Exception e1) {
             e1.printStackTrace();
         }
+	}
+	
+	private void defineNameAndFolder() {
+		dataClone = data.clone();
+		
+		NameAndFolderFrame frame = new NameAndFolderFrame(dataClone, false);
+		frame.setVisible(true);
+		
+		if(state.getState()<0) state.setState(0);
+		
+		MainWindow.this.modifyingData = false;
+		if(!data.getProjectName().equals("") && !data.getSaveFolder().equals("")) modifyingData = true; 
+		
+		// WindowListener for detect when the frame is closed
+		frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+            	if(dataClone.getDataValidated()) {
+            		data.updateData(dataClone);
+            	}else {
+            		// The user close the window without save.
+            	}
+            	dataClone = null;
+            	
+        		if(!modifyingData) {
+            		if(!data.getProjectName().equals("") && !data.getSaveFolder().equals("")) {
+	                	state.setState1(false);
+	                }else {
+	                	state.setState0(false);
+	                	JOptionPane.showMessageDialog(null, "Debe indicar nombre y carpeta destino de los archivos para poder iniciar la definicion del problema.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+	                }
+            	}else {
+            		state.checkState(false);
+            	}
+            }
+        });
+		
+		state.checkState(true);
+	}
+	
+	private void defineParticipants() {
+		dataClone = data.clone();
+		
+		ParticipantFrame frame = new ParticipantFrame(dataClone, false);
+        frame.setVisible(true);
+        
+        if(state.getState()<1) state.setState(1);
+        MainWindow.this.modifyingData = false;
+        if(data.getDataManagerParticipant().getParticipants().size()>0) modifyingData = true;
+        
+        // WindowListener for detect when the frame is closed
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+            	if(dataClone.getDataValidated()) {
+            		data.updateData(dataClone);
+            	}else {
+            		// The user close the window without save.
+            	}
+            	dataClone = null;
+            	
+            	if(!modifyingData) {
+	                if(data.getDataManagerParticipant().getParticipants().size()>0) {
+	                	state.setState2(false);
+	                }else {
+	                	state.setState1(false);
+	                	JOptionPane.showMessageDialog(null, "Debe definir al menos un participante para poder seguir con el problema y definir los criterios de comparacion.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+	                }
+	            }else {
+	            	state.checkState(false);
+	            }
+            }
+        });
+        
+        state.checkState(true);
+	}
+	
+	private void defineCriterias() {
+		dataClone = data.clone();
+		
+		CriteriaFrame frame = new CriteriaFrame(dataClone, false);
+		frame.setVisible(true);
+		
+		if(state.getState()<2) state.setState(2);
+		MainWindow.this.modifyingData = false;
+		if(data.getDataManagerCriteria().getCriterias().size()>0) modifyingData = true;
+		
+		// WindowListener for detect when the frame is closed
+		frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+            	if(dataClone.getDataValidated()) {
+            		data.updateData(dataClone);
+            	}else {
+            		// The user close the window without save.
+            	}
+            	dataClone = null;
+            	
+            	if(!modifyingData) {
+	                if(data.getDataManagerCriteria().getCriterias().size()>0) {
+	                	state.setState3(false);
+	                }else {
+	                	state.setState2(false);
+	                	JOptionPane.showMessageDialog(null, "Debe definir al menos un criterio de comparacion para poder seguir con el problema y definir las alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+	                }
+	            }else {
+	            	if(data.getDataManagerCriteria().getCriterias().size()>0) {
+	            		state.checkState(false);
+	            	}else {
+	            		state.setState2(false);
+	                	JOptionPane.showMessageDialog(null, "Debe definir al menos un criterio de comparacion para poder seguir con el problema y definir las alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+	            	}
+	            }
+            }
+        });
+		
+		state.checkState(true);
+	}
+	
+	private void defineEvidence() {
+		dataClone = data.clone();
+		
+		AlternativesFrame frame = new AlternativesFrame(dataClone, false);
+		frame.setVisible(true);
+		
+		if(state.getState()<3) state.setState(3);
+		MainWindow.this.modifyingData = false;
+		if(data.getDataManagerEvidence().getAlternatives().size()>1) modifyingData = true;
+			
+		// WindowListener for detect when the frame is closed
+		frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+            	if(MainWindow.this.dataClone!=null && MainWindow.this.dataClone.getDataValidated()) {
+            		data.updateData(MainWindow.this.dataClone);
+            	}else {
+            		// The user close the window without save.
+            	}
+            	MainWindow.this.dataClone = null;
+            	
+            	if(!modifyingData) {
+	            	if(data.getDataManagerEvidence().getAlternatives().size()>1) {
+	            		state.setState4(false);
+	                }else {
+	                	state.setState3(false);
+	                	JOptionPane.showMessageDialog(null, "Debe definir al menos dos alternativas para poder realizar una comparacion.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+	                }
+            	}else {
+            		state.checkState(false);
+            	}
+            }
+        });
+		
+		state.checkState(true);
+	}
+	
+	private void defineRules() {
+		dataClone = data.clone();
+		
+		PrefRulesFrame frame = new PrefRulesFrame(dataClone, false);
+		frame.setVisible(true);
+		
+		if(state.getState()<4) state.setState(4);
+		MainWindow.this.modifyingData = false;
+		if(data.getDataManagerRule().getRules().size()>0) modifyingData = true;
+		
+		// WindowListener for detect when the frame is closed
+		frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+            	if(MainWindow.this.dataClone.getDataValidated()) {
+            		data.updateData(MainWindow.this.dataClone);
+            	}else {
+            		// The user close the window without save.
+            	}
+            	MainWindow.this.dataClone = null;
+            	
+            	if(!modifyingData) {
+	                if(data.getDataManagerRule().getRules().size()>0) {
+	                	state.setState5(false);
+	                }else {
+	                	state.setState4(false);
+	                	JOptionPane.showMessageDialog(null, "Debe definir al menos un criterio de comparacion para poder seguir con el problema y definir las alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+	                }
+	            }else {
+	            	if(data.getDataManagerRule().getRules().size()>0) {
+	            		state.checkState(false);
+	            	}else {
+	            		state.setState4(false);
+	                	JOptionPane.showMessageDialog(null, "Debe definir al menos un criterio de comparacion para poder seguir con el problema y definir las alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+	            	}
+	            }
+            }
+        });
+		
+		state.checkState(true);
 	}
 }
