@@ -32,22 +32,23 @@ import java.awt.FlowLayout;
 public class MainWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-    private JButton btnEditNameAndFolder;
-    private JButton btnViewNameAndFolder;
-    private JButton btnEditParticipants;
-    private JButton btnViewParticipants;
-    private JButton btnEditCriteria;
-    private JButton btnViewCriteria;
-    private JButton btnEditEvidence;
-    private JButton btnViewEvidence;
-    private JButton btnEditRules;
-    private JButton btnViewRules;
-    private JButton btnSaveFiles;
+    public JButton btnEditNameAndFolder;
+    public JButton btnViewNameAndFolder;
+    public JButton btnEditParticipants;
+    public JButton btnViewParticipants;
+    public JButton btnEditCriteria;
+    public JButton btnViewCriteria;
+    public JButton btnEditEvidence;
+    public JButton btnViewEvidence;
+    public JButton btnEditRules;
+    public JButton btnViewRules;
+    public JButton btnSaveFiles;
 
 	private DataManager data;
 	private DataManager dataClone;
 	private boolean modifyingData;
-	private int state;
+	private Scout scout;
+	private BtnStates state;
 	
 	/**
 	 * Launch the application.
@@ -56,7 +57,7 @@ public class MainWindow extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainWindow frame = new MainWindow();
+					MainWindow frame = new MainWindow(new Scout());
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -68,10 +69,11 @@ public class MainWindow extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MainWindow() {
+	public MainWindow(Scout scout) {
 		setTitle("Sistema de Decision Multi-Agente");
+		this.scout = scout;
 		data = new DataManager("", "");
-		state = -1;
+		state = new BtnStates(this);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 506);
@@ -117,7 +119,7 @@ public class MainWindow extends JFrame {
 				NameAndFolderFrame frame = new NameAndFolderFrame(dataClone, false);
 				frame.setVisible(true);
 				
-				if(state<0) state = 0;
+				if(state.getState()<0) state.setState(0);
 				
 				MainWindow.this.modifyingData = false;
 				if(!data.getProjectName().equals("") && !data.getSaveFolder().equals("")) modifyingData = true; 
@@ -135,18 +137,18 @@ public class MainWindow extends JFrame {
 		            	
 	            		if(!modifyingData) {
 		            		if(!data.getProjectName().equals("") && !data.getSaveFolder().equals("")) {
-			                	setState1(false);
+			                	state.setState1(false);
 			                }else {
-			                	setState0(false);
+			                	state.setState0(false);
 			                	JOptionPane.showMessageDialog(null, "Debe indicar nombre y carpeta destino de los archivos para poder iniciar la definicion del problema.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 			                }
 		            	}else {
-		            		checkState(false);
+		            		state.checkState(false);
 		            	}
 		            }
 		        });
 				
-				checkState(true);
+				state.checkState(true);
 			}
 		});
 		btnEditNameAndFolder.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -188,7 +190,7 @@ public class MainWindow extends JFrame {
 				ParticipantFrame frame = new ParticipantFrame(dataClone, false);
 		        frame.setVisible(true);
 		        
-		        if(state<1) state = 1;
+		        if(state.getState()<1) state.setState(1);
 		        MainWindow.this.modifyingData = false;
 		        if(data.getDataManagerParticipant().getParticipants().size()>0) modifyingData = true;
 		        
@@ -205,18 +207,18 @@ public class MainWindow extends JFrame {
 		            	
 		            	if(!modifyingData) {
 			                if(data.getDataManagerParticipant().getParticipants().size()>0) {
-			                	setState2(false);
+			                	state.setState2(false);
 			                }else {
-			                	setState1(false);
+			                	state.setState1(false);
 			                	JOptionPane.showMessageDialog(null, "Debe definir al menos un participante para poder seguir con el problema y definir los criterios de comparacion.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 			                }
 			            }else {
-			            	checkState(false);
+			            	state.checkState(false);
 			            }
 		            }
 		        });
 		        
-		        checkState(true);
+		        state.checkState(true);
 			}
 		});
 		btnEditParticipants.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -263,7 +265,7 @@ public class MainWindow extends JFrame {
 				CriteriaFrame frame = new CriteriaFrame(dataClone, false);
 				frame.setVisible(true);
 				
-				if(state<2) state = 2;
+				if(state.getState()<2) state.setState(2);
 				MainWindow.this.modifyingData = false;
 				if(data.getDataManagerCriteria().getCriterias().size()>0) modifyingData = true;
 				
@@ -280,23 +282,23 @@ public class MainWindow extends JFrame {
 		            	
 		            	if(!modifyingData) {
 			                if(data.getDataManagerCriteria().getCriterias().size()>0) {
-			                	setState3(false);
+			                	state.setState3(false);
 			                }else {
-			                	setState2(false);
+			                	state.setState2(false);
 			                	JOptionPane.showMessageDialog(null, "Debe definir al menos un criterio de comparacion para poder seguir con el problema y definir las alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 			                }
 			            }else {
 			            	if(data.getDataManagerCriteria().getCriterias().size()>0) {
-			            		checkState(false);
+			            		state.checkState(false);
 			            	}else {
-			            		setState2(false);
+			            		state.setState2(false);
 			                	JOptionPane.showMessageDialog(null, "Debe definir al menos un criterio de comparacion para poder seguir con el problema y definir las alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 			            	}
 			            }
 		            }
 		        });
 				
-				checkState(true);
+				state.checkState(true);
 			}
 		});
 		
@@ -335,7 +337,7 @@ public class MainWindow extends JFrame {
 				AlternativesFrame frame = new AlternativesFrame(dataClone, false);
 				frame.setVisible(true);
 				
-				if(state<3) state = 3;
+				if(state.getState()<3) state.setState(3);
 				MainWindow.this.modifyingData = false;
 				if(data.getDataManagerEvidence().getAlternatives().size()>1) modifyingData = true;
 					
@@ -352,18 +354,18 @@ public class MainWindow extends JFrame {
 		            	
 		            	if(!modifyingData) {
 			            	if(data.getDataManagerEvidence().getAlternatives().size()>1) {
-			                	setState4(false);
+			            		state.setState4(false);
 			                }else {
-			                	setState3(false);
+			                	state.setState3(false);
 			                	JOptionPane.showMessageDialog(null, "Debe definir al menos dos alternativas para poder realizar una comparacion.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 			                }
 		            	}else {
-		            		checkState(false);
+		            		state.checkState(false);
 		            	}
 		            }
 		        });
 				
-				checkState(true);
+				state.checkState(true);
 			}
 		});
 		
@@ -389,7 +391,7 @@ public class MainWindow extends JFrame {
 				PrefRulesFrame frame = new PrefRulesFrame(dataClone, false);
 				frame.setVisible(true);
 				
-				if(state<4) state = 4;
+				if(state.getState()<4) state.setState(4);
 				MainWindow.this.modifyingData = false;
 				if(data.getDataManagerRule().getRules().size()>0) modifyingData = true;
 				
@@ -406,23 +408,23 @@ public class MainWindow extends JFrame {
 		            	
 		            	if(!modifyingData) {
 			                if(data.getDataManagerRule().getRules().size()>0) {
-			                	setState5(false);
+			                	state.setState5(false);
 			                }else {
-			                	setState4(false);
+			                	state.setState4(false);
 			                	JOptionPane.showMessageDialog(null, "Debe definir al menos un criterio de comparacion para poder seguir con el problema y definir las alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 			                }
 			            }else {
 			            	if(data.getDataManagerRule().getRules().size()>0) {
-			            		checkState(false);
+			            		state.checkState(false);
 			            	}else {
-			            		setState4(false);
+			            		state.setState4(false);
 			                	JOptionPane.showMessageDialog(null, "Debe definir al menos un criterio de comparacion para poder seguir con el problema y definir las alternativas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 			            	}
 			            }
 		            }
 		        });
 				
-				checkState(true);
+				state.checkState(true);
 			}
 		});
 		panelBtnRules.add(btnEditRules);
@@ -459,223 +461,13 @@ public class MainWindow extends JFrame {
 				CSVwriter.saveEvidenceToCSV(data);
 				CSVwriter.saveRulesToCSV(data);
 				CSVwriter.saveRulePriorityToCSV(data);
+				MainWindow.this.scout.setDataSaved(true);
 			}
 		});
 		btnSaveFiles.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(btnSaveFiles);
 		
-		setState0(false);
-	}
-	
-	private void checkState(boolean isEditing) {
-		switch (state) {
-	        case 0:
-	            // Must indicate the name and project folder
-	            setState0(isEditing);
-	            break;
-	        case 1:
-	            // Must indicate the participants
-	        	setState1(isEditing);
-	            break;
-	        case 2:
-	            // Must indicate the criteria
-	        	setState2(isEditing);
-	            break;
-	        case 3:
-	            // Must indicate the evidence
-	        	setState3(isEditing);
-	            break;
-	        case 4:
-	            // Must indicate the preference rules
-	        	setState4(isEditing);
-	            break;
-	        case 5:
-	            // Must indicate the preference rules
-	        	setState5(isEditing);
-	            break;
-	        default:
-	            // Error
-	        	JOptionPane.showMessageDialog(null, "Estado invalido", "Advertencia", JOptionPane.WARNING_MESSAGE);
-			}
-	}
-	
-	// The user start the program
-	// > Must indicate the name and project folder
-	private void setState0(boolean isEditing) {
-		state = 0;
-		if(isEditing) {
-			btnEditNameAndFolder.setEnabled(false);
-		}else {
-			btnEditNameAndFolder.setEnabled(true);
-		}
-	    btnViewNameAndFolder.setEnabled(false);
-	    
-	    btnEditParticipants.setEnabled(false);
-	    btnViewParticipants.setEnabled(false);
-	    
-	    btnEditCriteria.setEnabled(false);
-	    btnViewCriteria.setEnabled(false);
-	    
-	    btnEditEvidence.setEnabled(false);
-	    btnViewEvidence.setEnabled(false);
-	    
-	    btnEditRules.setEnabled(false);
-	    btnViewRules.setEnabled(false);
-	    
-	    btnSaveFiles.setEnabled(false);
-	}
-	
-	// The user indicate name and project folder
-	// > Must indicate the participants
-	private void setState1(boolean isEditing) {
-		state = 1;
-		if(isEditing) {
-			btnEditNameAndFolder.setEnabled(false);
-			btnEditParticipants.setEnabled(false);
-		}else {
-			btnEditNameAndFolder.setEnabled(true);
-			btnEditParticipants.setEnabled(true);
-		}
-		
-	    btnViewNameAndFolder.setEnabled(true);
-	    
-	    btnViewParticipants.setEnabled(false);
-	    
-	    btnEditCriteria.setEnabled(false);
-	    btnViewCriteria.setEnabled(false);
-	    
-	    btnEditEvidence.setEnabled(false);
-	    btnViewEvidence.setEnabled(false);
-	    
-	    btnEditRules.setEnabled(false);
-	    btnViewRules.setEnabled(false);
-	    
-	    btnSaveFiles.setEnabled(true);
-	}
-	
-	// The user indicate the participants and they priorities
-	// > Must indicate the criteria
-	// [Here the participants can be edited but never can be 0]
-	private void setState2(boolean isEditing) {
-		state = 2;
-		if(isEditing) {
-			btnEditNameAndFolder.setEnabled(false);
-			btnEditParticipants.setEnabled(false);
-			btnEditCriteria.setEnabled(false);
-		}else {
-			btnEditNameAndFolder.setEnabled(true);
-			btnEditParticipants.setEnabled(true);
-			btnEditCriteria.setEnabled(true);
-		}
-		
-	    btnViewNameAndFolder.setEnabled(true);
-	    
-	    btnViewParticipants.setEnabled(true);
-	    
-	    btnViewCriteria.setEnabled(false);
-	    
-	    btnEditEvidence.setEnabled(false);
-	    btnViewEvidence.setEnabled(false);
-	    
-	    btnEditRules.setEnabled(false);
-	    btnViewRules.setEnabled(false);
-	    
-	    btnSaveFiles.setEnabled(true);
-	}
-	
-	// The user indicate the criteria
-	// > Must indicate the evidence
-	// [Here the criteria can be edited but never can be 0]
-	private void setState3(boolean isEditing) {
-		state = 3;
-		if(isEditing) {
-			btnEditNameAndFolder.setEnabled(false);
-			btnEditParticipants.setEnabled(false);
-			btnEditCriteria.setEnabled(false);
-			btnEditEvidence.setEnabled(false);
-		}else {
-			btnEditNameAndFolder.setEnabled(true);
-			btnEditParticipants.setEnabled(true);
-			btnEditCriteria.setEnabled(true);
-			btnEditEvidence.setEnabled(true);
-		}
-		
-	    btnViewNameAndFolder.setEnabled(true);
-	    
-	    btnViewParticipants.setEnabled(true);
-	    
-	    btnViewCriteria.setEnabled(true);
-	    
-	    btnViewEvidence.setEnabled(false);
-	    
-	    btnEditRules.setEnabled(false);
-	    btnViewRules.setEnabled(false);
-	    
-	    btnSaveFiles.setEnabled(true);
-	}
-	
-	// The user indicate the evidence
-	// > Must indicate the preference rules
-	// [Here the rules can be edited but never can be less than 1]
-	private void setState4(boolean isEditing) {
-		state = 4;
-		if(isEditing) {
-			btnEditNameAndFolder.setEnabled(false);
-			btnEditParticipants.setEnabled(false);
-			btnEditCriteria.setEnabled(false);
-			btnEditEvidence.setEnabled(false);
-			btnEditRules.setEnabled(false);
-		}else {
-			btnEditNameAndFolder.setEnabled(true);
-			btnEditParticipants.setEnabled(true);
-			btnEditCriteria.setEnabled(true);
-			btnEditEvidence.setEnabled(true);
-			btnEditRules.setEnabled(true);
-		}
-		
-	    btnViewNameAndFolder.setEnabled(true);
-	    
-	    btnViewParticipants.setEnabled(true);
-	    
-	    btnViewCriteria.setEnabled(true);
-	    
-	    btnViewEvidence.setEnabled(true);
-	    
-	    btnViewRules.setEnabled(false);
-	    
-	    btnSaveFiles.setEnabled(true);
-	}
-	
-	// The user indicate the rules
-	// > This is a finish state
-	// [Here you can do something with the files or data?]
-	private void setState5(boolean isEditing) {
-		state = 5;
-		if(isEditing) {
-			btnEditNameAndFolder.setEnabled(false);
-			btnEditParticipants.setEnabled(false);
-			btnEditCriteria.setEnabled(false);
-			btnEditEvidence.setEnabled(false);
-			btnEditRules.setEnabled(false);
-		}else {
-			btnEditNameAndFolder.setEnabled(true);
-			btnEditParticipants.setEnabled(true);
-			btnEditCriteria.setEnabled(true);
-			btnEditEvidence.setEnabled(true);
-			btnEditRules.setEnabled(true);
-		}
-		
-	    btnViewNameAndFolder.setEnabled(true);
-	    
-	    btnViewParticipants.setEnabled(true);
-	    
-	    btnViewCriteria.setEnabled(true);
-	    
-	    btnViewEvidence.setEnabled(true);
-	    
-	    btnViewRules.setEnabled(true);
-	    
-	    btnSaveFiles.setEnabled(true);
+		state.setState0(false);
 	}
 	
 	private void openManual() {
