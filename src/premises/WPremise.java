@@ -66,7 +66,7 @@ public class WPremise extends Premise{
 	}
 	
 	public String getPremise() {
-		String premise = "worst(X,Y,"+criteria.getName()+")";
+		String premise = "worse(X,Y,"+criteria.getName()+")";
 		if(maxDistBetweenXY!=0)
 			premise += ", max_dist(X,Y, "+criteria.getName()+", "+maxDistBetweenXY+")";
 		if(minValueForX!=-1)
