@@ -84,7 +84,6 @@ public class MainWindow extends JFrame {
 		state = new BtnStates(this);
 		
 		setTitle("Sistema de Decision Multi-Agente");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 450);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -102,6 +101,8 @@ public class MainWindow extends JFrame {
 		btnEditNameAndFolder = new JButton("Definir nombre y carpeta");
 		btnViewNameAndFolder = new JButton("Ver nombre y carpeta");
 		if(!MainWindow.intoSystemFlag) {
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			
 			state.setState(1);
 			
 			Component verticalStrut_2 = Box.createVerticalStrut(20);

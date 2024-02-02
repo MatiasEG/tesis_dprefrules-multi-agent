@@ -40,14 +40,14 @@ public class EPremise extends Premise{
 		String premise = "equal(X,Y,"+criteria.getName()+")";
 		if(minValueForX!=-1)
 			if(!criteria.isNumeric())
-				premise += ", min(X, "+criteria.getName()+", "+criteria.getValues()[minValueForX]+")";
+				premise += ", min(X,"+criteria.getName()+","+criteria.getValues()[minValueForX]+")";
 			else
-				premise += ", min(X, "+criteria.getName()+", "+minValueForX+")";
+				premise += ", min(X,"+criteria.getName()+","+minValueForX+")";
 		if(maxValueForY!=-1)
 			if(!criteria.isNumeric())
-				premise += ", max(Y, "+criteria.getName()+", "+criteria.getValues()[maxValueForY]+")";
+				premise += ", max(Y,"+criteria.getName()+","+criteria.getValues()[maxValueForY]+")";
 			else
-				premise += ", max(Y, "+criteria.getName()+", "+maxValueForY+")";
+				premise += ", max(Y,"+criteria.getName()+","+maxValueForY+")";
 		return premise;
 	}
 

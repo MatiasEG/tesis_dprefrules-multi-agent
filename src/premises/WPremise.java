@@ -68,17 +68,17 @@ public class WPremise extends Premise{
 	public String getPremise() {
 		String premise = "worse(X,Y,"+criteria.getName()+")";
 		if(maxDistBetweenXY!=0)
-			premise += ", max_dist(X,Y, "+criteria.getName()+", "+maxDistBetweenXY+")";
+			premise += ", max_dist(X,Y,"+criteria.getName()+","+maxDistBetweenXY+")";
 		if(minValueForX!=-1)
 			if(!criteria.isNumeric())
-				premise += ", min(X, "+criteria.getName()+", "+criteria.getValues()[minValueForX]+")";
+				premise += ", min(X,"+criteria.getName()+","+criteria.getValues()[minValueForX]+")";
 			else
-				premise += ", min(X, "+criteria.getName()+", "+minValueForX+")";
+				premise += ", min(X,"+criteria.getName()+","+minValueForX+")";
 		if(maxValueForY!=-1)
 			if(!criteria.isNumeric())
-				premise += ", max(Y, "+criteria.getName()+", "+criteria.getValues()[maxValueForY]+")";
+				premise += ", max(Y,"+criteria.getName()+","+criteria.getValues()[maxValueForY]+")";
 			else
-				premise += ", max(Y, "+criteria.getName()+", "+maxValueForY+")";
+				premise += ", max(Y,"+criteria.getName()+","+maxValueForY+")";
 		return premise;
 	}
 
