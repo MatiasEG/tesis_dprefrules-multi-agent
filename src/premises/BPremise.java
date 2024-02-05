@@ -50,73 +50,76 @@ public class BPremise extends Premise{
 	public boolean validMinXValue(String minX) {
 		int minXIndex = -1;
 		
-		if(!criteria.isNumeric()) {
-			for(int i=0; i<criteria.getValues().length; i++) {
-				if(criteria.getValues()[i].equals(minX)) {
-					minXIndex = i;
+		if(!minX.equals("-")) {
+			if(!criteria.isNumeric()) {
+				for(int i=0; i<criteria.getValues().length; i++) {
+					if(criteria.getValues()[i].equals(minX)) {
+						minXIndex = i;
+					}
+					if(minXIndex!=-1) break;
 				}
-				if(minXIndex!=-1) break;
-			}
-			if(minXIndex==-1) return false;
-		}else {
-			try {
-				minXIndex = Integer.parseInt(minX);
-				
-				if((minXIndex<Integer.parseInt(criteria.getValues()[0]) || minXIndex>Integer.parseInt(criteria.getValues()[1]))) {
+				if(minXIndex==-1) return false;
+			}else {
+				try {
+					minXIndex = Integer.parseInt(minX);
+					
+					if((minXIndex<Integer.parseInt(criteria.getValues()[0]) || minXIndex>Integer.parseInt(criteria.getValues()[1]))) {
+						return false;
+					}
+					
+				}catch(NumberFormatException e) {
 					return false;
 				}
-				
-			}catch(NumberFormatException e) {
-				return false;
+			}
+			
+			if(minDistBetweenXY!=0) {
+				if(!(minXIndex > minDistBetweenXY)) return false;
 			}
 		}
-		
-		if(minDistBetweenXY!=0) {
-			if(!(minXIndex > minDistBetweenXY)) return false;
-		}
-		
 		return true;
 	}
 	
 	public boolean validMaxYValue(String maxY) {
 		int maxYIndex = -1;
 		
-		if(!criteria.isNumeric()) {
-			for(int i=0; i<criteria.getValues().length; i++) {
-				if(criteria.getValues()[i].equals(maxY)) {
-					maxYIndex = i;
+		if(!maxY.equals("-")) {
+			if(!criteria.isNumeric()) {
+				for(int i=0; i<criteria.getValues().length; i++) {
+					if(criteria.getValues()[i].equals(maxY)) {
+						maxYIndex = i;
+					}
+					if(maxYIndex!=-1) break;
 				}
-				if(maxYIndex!=-1) break;
-			}
-			if(maxYIndex==-1) return false;
-		}else {
-			try {
-				maxYIndex = Integer.parseInt(maxY);
-				
-				if((maxYIndex<Integer.parseInt(criteria.getValues()[0]) || maxYIndex>Integer.parseInt(criteria.getValues()[1]))) {
-					return false;
-				}
-			}catch(NumberFormatException e) {
-				return false;
-			}
-		}
-		
-		if(maxYIndex!=-1 && minValueForX!=-1 && minValueForX<maxYIndex) return false;
-		
-		if(minDistBetweenXY!=0) {
-			// Defined: minDistBetweenXY & minValueX & maxValueY
-			if(minValueForX!=-1) {
-				if(!(minValueForX-maxYIndex >= minDistBetweenXY)) {
-					return false;
-				}
-				// Defined: minDistBetweenXY & maxValueY
-			}else if(!criteria.isNumeric()) {
-				if(!(criteria.getValues().length-maxYIndex > minDistBetweenXY)) {
-					return false;
-				}
+				if(maxYIndex==-1) return false;
 			}else {
-				if(!(Integer.parseInt(criteria.getValues()[1])-maxYIndex > minDistBetweenXY)) {
+				try {
+					maxYIndex = Integer.parseInt(maxY);
+					
+					if((maxYIndex<Integer.parseInt(criteria.getValues()[0]) || maxYIndex>Integer.parseInt(criteria.getValues()[1]))) {
+						return false;
+					}
+				}catch(NumberFormatException e) {
 					return false;
+				}
+			}
+			
+			if(maxYIndex!=-1 && minValueForX!=-1 && minValueForX<maxYIndex) return false;
+			
+			if(minDistBetweenXY!=0) {
+				// Defined: minDistBetweenXY & minValueX & maxValueY
+				if(minValueForX!=-1) {
+					if(!(minValueForX-maxYIndex >= minDistBetweenXY)) {
+						return false;
+					}
+					// Defined: minDistBetweenXY & maxValueY
+				}else if(!criteria.isNumeric()) {
+					if(!(criteria.getValues().length-maxYIndex > minDistBetweenXY)) {
+						return false;
+					}
+				}else {
+					if(!(Integer.parseInt(criteria.getValues()[1])-maxYIndex > minDistBetweenXY)) {
+						return false;
+					}
 				}
 			}
 		}
@@ -126,7 +129,7 @@ public class BPremise extends Premise{
 	public String getDescription() {
 		String description = "X debe ser mejor que Y en el criterio <"+criteria.getName()+">";
 		if(minDistBetweenXY!=0)
-			description += ", con una distancia minima entre los valores de las alternativas de al menos ("+minDistBetweenXY+")";
+			description += ", con una distancia minima entre los valores de las alternativas de al menos "+minDistBetweenXY;
 		if(minValueForX!=-1)
 			if(!criteria.isNumeric())
 				description += ", donde X vale como minimo "+criteria.getValues()[minValueForX]+"";

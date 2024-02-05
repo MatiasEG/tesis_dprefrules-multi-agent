@@ -48,6 +48,7 @@ public class PrefRuleCreationFrame extends JFrame {
 	private JButton btnNewWPremise;
 	private JButton btnNewEPremise;
 	private JButton btnSaveRuleName;
+	private JButton btnSave;
 	
 	private Rule rule;
 	private DefaultListModel<String> listModelRuleContent;
@@ -106,10 +107,6 @@ public class PrefRuleCreationFrame extends JFrame {
 		JLabel lblNewLabel_1 = new JLabel("- Toda regla debe tener al menos una condicion en la que se prefiera a la alternativa X por sobre la alternativa Y bajo algun criterio -");
 		lblNewLabel_1.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(lblNewLabel_1);
-		
-		JLabel lblNewLabel_2 = new JLabel("- Ademas, toda regla debe tener una condicion en la que la alternativa X es peor o igual que la alternativa Y bajo algun criterio -");
-		lblNewLabel_2.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentPane.add(lblNewLabel_2);
 		
 		Component verticalStrut = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut);
@@ -190,11 +187,25 @@ public class PrefRuleCreationFrame extends JFrame {
 		textPaneDescription = new JTextPane();
 		scrollPane_1.setViewportView(textPaneDescription);
 		
+		Component verticalStrut_4 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_4);
+		
+		btnSave = new JButton("Guardar cambios");
+		btnSave.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(btnSave);
+		
 		actionListeners();
 		editMode(rule);
 	}
 	
 	private void actionListeners() {
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				PrefRuleCreationFrame.this.data.setDataValidated();
+				viewOnlyMod(true);
+				JOptionPane.showMessageDialog(null, "Regla guardada correctamente, ya puede cerrar esta ventana.","Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
 		btnNewBPremise.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				PrefRuleCreationFrame.this.viewOnlyMod(true);
@@ -299,6 +310,7 @@ public class PrefRuleCreationFrame extends JFrame {
 			btnNewWPremise.setEnabled(true);
 			btnNewEPremise.setEnabled(true);
 			btnDeletePremise.setEnabled(true);
+			btnSave.setEnabled(true);
 		}
 	}
 	
@@ -309,6 +321,7 @@ public class PrefRuleCreationFrame extends JFrame {
 		btnNewWPremise.setEnabled(!viewOnly);
 		btnNewEPremise.setEnabled(!viewOnly);
 		btnSaveRuleName.setEnabled(!viewOnly);
+		btnSave.setEnabled(!viewOnly);
 	}
 	
 	private void updateRuleDescription() {

@@ -282,14 +282,14 @@ public class WPremiseFrame extends JFrame {
 				if(wPremise.validMinXValue(minX)) {
 					wPremise.setMinValueForX(minX);
 				}else {
-					JOptionPane.showMessageDialog(null, "Error: El valor minimo para X ingresado no es valida.", "Advertencia", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Error: El valor minimo para X ingresado no es valido.", "Advertencia", JOptionPane.ERROR_MESSAGE);
 					valid = false;
 				}
 				
 				if(wPremise.validMaxYValue(maxY)) {
 					wPremise.setMaxValueForY(maxY);
 				}else {
-					JOptionPane.showMessageDialog(null, "Error: El valor maximo para Y ingresado no es valida.", "Advertencia", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Error: El valor maximo para Y ingresado no es valido.", "Advertencia", JOptionPane.ERROR_MESSAGE);
 					valid = false;
 				}
 				

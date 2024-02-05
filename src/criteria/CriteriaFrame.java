@@ -223,7 +223,7 @@ public class CriteriaFrame extends JFrame {
 		btnSaveFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CSVwriter.saveCriteriasToCSV(CriteriaFrame.this.data);
-				JOptionPane.showMessageDialog(null, "Criterios guardadas correctamente, ya puede cerrar esta ventana.","Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Criterios guardados correctamente, ya puede cerrar esta ventana.","Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 				CriteriaFrame.this.data.setDataValidated();
 				viewOnlyMod(true);
 			}

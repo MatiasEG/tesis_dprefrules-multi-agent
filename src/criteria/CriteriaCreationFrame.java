@@ -49,7 +49,7 @@ public class CriteriaCreationFrame extends JFrame {
 		criteriaToUpdate = criteria;
 		
 		setTitle("Nuevo criterio");
-		setBounds(100, 100, 550, 260);
+		setBounds(100, 100, 550, 340);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -67,31 +67,42 @@ public class CriteriaCreationFrame extends JFrame {
 		Component verticalStrut = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut);
 		
-		JLabel lblNewLabel_1 = new JLabel("Ingrese el rango de valores del nuevo criterio");
-		lblNewLabel_1.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentPane.add(lblNewLabel_1);
+		JLabel lblNewLabel_6 = new JLabel("Seleccione de que tipo va a ser el nuevo criterio en base a sus valores");
+		lblNewLabel_6.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblNewLabel_6);
 		
 		JPanel panelTypeValues = new JPanel();
 		FlowLayout f2_panelButtons = new FlowLayout(FlowLayout.CENTER, 5, 5);
 		panelTypeValues.setLayout(f2_panelButtons);
 		contentPane.add(panelTypeValues);
 		
-		rdbtnNumericValues = new JRadioButton("Valores numericos");
+		rdbtnNumericValues = new JRadioButton("Criterio numerico");
 		panelTypeValues.add(rdbtnNumericValues);
 		
-		rdbtnCategoricValues = new JRadioButton("Valores categoricos");
+		rdbtnCategoricValues = new JRadioButton("Criterio categorico");
 		panelTypeValues.add(rdbtnCategoricValues);
 		
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(rdbtnNumericValues);
 		buttonGroup.add(rdbtnCategoricValues);
 		
+		Component verticalStrut_2 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_2);
+		
+		JLabel lblNewLabel_1 = new JLabel("Ingrese el rango de valores del nuevo criterio");
+		lblNewLabel_1.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblNewLabel_1);
+		
+		JLabel lblElCriterioNumerico = new JLabel("El criterio numerico puede valer:");
+		lblElCriterioNumerico.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblElCriterioNumerico);
+		
 		JPanel panelNumericValues = new JPanel();
 		FlowLayout fl_panelButtons = new FlowLayout(FlowLayout.CENTER, 5, 5);
 		panelNumericValues.setLayout(fl_panelButtons);
 		contentPane.add(panelNumericValues);
 		
-		JLabel lblNewLabel = new JLabel("El criterio puede valer entre (");
+		JLabel lblNewLabel = new JLabel("entre (");
 		panelNumericValues.add(lblNewLabel);
 		
 		textFieldNumericValue1 = new JFormattedTextField();
@@ -110,11 +121,18 @@ public class CriteriaCreationFrame extends JFrame {
 		JLabel lblNewLabel_3 = new JLabel(")");
 		panelNumericValues.add(lblNewLabel_3);
 		
+		Component verticalStrut_3 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_3);
+		
+		JLabel lblNewLabel_4_1 = new JLabel("El criterio categorico puede tomar los valores");
+		lblNewLabel_4_1.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblNewLabel_4_1);
+		
 		JPanel panelCategoricalValues = new JPanel();
 		contentPane.add(panelCategoricalValues);
 		panelCategoricalValues.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JLabel lblNewLabel_4 = new JLabel("El criterio tomar los valores [");
+		JLabel lblNewLabel_4 = new JLabel("[");
 		panelCategoricalValues.add(lblNewLabel_4);
 		
 		textFieldSimbolicValues = new JTextField();

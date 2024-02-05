@@ -322,6 +322,7 @@ public class MainWindow extends JFrame {
 				CSVwriter.saveRulesToCSV(data);
 				CSVwriter.saveRulePriorityToCSV(data);
 				MainWindow.this.scout.setDataSaved(true);
+            	JOptionPane.showMessageDialog(null, "Archivos guardados correctamente, ya puede cerrar esta ventana", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 	}

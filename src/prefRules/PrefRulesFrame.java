@@ -197,14 +197,23 @@ public class PrefRulesFrame extends JFrame {
 		});
 		btnNewRule.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				dataClone = data.clone();
+				
 				PrefRulesFrame.this.viewOnlyMod(true);
-				PrefRuleCreationFrame frame = new PrefRuleCreationFrame(PrefRulesFrame.this.data, null);
+				PrefRuleCreationFrame frame = new PrefRuleCreationFrame(dataClone, null);
 				frame.setVisible(true);
 				
 				// WindowListener for detect when the frame is closed
 		        frame.addWindowListener(new WindowAdapter() {
 		            @Override
 		            public void windowClosing(WindowEvent e) {
+		            	if(dataClone.getDataValidated()) {
+		            		data.updateData(dataClone);
+		            	}else {
+		            		// The user close the window without save.
+		            	}
+		            	dataClone = null;
+		            	
 		            	updateRules();
 		            	PrefRulesFrame.this.viewOnlyMod(false);
 		            }

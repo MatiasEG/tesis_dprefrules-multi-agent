@@ -279,7 +279,7 @@ public class EPremiseFrame extends JFrame {
 					if(ePremise.validMinXValue(value)) {
 						ePremise.setMinValueForX(value);
 					}else {
-						JOptionPane.showMessageDialog(null, "Error: El valor minimo para X ingresado no es valida.", "Advertencia", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Error: El valor minimo para X ingresado no es valido.", "Advertencia", JOptionPane.ERROR_MESSAGE);
 						valid = false;
 					}
 				}else {
@@ -291,7 +291,7 @@ public class EPremiseFrame extends JFrame {
 					if(ePremise.validMaxYValue(value)) {
 						ePremise.setMaxValueForY(value);
 					}else {
-						JOptionPane.showMessageDialog(null, "Error: El valor minimo para X ingresado no es valida.", "Advertencia", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Error: El valor minimo para X ingresado no es valido.", "Advertencia", JOptionPane.ERROR_MESSAGE);
 						valid = false;
 					}
 				}
