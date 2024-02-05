@@ -19,6 +19,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.awt.event.ActionEvent;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -31,7 +34,7 @@ import java.awt.FlowLayout;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
-	public static boolean intoSystemFlag = true;
+	public static boolean intoSystemFlag = false;
 	
 	private JPanel contentPane;
     public JButton btnEditNameAndFolder;
@@ -325,10 +328,22 @@ public class MainWindow extends JFrame {
 	
 	private void openManual() {
 		try {
-            System.out.println("Start..");
-            File file = new java.io.File("src/manual.html").getAbsoluteFile();
-            Desktop.getDesktop().open(file);                    
-            System.out.println("End..");
+			// Get the location of the JAR file
+	        InputStream inputStream = MainWindow.class.getResourceAsStream("/manual.html");
+			
+	        // Verifica si el recurso se encontró correctamente
+	        if (inputStream != null) {
+	            // Crea un archivo temporal para copiar el contenido del recurso
+	            File tempFile = File.createTempFile("manual", ".html");
+
+	            // Copy the content on a temporal file
+	            Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+	            // Abre el archivo temporal con el navegador predeterminado
+	            Desktop.getDesktop().open(tempFile);
+	        } else {
+	            System.out.println("No se pudo encontrar el recurso manual.html");
+	        }
         } catch (Exception e1) {
             e1.printStackTrace();
         }
