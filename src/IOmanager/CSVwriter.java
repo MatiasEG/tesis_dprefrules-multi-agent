@@ -6,29 +6,29 @@ import alternative.Alternative;
 import criteria.Criteria;
 import dataManager.DataManager;
 import dataManager.Priority;
-import java_ui.DSJavaUI;
+//import java_ui.DSJavaUI;
 import mainWindow.MainWindow;
 import participant.Participant;
 import prefRules.Rule;
 
 public class CSVwriter {
 
-	private static String criteria_example_path = "criteria_example_6.csv";
-	private static String evidence_example_path = "evidence_example_6.csv";
-	private static String cpref_rules_example_path = "cpref_rules_example_6.csv";
-	private static String importance_example_path = "importance_orders_6.csv";
-	private static String agents_priority_example_path = "agents_priority_order_example_6.csv";
-	
-	private static String criteria_file = DSJavaUI.getExamplesFolderRelativePath()+"/examples/"+criteria_example_path;
-	private static String evidence_file = DSJavaUI.getExamplesFolderRelativePath()+"/examples/"+evidence_example_path;
-	private static String cpref_rules_file = DSJavaUI.getExamplesFolderRelativePath()+"/examples/"+cpref_rules_example_path;
-	private static String importance_file = DSJavaUI.getExamplesFolderRelativePath()+"/examples/"+importance_example_path;
-	private static String agents_priority_file = DSJavaUI.getExamplesFolderRelativePath()+"/examples/"+agents_priority_example_path;
+//	private static String criteria_example_path = "criteria_example_6.csv";
+//	private static String evidence_example_path = "evidence_example_6.csv";
+//	private static String cpref_rules_example_path = "cpref_rules_example_6.csv";
+//	private static String importance_example_path = "importance_orders_6.csv";
+//	private static String agents_priority_example_path = "agents_priority_order_example_6.csv";
+//	
+//	private static String criteria_file = DSJavaUI.getExamplesFolderRelativePath()+"/examples/"+criteria_example_path;
+//	private static String evidence_file = DSJavaUI.getExamplesFolderRelativePath()+"/examples/"+evidence_example_path;
+//	private static String cpref_rules_file = DSJavaUI.getExamplesFolderRelativePath()+"/examples/"+cpref_rules_example_path;
+//	private static String importance_file = DSJavaUI.getExamplesFolderRelativePath()+"/examples/"+importance_example_path;
+//	private static String agents_priority_file = DSJavaUI.getExamplesFolderRelativePath()+"/examples/"+agents_priority_example_path;
 	
 	public static void saveCriteriasToCSV(DataManager data) {
 		String filePath = "";
 		if(MainWindow.intoSystemFlag) {
-			filePath = criteria_file;
+//			filePath = criteria_file;
 		}else {
 			filePath = data.getSaveFolder()+"\\"+data.getProjectName()+"_criteria.csv";
 
@@ -79,7 +79,7 @@ public class CSVwriter {
 	public static void saveAgentPriorityToCSV(DataManager data) {
 		String filePath = "";
 		if(MainWindow.intoSystemFlag) {
-			filePath = agents_priority_file;
+//			filePath = agents_priority_file;
 		}else {
 			filePath = data.getSaveFolder()+"\\"+data.getProjectName()+"_participants_priority_order.csv";
 		}
@@ -111,7 +111,7 @@ public class CSVwriter {
 	public static void saveEvidenceToCSV(DataManager data) {
 		String filePath = "";
 		if(MainWindow.intoSystemFlag) {
-			filePath = evidence_file;
+//			filePath = evidence_file;
 		}else {
 			filePath = data.getSaveFolder()+"/"+data.getProjectName()+"_evidence.csv";
 		}
@@ -131,10 +131,6 @@ public class CSVwriter {
             for(Alternative alt: data.getDataManagerEvidence().getAlternatives()) {
             	String values[] = alt.evidenceFileContent();
             	writer.write(values[0]);
-            	
-//            	for(int i=0; i<values.length; i++) {
-//            		System.out.print(" - "+values[i]);
-//            	}
             	
             	for(int i=1; i<values.length; i++) {
             		if(values[i].equals("-")) {
@@ -162,7 +158,7 @@ public class CSVwriter {
 	public static void saveRulesToCSV(DataManager data) {
 		String filePath = "";
 		if(MainWindow.intoSystemFlag) {
-			filePath = cpref_rules_file;
+//			filePath = cpref_rules_file;
 		}else {
 			filePath = data.getSaveFolder()+"/"+data.getProjectName()+"_rules.csv";
 		}
@@ -190,7 +186,7 @@ public class CSVwriter {
 	public static void saveRulePriorityToCSV(DataManager data) {
 		String filePath = "";
 		if(MainWindow.intoSystemFlag) {
-			filePath = importance_file;
+//			filePath = importance_file;
 		}else {
 			filePath = data.getSaveFolder()+"/"+data.getProjectName()+"_importance_orders.csv";
 		}
