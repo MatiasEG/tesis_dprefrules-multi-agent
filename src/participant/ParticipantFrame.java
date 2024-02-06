@@ -7,7 +7,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import IOmanager.CSVreader;
-import IOmanager.CSVwriter;
 import IOmanager.FileChooser;
 import dataManager.DataManager;
 import exceptions.AgentPriorityException;
@@ -37,7 +36,7 @@ public class ParticipantFrame extends JFrame {
 	private JButton btnAddUser;
 	private JButton btnDeleteUser;
 	private JButton btnEditParticipantsPriority;
-	private JButton btnSaveParticipantsFile;
+	private JButton btnSave;
 	private JButton btnViewParticipantsPriority;
 	
 	private DefaultListModel<String> listModelParticipants;
@@ -133,9 +132,9 @@ public class ParticipantFrame extends JFrame {
 		btnViewParticipantsPriority.setAlignmentX(0.5f);
 		panelAgentsButtons.add(btnViewParticipantsPriority);
 		
-		btnSaveParticipantsFile = new JButton("Guardar cambios");
-		btnSaveParticipantsFile.setAlignmentX(0.5f);
-		panelAgentsButtons.add(btnSaveParticipantsFile);
+		btnSave = new JButton("Guardar cambios");
+		btnSave.setAlignmentX(0.5f);
+		panelAgentsButtons.add(btnSave);
 		
 		updateVisualComponents(data);
 		actionListeners();
@@ -153,10 +152,9 @@ public class ParticipantFrame extends JFrame {
 				deleteSelectedParticipant();
 			}
 		});
-		btnSaveParticipantsFile.addActionListener(new ActionListener() {
+		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(ParticipantFrame.this.data.getDataManagerParticipant().getParticipants().size()>0) {
-					CSVwriter.saveAgentPriorityToCSV(ParticipantFrame.this.data);
 					JOptionPane.showMessageDialog(null, "Datos validados y guardados, ya puede cerrar esta ventana", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 					ParticipantFrame.this.data.setDataValidated();
 					viewOnlyMod(true);
@@ -221,7 +219,7 @@ public class ParticipantFrame extends JFrame {
 		btnAddUser.setEnabled(!viewOnly);;
 		btnDeleteUser.setEnabled(!viewOnly);;
 		btnEditParticipantsPriority.setEnabled(!viewOnly);;
-		btnSaveParticipantsFile.setEnabled(!viewOnly);
+		btnSave.setEnabled(!viewOnly);
 	}
 	
 	private void deleteSelectedParticipant() {

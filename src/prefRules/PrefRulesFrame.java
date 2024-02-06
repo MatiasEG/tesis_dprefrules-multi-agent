@@ -7,7 +7,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import IOmanager.CSVreader;
-import IOmanager.CSVwriter;
 import IOmanager.FileChooser;
 import criteria.Criteria;
 import dataManager.DataManager;
@@ -40,7 +39,7 @@ public class PrefRulesFrame extends JFrame {
 	private JButton btnDeleteRule;
 	private JButton btnNewRule;
 	private JButton btnLoadFile;
-	private JButton btnSaveFile;
+	private JButton btnSave;
 	private JButton btnEditRulePreferences;
 	private JButton btnViewRulePreferences;
 	private JButton btnDescriptionRule;
@@ -114,8 +113,8 @@ public class PrefRulesFrame extends JFrame {
 		panelFileButtons.add(btnLoadFile);
 		btnLoadFile.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
-		btnSaveFile = new JButton("Guardar archivo");
-		panelFileButtons.add(btnSaveFile);
+		btnSave = new JButton("Guardar cambios");
+		panelFileButtons.add(btnSave);
 		
 		Component verticalStrut_1 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_1);
@@ -292,26 +291,30 @@ public class PrefRulesFrame extends JFrame {
 		});
 		btnEditRulePreferences.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dataClone = PrefRulesFrame.this.data.clone();
-				PrefRulesFrame.this.viewOnlyMod(true);
-				
-				PrefRulePreferencesFrame frame = new PrefRulePreferencesFrame(dataClone, false);
-				frame.setVisible(true);
-				
-				// WindowListener for detect when the frame is closed
-				frame.addWindowListener(new WindowAdapter() {
-		            @Override
-		            public void windowClosing(WindowEvent e) {
-		            	if(dataClone.getDataValidated()) {
-		            		PrefRulesFrame.this.data.updateData(dataClone);
-		            	}else {
-		            		// The user close the window without save.
-		            	}
-		            	dataClone = null;
-		            	
-		            	PrefRulesFrame.this.viewOnlyMod(false);
-		            }
-		        });
+				if(PrefRulesFrame.this.data.getDataManagerRule().getRules().size() > 1) {
+					dataClone = PrefRulesFrame.this.data.clone();
+					PrefRulesFrame.this.viewOnlyMod(true);
+					
+					PrefRulePreferencesFrame frame = new PrefRulePreferencesFrame(dataClone, false);
+					frame.setVisible(true);
+					
+					// WindowListener for detect when the frame is closed
+					frame.addWindowListener(new WindowAdapter() {
+			            @Override
+			            public void windowClosing(WindowEvent e) {
+			            	if(dataClone.getDataValidated()) {
+			            		PrefRulesFrame.this.data.updateData(dataClone);
+			            	}else {
+			            		// The user close the window without save.
+			            	}
+			            	dataClone = null;
+			            	
+			            	PrefRulesFrame.this.viewOnlyMod(false);
+			            }
+			        });
+				}else {
+		            JOptionPane.showMessageDialog(PrefRulesFrame.this, "Debe crear al menos dos reglas de preferencia, para poder establecer un orden de prioridad.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+				}
 			}
 		});
 		btnViewRulePreferences.addActionListener(new ActionListener() {
@@ -320,9 +323,8 @@ public class PrefRulesFrame extends JFrame {
 				frame.setVisible(true);
 			}
 		});
-		btnSaveFile.addActionListener(new ActionListener() {
+		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				CSVwriter.saveRulesToCSV(PrefRulesFrame.this.data);
 				JOptionPane.showMessageDialog(null, "Alternativas guardadas correctamente, ya puede cerrar esta ventana.","Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 				PrefRulesFrame.this.data.setDataValidated();
 				viewOnlyMod(true);
@@ -335,7 +337,7 @@ public class PrefRulesFrame extends JFrame {
 		btnDeleteRule.setEnabled(!viewOnly);
 		btnNewRule.setEnabled(!viewOnly);
 		btnLoadFile.setEnabled(!viewOnly);
-		btnSaveFile.setEnabled(!viewOnly);
+		btnSave.setEnabled(!viewOnly);
 		btnEditRulePreferences.setEnabled(!viewOnly);
 	}
 	

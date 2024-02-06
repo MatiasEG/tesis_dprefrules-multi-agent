@@ -46,7 +46,7 @@ public class PrefRulePreferencesFrame extends JFrame {
     private JButton btnSaveRulePreferenes;
     private JButton btnAddPriority;
     private JButton btnDeletePriority;
-    private JButton btnConfirmChanges;
+    private JButton btnSave;
 
 	private DataManager data;
 
@@ -157,9 +157,9 @@ public class PrefRulePreferencesFrame extends JFrame {
 		Component verticalStrut_6 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_6);
 		
-		btnConfirmChanges = new JButton("Confirmar cambios");
-		btnConfirmChanges.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentPane.add(btnConfirmChanges);
+		btnSave = new JButton("Guardar cambios");
+		btnSave.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(btnSave);
 		
 		updateIndexRulePriority();
 		updateRulePriorityTransitiveList();
@@ -228,7 +228,7 @@ public class PrefRulePreferencesFrame extends JFrame {
 				}
 			}
 		});
-		btnConfirmChanges.addActionListener(new ActionListener() {
+		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null, "Datos validados y guardados, ya puede cerrar esta ventana", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 				PrefRulePreferencesFrame.this.data.setDataValidated();

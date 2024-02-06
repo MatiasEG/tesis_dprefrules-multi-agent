@@ -34,7 +34,7 @@ public class ParticipantPriorityFrame extends JFrame {
     
     private JButton btnAddPriority;
     private JButton btnDeletePriority;
-    private JButton btnConfirmChanges;
+    private JButton btnSave;
 
 	private DataManager data;
 
@@ -130,9 +130,9 @@ public class ParticipantPriorityFrame extends JFrame {
 		Component verticalStrut_5 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_5);
 		
-		btnConfirmChanges = new JButton("Confirmar cambios");
-		btnConfirmChanges.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentPane.add(btnConfirmChanges);
+		btnSave = new JButton("Guardar cambios");
+		btnSave.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(btnSave);
 		
 		updatePriorityLists();
 		updateParticipantsPriorityTransitiveList();
@@ -192,7 +192,7 @@ public class ParticipantPriorityFrame extends JFrame {
 		        }
 			}
 		});
-		btnConfirmChanges.addActionListener(new ActionListener() {
+		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JOptionPane.showMessageDialog(null, "Datos validados y guardados, ya puede cerrar esta ventana", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 				ParticipantPriorityFrame.this.data.setDataValidated();

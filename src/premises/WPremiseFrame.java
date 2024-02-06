@@ -40,7 +40,7 @@ public class WPremiseFrame extends JFrame {
 	private DefaultComboBoxModel<String> comboBoxModelYMaxValue;
 	private JLabel lblCriteria1;
 	private JLabel lblCriteria2;
-	private JButton btnValidateDataAndSave;
+	private JButton btnSave;
 	private JPanel panelNumeric1;
 	private JPanel panelNumeric2;
 	private JTextField textFieldXMinValue;
@@ -101,7 +101,7 @@ public class WPremiseFrame extends JFrame {
 					lblMaxDist.setText("La distancia minima entre los valores posibles para el criterio "+criteria.getName()+" debe ser:");
 					lblCriteria1.setText("en el criterio "+criteria.getName()+".");
 					lblCriteria2.setText("en el criterio "+criteria.getName()+".");
-					btnValidateDataAndSave.setEnabled(true);
+					btnSave.setEnabled(true);
 					btnConfirmCriteria.setEnabled(false);
 					wPremise = new WPremise(criteria);
 					
@@ -149,7 +149,7 @@ public class WPremiseFrame extends JFrame {
 						textFieldYMaxValue.setColumns(10);
 						panelNumeric2.add(textFieldYMaxValue);
 					}
-					btnValidateDataAndSave.setEnabled(true);
+					btnSave.setEnabled(true);
 				}else {
 					JOptionPane.showMessageDialog(null, "Error: El criterio seleccionado no se encuentra disponible", "Advertencia", JOptionPane.WARNING_MESSAGE);
 				}
@@ -254,9 +254,9 @@ public class WPremiseFrame extends JFrame {
 		Component verticalStrut_5 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_5);
 		
-		btnValidateDataAndSave = new JButton("Validar datos y guardar");
-		btnValidateDataAndSave.setEnabled(false);
-		btnValidateDataAndSave.addActionListener(new ActionListener() {
+		btnSave = new JButton("Guardar cambios");
+		btnSave.setEnabled(false);
+		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				boolean valid = true;
 				
@@ -298,13 +298,13 @@ public class WPremiseFrame extends JFrame {
 				}
 			}
 		});
-		btnValidateDataAndSave.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentPane.add(btnValidateDataAndSave);
+		btnSave.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(btnSave);
 	}
 	
 	private void saveData() {
 		WPremiseFrame.this.rule.addWorseP(wPremise);
-		btnValidateDataAndSave.setEnabled(false);
+		btnSave.setEnabled(false);
 		JOptionPane.showMessageDialog(null, "Exito: Los datos se han guardado correctamente, ya puede cerrar esta ventana.", "Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 		disableEdit();
 	}

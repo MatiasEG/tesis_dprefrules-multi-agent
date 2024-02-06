@@ -10,7 +10,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import IOmanager.CSVreader;
-import IOmanager.CSVwriter;
 import IOmanager.FileChooser;
 import criteria.Criteria;
 import dataManager.DataManager;
@@ -36,7 +35,7 @@ public class AlternativesFrame extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
 	private DefaultTableModel model;
-	private JButton btnAcept;
+	private JButton btnSave;
 	private JButton btnDeleteAlternative;
 	private JButton btnLoadFile;
 	private JButton btnNewAlternative;
@@ -142,8 +141,8 @@ public class AlternativesFrame extends JFrame {
 		btnDeleteAlternative = new JButton("Eliminar alternativa");
 		panel.add(btnDeleteAlternative);
 		
-		btnAcept = new JButton("Guardar archivo");
-		panel.add(btnAcept);
+		btnSave = new JButton("Guardar cambios");
+		panel.add(btnSave);
 		
 		for(int i=0; i<criterias.size(); i++) {
 			if(!criterias.get(i).isNumeric()) {
@@ -198,7 +197,7 @@ public class AlternativesFrame extends JFrame {
                  }
 			}
 		});
-		btnAcept.addActionListener(new ActionListener() {
+		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (table.isEditing()) {
 		            table.getCellEditor().stopCellEditing();
@@ -206,7 +205,6 @@ public class AlternativesFrame extends JFrame {
 				
 				if(table.getRowCount()>1) {
 					if(validateEvidence(AlternativesFrame.this.data)) {
-						CSVwriter.saveEvidenceToCSV(AlternativesFrame.this.data);
 						JOptionPane.showMessageDialog(null, "Alternativas guardadas correctamente, ya puede cerrar esta ventana.","Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 						AlternativesFrame.this.data.setDataValidated();
 						viewOnlyMod(true);
@@ -220,7 +218,7 @@ public class AlternativesFrame extends JFrame {
 	
 	private void viewOnlyMod(boolean viewOnly) {
 		if(viewOnly) {
-			btnAcept.setEnabled(false);
+			btnSave.setEnabled(false);
 			btnDeleteAlternative.setEnabled(false);
 			btnLoadFile.setEnabled(false);
 			btnNewAlternative.setEnabled(false);

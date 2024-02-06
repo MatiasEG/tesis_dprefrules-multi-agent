@@ -5,7 +5,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import IOmanager.CSVreader;
-import IOmanager.CSVwriter;
 import IOmanager.FileChooser;
 import alternative.Alternative;
 import dataManager.DataManager;
@@ -39,7 +38,7 @@ public class CriteriaFrame extends JFrame {
 	private JLabel lblNewLabel_3;
 	private JLabel lblNewLabel_4;
 	private JPanel panelButtons;
-	private JButton btnSaveFile;
+	private JButton btnSave;
 	private JButton btnAddCriteria;
 	private JButton btnDeleteCriteria;
 	private JButton btnEditCriteria;
@@ -148,8 +147,8 @@ public class CriteriaFrame extends JFrame {
 		btnEditCriteria = new JButton("Editar criterio seleccionado");
 		panelButtons.add(btnEditCriteria);
 		
-		btnSaveFile = new JButton("Guardar archivo");
-		panelButtons.add(btnSaveFile);
+		btnSave = new JButton("Guardar cambios");
+		panelButtons.add(btnSave);
 		
 		checkData(data);
 		actionListeners();
@@ -220,9 +219,8 @@ public class CriteriaFrame extends JFrame {
 				}
 			}
 		});
-		btnSaveFile.addActionListener(new ActionListener() {
+		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CSVwriter.saveCriteriasToCSV(CriteriaFrame.this.data);
 				JOptionPane.showMessageDialog(null, "Criterios guardados correctamente, ya puede cerrar esta ventana.","Guardado exitoso", JOptionPane.INFORMATION_MESSAGE);
 				CriteriaFrame.this.data.setDataValidated();
 				viewOnlyMod(true);
@@ -232,7 +230,7 @@ public class CriteriaFrame extends JFrame {
 	
 	private void viewOnlyMod(boolean viewOnly) {
 		if(viewOnly) {
-			btnSaveFile.setEnabled(false);
+			btnSave.setEnabled(false);
 			btnLoadFile.setEnabled(false);
 			btnAddCriteria.setEnabled(false);
 			btnDeleteCriteria.setEnabled(false);
