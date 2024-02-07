@@ -82,7 +82,7 @@ public class CriteriaFrame extends JFrame {
 		this.data = data;
 		
 		setTitle("Criterios a evaluar");
-		setBounds(100, 100, 850, 400);
+		setBounds(100, 100, 860, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 

@@ -207,6 +207,7 @@ public class ParticipantPriorityFrame extends JFrame {
 			comboBoxWorst.setEnabled(false);
 			btnAddPriority.setEnabled(false);
 			btnDeletePriority.setEnabled(false);
+			btnSave.setEnabled(false);
 		}
 	}
 	

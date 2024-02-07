@@ -142,7 +142,7 @@ public class NameAndFolderFrame extends JFrame {
 	
 	private boolean validateInput() {
 		if(FileChooser.isValidFolder(folderPath)) {
-			String error = DataManager.validateStringWithOnlyLettersAndNumbers(textFieldProjectName.getText());
+			String error = DataManager.validateStringWithOnlyLetters(textFieldProjectName.getText());
 			if(error == null){
 				NameAndFolderFrame.this.data.setSaveFolder(folderPath);
 				NameAndFolderFrame.this.data.setProjectName(textFieldProjectName.getText());

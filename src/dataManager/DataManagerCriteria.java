@@ -87,7 +87,7 @@ public class DataManagerCriteria {
 	        }
 	        
 	        for(String myStr: values) {
-	        	String validation = DataManager.validateStringWithOnlyLettersAndNumbers(myStr);
+	        	String validation = DataManager.validateStringWithOnlyLetters(myStr);
 	        	if(validation!=null) return false;
 		    }
 		}else {

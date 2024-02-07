@@ -298,6 +298,13 @@ public class WPremiseFrame extends JFrame {
 				}
 			}
 		});
+		
+		JLabel lblNewLabel_2 = new JLabel("- Si no ingresa ningun dato, se considerara que X es mejor que Y si solamente tiene un mejor valor en el criterio seleccionado -");
+		lblNewLabel_2.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblNewLabel_2);
+		
+		Component verticalStrut_7 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_7);
 		btnSave.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(btnSave);
 	}

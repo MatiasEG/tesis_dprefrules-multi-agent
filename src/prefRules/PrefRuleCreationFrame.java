@@ -276,7 +276,7 @@ public class PrefRuleCreationFrame extends JFrame {
 		});
 		btnSaveRuleName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String validation = DataManager.validateStringWithOnlyLettersAndNumbers(textFieldRuleName.getText());
+				String validation = DataManager.validateStringWithOnlyLetters(textFieldRuleName.getText());
 				if(validation == null) {
 					if(DataManager.validateStringListNotContainNewElement(PrefRuleCreationFrame.this.data.getDataManagerRule().getRuleNames(), textFieldRuleName.getText())) {
 						lblRuleName.setText("Nombre establecido: "+textFieldRuleName.getText());

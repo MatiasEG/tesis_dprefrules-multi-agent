@@ -87,11 +87,11 @@ public class DataManager {
 	}
 	
 	// check --------------------------------------------------------------------------------------------------------------
-	public static String validateStringWithOnlyLettersAndNumbers(String s) {
+	public static String validateStringWithOnlyLetters(String s) {
 		if(s == null || s.equals("")) return "Cadena de caracteres vacia";
 		
 		for(int i = 0; i < s.length(); i++) {
-			if(!Character.isLetterOrDigit(s.charAt(i))) {
+			if(!Character.isLetter(s.charAt(i))) {
 				return "Caracter invalido ("+s.charAt(i)+") en "+s+".";
 			}
 		}

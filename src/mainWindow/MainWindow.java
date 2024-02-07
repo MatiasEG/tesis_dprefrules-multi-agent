@@ -185,7 +185,7 @@ public class MainWindow extends JFrame {
 		contentPane.add(panelAlternatives);
 		panelAlternatives.setLayout(new BoxLayout(panelAlternatives, BoxLayout.Y_AXIS));
 		
-		JLabel lblNewLabel_3 = new JLabel("- Determine cuales son las alternativas posibles -");
+		JLabel lblNewLabel_3 = new JLabel("- Determine cuales son las alternativas y sus caracteristicas -");
 		lblNewLabel_3.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panelAlternatives.add(lblNewLabel_3);
 		

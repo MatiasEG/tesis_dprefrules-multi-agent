@@ -49,7 +49,7 @@ public class CriteriaCreationFrame extends JFrame {
 		criteriaToUpdate = criteria;
 		
 		setTitle("Nuevo criterio");
-		setBounds(100, 100, 550, 340);
+		setBounds(100, 100, 625, 450);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -92,6 +92,24 @@ public class CriteriaCreationFrame extends JFrame {
 		JLabel lblNewLabel_1 = new JLabel("Ingrese el rango de valores del nuevo criterio");
 		lblNewLabel_1.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(lblNewLabel_1);
+		
+		Component verticalStrut_4 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_4);
+		
+		JLabel lblNewLabel_7 = new JLabel("Recuerde que:");
+		lblNewLabel_7.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPane.add(lblNewLabel_7);
+		
+		JLabel lblNewLabel_3_1 = new JLabel("- Los valores posibles para los criterios deben estar separados por coma -");
+		lblNewLabel_3_1.setAlignmentX(0.5f);
+		contentPane.add(lblNewLabel_3_1);
+		
+		JLabel lblNewLabel_4_2 = new JLabel("- El valor de mas a la izquierda sera considerado el peor valor posible, mientras que el de mas a la derecha el mejor -");
+		lblNewLabel_4_2.setAlignmentX(0.5f);
+		contentPane.add(lblNewLabel_4_2);
+		
+		Component verticalStrut_5 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_5);
 		
 		JLabel lblElCriterioNumerico = new JLabel("El criterio numerico puede valer:");
 		lblElCriterioNumerico.setAlignmentX(Component.CENTER_ALIGNMENT);
