@@ -259,6 +259,13 @@ public class EPremiseFrame extends JFrame {
 		lblCriteria2 = new JLabel("en el criterio ... .");
 		panel_4.add(lblCriteria2);
 		
+		Component verticalStrut_5_1 = Box.createVerticalStrut(20);
+		contentPane.add(verticalStrut_5_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("- Si no ingresa ningun dato, se considerara que X es mejor que Y si solamente tiene un valor igual en el criterio seleccionado -");
+		lblNewLabel_2.setAlignmentX(0.5f);
+		contentPane.add(lblNewLabel_2);
+		
 		Component verticalStrut_5 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_5);
 		
