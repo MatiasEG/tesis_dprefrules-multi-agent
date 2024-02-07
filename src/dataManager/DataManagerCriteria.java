@@ -87,7 +87,6 @@ public class DataManagerCriteria {
 	        }
 	        
 	        for(String myStr: values) {
-	        	myStr = myStr.toLowerCase();
 	        	String validation = DataManager.validateStringWithOnlyLetters(myStr);
 	        	if(validation!=null) return false;
 		    }

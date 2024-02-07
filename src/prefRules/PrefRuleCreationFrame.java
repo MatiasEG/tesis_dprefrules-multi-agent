@@ -276,20 +276,19 @@ public class PrefRuleCreationFrame extends JFrame {
 		});
 		btnSaveRuleName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String ruleName = textFieldRuleName.getText().toLowerCase();
-				String validation = DataManager.validateStringWithOnlyLetters(ruleName);
+				String validation = DataManager.validateStringWithOnlyLetters(textFieldRuleName.getText());
 				if(validation == null) {
-					if(DataManager.validateStringListNotContainNewElement(PrefRuleCreationFrame.this.data.getDataManagerRule().getRuleNames(), ruleName)) {
-						lblRuleName.setText("Nombre establecido: "+ruleName);
+					if(DataManager.validateStringListNotContainNewElement(PrefRuleCreationFrame.this.data.getDataManagerRule().getRuleNames(), textFieldRuleName.getText())) {
+						lblRuleName.setText("Nombre establecido: "+textFieldRuleName.getText());
 						if(PrefRuleCreationFrame.this.rule==null) {
-							PrefRuleCreationFrame.this.rule = new Rule(ruleName);
+							PrefRuleCreationFrame.this.rule = new Rule(textFieldRuleName.getText());
 							PrefRuleCreationFrame.this.data.getDataManagerRule().addRule(PrefRuleCreationFrame.this.rule);
 							btnNewBPremise.setEnabled(true);
 							btnNewWPremise.setEnabled(true);
 							btnNewEPremise.setEnabled(true);
 							btnDeletePremise.setEnabled(true);
 						}else {
-							PrefRuleCreationFrame.this.rule.setName(ruleName);
+							PrefRuleCreationFrame.this.rule.setName(textFieldRuleName.getText());
 						}
 						textFieldRuleName.setText("");
 					}else {

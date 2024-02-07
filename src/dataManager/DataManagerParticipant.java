@@ -115,7 +115,6 @@ public class DataManagerParticipant {
 	
 	// check --------------------------------------------------------------------------------------------------------------
 	public boolean validParticipantName(String name) {
-		name = name.toLowerCase();
 		if(DataManager.validateStringWithOnlyLetters(name)!=null) return false;
 		if ((name==null) || name.trim().isEmpty()) return false;
 		for(Participant participant : participants) {
