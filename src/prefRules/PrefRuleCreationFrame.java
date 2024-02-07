@@ -100,11 +100,11 @@ public class PrefRuleCreationFrame extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 		
-		JLabel lblNewLabel = new JLabel("Consideraciones");
+		JLabel lblNewLabel = new JLabel("Recuerde que:");
 		lblNewLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(lblNewLabel);
 		
-		JLabel lblNewLabel_1 = new JLabel("- Toda regla debe tener al menos una condicion en la que se prefiera a la alternativa X por sobre la alternativa Y bajo algun criterio -");
+		JLabel lblNewLabel_1 = new JLabel("- Toda regla debe tener al menos un supuesto en el que X sea mejor que Y bajo algun criterio -");
 		lblNewLabel_1.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(lblNewLabel_1);
 		
@@ -133,13 +133,9 @@ public class PrefRuleCreationFrame extends JFrame {
 		Component verticalStrut_1 = Box.createVerticalStrut(20);
 		contentPane.add(verticalStrut_1);
 		
-		JLabel lblNewLabel_4 = new JLabel("Condiciones");
+		JLabel lblNewLabel_4 = new JLabel("Supuestos");
 		lblNewLabel_4.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(lblNewLabel_4);
-		
-		JLabel lblNewLabel_5 = new JLabel("Prefiero la alternativa X por sobre la alternativa Y si ...");
-		lblNewLabel_5.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentPane.add(lblNewLabel_5);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		Dimension scrollPaneDimensions = new Dimension(850, 150);
@@ -177,7 +173,7 @@ public class PrefRuleCreationFrame extends JFrame {
 		panelButtons1.setPreferredSize(panelButtonsDimensions);
 		panelButtons1.setMaximumSize(panelButtonsDimensions);
 		
-		btnDeletePremise = new JButton("Eliminar condicion");
+		btnDeletePremise = new JButton("Eliminar supuesto");
 		panelButtons1.add(btnDeletePremise);
 		btnDeletePremise.setEnabled(false);
 		
