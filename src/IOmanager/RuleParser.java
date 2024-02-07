@@ -77,7 +77,7 @@ public class RuleParser {
 		Matcher matcher = pattern.matcher(conditions[index]);
 		System.out.println("2 --> "+rule.toString());
 		matcher.find();
-        String criteriaName = matcher.group(2);
+        String criteriaName = matcher.group(2).toLowerCase();
         
         Criteria criteria = data.getDataManagerCriteria().getCriteria(criteriaName);
         if(criteria!=null) {
@@ -118,8 +118,8 @@ public class RuleParser {
 		Matcher matcher = pattern.matcher(conditions[index]);
 		System.out.println("3 --> "+rule.toString());
 		matcher.find();
-        String minDistCriteriaName = matcher.group(2);
-        String minDistValueString = matcher.group(3);
+        String minDistCriteriaName = matcher.group(2).toLowerCase();
+        String minDistValueString = matcher.group(3).toLowerCase();
         
         if(minDistCriteriaName.equals(bPremise.getCriteria().getName())) {
         	if(bPremise.validMinDistValue(minDistValueString)) {
@@ -156,8 +156,8 @@ public class RuleParser {
 		Matcher matcher = pattern.matcher(conditions[index]);
 		System.out.println("4 --> "+rule.toString());
 		matcher.find();
-        String minCriteriaName = matcher.group(2);
-        String minValueString = matcher.group(3);
+        String minCriteriaName = matcher.group(2).toLowerCase();
+        String minValueString = matcher.group(3).toLowerCase();
         
         if(minCriteriaName.equals(premise.getCriteria().getName())) {
         	if(premise.validMinXValue(minValueString)) {
@@ -192,8 +192,8 @@ public class RuleParser {
 		Matcher matcher = pattern.matcher(conditions[index]);
 		System.out.println("5 --> "+rule.toString());
 		matcher.find();
-        String maxCriteriaName = matcher.group(2);
-        String maxValueString = matcher.group(3);
+        String maxCriteriaName = matcher.group(2).toLowerCase();
+        String maxValueString = matcher.group(3).toLowerCase();
         
         if(maxCriteriaName.equals(premise.getCriteria().getName())) {
         	if(premise.validMaxYValue(maxValueString)) {
@@ -226,7 +226,7 @@ public class RuleParser {
 		Matcher matcher = pattern.matcher(conditions[index]);
 		System.out.println("6 --> "+rule.toString());
 		matcher.find();
-        String criteriaName = matcher.group(2);
+        String criteriaName = matcher.group(2).toLowerCase();
         
         Criteria criteria = data.getDataManagerCriteria().getCriteria(criteriaName);
         if(criteria!=null) {
@@ -267,8 +267,8 @@ public class RuleParser {
 		Matcher matcher = pattern.matcher(conditions[index]);
 		System.out.println("7 --> "+rule.toString());
 		matcher.find();
-        String maxDistCriteriaName = matcher.group(2);
-        String maxDistValueString = matcher.group(3);
+        String maxDistCriteriaName = matcher.group(2).toLowerCase();
+        String maxDistValueString = matcher.group(3).toLowerCase();
         
         if(maxDistCriteriaName.equals(wPremise.getCriteria().getName())) {
         	if(wPremise.validMaxDistValue(maxDistValueString)) {
@@ -305,7 +305,7 @@ public class RuleParser {
 		Matcher matcher = pattern.matcher(conditions[index]);
 		System.out.println("8 --> "+rule.toString());
 		matcher.find();
-        String criteriaName = matcher.group(2);
+        String criteriaName = matcher.group(2).toLowerCase();
         
         Criteria criteria = data.getDataManagerCriteria().getCriteria(criteriaName);
         if(criteria!=null) {

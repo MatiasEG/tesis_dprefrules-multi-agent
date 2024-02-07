@@ -33,10 +33,10 @@ public class CSVreader {
 		        while ((line = br.readLine()) != null) {
 		            String[] parts = line.split(";");
 					if (parts.length == 2) {
-					    String name = parts[0].trim();
+					    String name = parts[0].trim().toLowerCase();
 					    
 					    if(newData.getDataManagerCriteria().validCriteriaName(name)) {
-					    	String valoresString = parts[1].trim();
+					    	String valoresString = parts[1].trim().toLowerCase();
 						    
 							String[] values;
 							
@@ -98,8 +98,8 @@ public class CSVreader {
 		        while ((line = br.readLine()) != null) {
 		            String[] parts = line.split(">");
 					if (parts.length == 2) {
-					    String morePriorAgent = parts[0].trim();
-					    String lessPriorAgent = parts[1].trim();
+					    String morePriorAgent = parts[0].trim().toLowerCase();
+					    String lessPriorAgent = parts[1].trim().toLowerCase();
 					    
 					    Participant morePriorParticipant = newData.getDataManagerParticipant().getParticipantByName(morePriorAgent);
 					    Participant lessPriorParticipant = newData.getDataManagerParticipant().getParticipantByName(lessPriorAgent);
@@ -141,21 +141,23 @@ public class CSVreader {
 				header += ";"+criteria.getName();
 			}
 			
-	    	if(br.readLine().equals(header)) {
+			String firstLine = br.readLine().toLowerCase();
+	    	if(firstLine.equals(header)) {
 	    		String line;
 		        while ((line = br.readLine()) != null) {
 		            String[] parts = line.split(";");
 					if (parts.length == (newData.getDataManagerCriteria().getCriterias().size()+1)) {
-						String altName = parts[0].trim();
+						String altName = parts[0].trim().toLowerCase();
 						Alternative alt = new Alternative(altName);
 						newData.getDataManagerEvidence().addAlternative(alt);
 						int altIndex = newData.getDataManagerEvidence().getAlternatives().size()-1;
 						
 						for(int i=1; i<parts.length; i++) {
-							if(newData.getDataManagerCriteria().getCriterias().get(i-1).valueIsValid(parts[i].trim())) {
-								newData.getDataManagerEvidence().getAlternatives().get(altIndex).updateOrAddCriteriaValue(newData.getDataManagerCriteria().getCriterias().get(i-1), parts[i].trim());
+							String value = parts[i].trim().toLowerCase();
+							if(newData.getDataManagerCriteria().getCriterias().get(i-1).valueIsValid(value)) {
+								newData.getDataManagerEvidence().getAlternatives().get(altIndex).updateOrAddCriteriaValue(newData.getDataManagerCriteria().getCriterias().get(i-1), value);
 							}else {
-				            	throw new EvidenceFileException("El criterio ("+newData.getDataManagerCriteria().getCriterias().get(i-1).getName()+") contiene una valor no valido ("+parts[i].trim()+") en el archivo de evidencia.");
+				            	throw new EvidenceFileException("El criterio ("+newData.getDataManagerCriteria().getCriterias().get(i-1).getName()+") contiene una valor no valido ("+value+") en el archivo de evidencia.");
 							}
 						}
 		            }else {
@@ -183,7 +185,7 @@ public class CSVreader {
 		        while ((line = br.readLine()) != null) {
 		            String[] parts = line.split(";");
 					if (parts.length == 2) {
-						String ruleName = parts[0].trim();
+						String ruleName = parts[0].trim().toLowerCase();
 						Rule auxRule = new Rule(ruleName);
 						
 						String[] premises = parts[1].split("\\s*==>\\s*");

@@ -240,6 +240,7 @@ public class ParticipantFrame extends JFrame {
 	
 	private void addParticipantName(DataManager data) {
         String name = JOptionPane.showInputDialog(this, "Ingrese el nombre del participante que desea agregar:");
+        name = name.toLowerCase();
         if(data.getDataManagerParticipant().validParticipantName(name)) {
         	listModelParticipants.addElement(name);
     		data.getDataManagerParticipant().addParticipant(new Participant(name));

@@ -228,7 +228,8 @@ public class AlternativesFrame extends JFrame {
 	}
 	
 	private void addAlternative(DataManager data) {
-		String name = JOptionPane.showInputDialog(this, "Ingrese el nombre de la alternativa que desea agregar:");
+		String nameAux = JOptionPane.showInputDialog(this, "Ingrese el nombre de la alternativa que desea agregar:");
+		String name = nameAux.toLowerCase();
         String validation = DataManager.validateStringWithOnlyLetters(name);
         if(validation==null) {
         	if(DataManager.validateStringListNotContainNewElement(data.getDataManagerEvidence().getAlternativesNames(), name)) {

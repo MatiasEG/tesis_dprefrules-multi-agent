@@ -204,12 +204,14 @@ public class CriteriaCreationFrame extends JFrame {
 		});
 		btnAcept.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if((criteriaToUpdate!=null && criteriaToUpdate.getName().equals(textFieldCriteriaName.getText())) || CriteriaCreationFrame.this.data.getDataManagerCriteria().validCriteriaName(textFieldCriteriaName.getText())) {
+				String criteriaName = textFieldCriteriaName.getText().toLowerCase();
+				if((criteriaToUpdate!=null && criteriaToUpdate.getName().equals(criteriaName)) || CriteriaCreationFrame.this.data.getDataManagerCriteria().validCriteriaName(criteriaName)) {
 					if(!isNumericEnabled && !textFieldSimbolicValues.getText().equals("")) {
-						String[] simbolicSplittedValues = textFieldSimbolicValues.getText().trim().split("\\s*,\\s*");
+						String values = textFieldSimbolicValues.getText().toLowerCase();
+						String[] simbolicSplittedValues = values.trim().split("\\s*,\\s*");
 						
 						if(CriteriaCreationFrame.this.data.getDataManagerCriteria().validCriteriaValues(simbolicSplittedValues, isNumericEnabled)) {
-							criteriaFrame.addCriteria(textFieldCriteriaName.getText(), textFieldSimbolicValues.getText(), isNumericEnabled, criteriaToUpdate);
+							criteriaFrame.addCriteria(criteriaName, values, isNumericEnabled, criteriaToUpdate);
 							CriteriaCreationFrame.this.dispose();
 						}else {
 							JOptionPane.showMessageDialog(null, "Por favor, revise los valores simbolicos del criterio y y siga las instrucciones solicitadas", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -218,7 +220,7 @@ public class CriteriaCreationFrame extends JFrame {
 						String[] numericSplittedValues = new String[] {textFieldNumericValue1.getText(), textFieldNumericValue2.getText()};
 						
 						if(CriteriaCreationFrame.this.data.getDataManagerCriteria().validCriteriaValues(numericSplittedValues, isNumericEnabled)){
-							criteriaFrame.addCriteria(textFieldCriteriaName.getText(), textFieldNumericValue1.getText()+","+textFieldNumericValue2.getText(), isNumericEnabled, criteriaToUpdate);
+							criteriaFrame.addCriteria(criteriaName, textFieldNumericValue1.getText()+","+textFieldNumericValue2.getText(), isNumericEnabled, criteriaToUpdate);
 							CriteriaCreationFrame.this.dispose();
 						}else {
 							JOptionPane.showMessageDialog(null, "Por favor, revise los valores numericos del criterio y y siga las instrucciones solicitadas", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -227,7 +229,7 @@ public class CriteriaCreationFrame extends JFrame {
 						JOptionPane.showMessageDialog(null, "Por favor, recuerde que debe definir un rango de valores para el criterio", "Advertencia", JOptionPane.WARNING_MESSAGE);
 					}
 				}else {
-					JOptionPane.showMessageDialog(null, "Error: El nombre de criterio ("+textFieldCriteriaName.getText()+") no es valido.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Error: El nombre de criterio ("+criteriaName+") no es valido.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});
