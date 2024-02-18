@@ -57,7 +57,7 @@ public class Criteria {
 	
 	private static String rndString() {
 		int size = 4;
-        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        String caracteres = "abcdefghijklmnopqrstuvwxyz";
         StringBuilder cadenaRandom = new StringBuilder();
 
         Random random = new Random();
