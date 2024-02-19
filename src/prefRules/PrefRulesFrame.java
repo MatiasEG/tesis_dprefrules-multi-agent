@@ -10,6 +10,7 @@ import IOmanager.CSVreader;
 import IOmanager.FileChooser;
 import criteria.Criteria;
 import dataManager.DataManager;
+import dataManager.Priority;
 import exceptions.RuleFileErrorException;
 import participant.Participant;
 import javax.swing.BoxLayout;
@@ -57,14 +58,25 @@ public class PrefRulesFrame extends JFrame {
 			public void run() {
 				try {
 					DataManager data = new DataManager("evidenceTest","C:\\Users\\Matia\\Desktop\\Archivos");
-					data.getDataManagerParticipant().addParticipant(new Participant("Matias"));
+					data.getDataManagerParticipant().addParticipant(new Participant("melisa"));
+					data.getDataManagerParticipant().addParticipant(new Participant("matias"));
+					data.getDataManagerParticipant().addParticipant(new Participant("mama"));
+					data.getDataManagerParticipant().addParticipant(new Participant("papa"));
 					
-					Criteria days = new Criteria("days", new String[]{"1","30"}, true);
-					Criteria entrmnt = new Criteria("entrmnt", new String[]{"vbad","bad","reg","good","vgood"}, false);
-					Criteria service = new Criteria("service", new String[]{"vbad","bad","reg","good","vgood"}, false);
-					data.getDataManagerCriteria().addCriteria(days);
-					data.getDataManagerCriteria().addCriteria(entrmnt);
-					data.getDataManagerCriteria().addCriteria(service);
+					data.getDataManagerParticipant().addParticipantsPriority(new Priority("melisa","mama"));
+					data.getDataManagerParticipant().addParticipantsPriority(new Priority("melisa","papa"));
+					data.getDataManagerParticipant().addParticipantsPriority(new Priority("matias","mama"));
+					data.getDataManagerParticipant().addParticipantsPriority(new Priority("matias","papa"));
+					
+					Criteria complejidad = new Criteria("complejidad", new String[]{"alta","media","baja"}, false);
+					Criteria tiempo = new Criteria("tiempo", new String[]{"6","1"}, true);
+					Criteria gradodeaceptacion = new Criteria("gradodeaceptacion", new String[]{"bajo","medio","alto"}, false);
+					Criteria porciones = new Criteria("porciones", new String[]{"8","15"}, true);
+					
+					data.getDataManagerCriteria().addCriteria(complejidad);
+					data.getDataManagerCriteria().addCriteria(tiempo);
+					data.getDataManagerCriteria().addCriteria(gradodeaceptacion);
+					data.getDataManagerCriteria().addCriteria(porciones);
 					
 					PrefRulesFrame frame = new PrefRulesFrame(data, false);
 					frame.setVisible(true);

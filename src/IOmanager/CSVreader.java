@@ -106,7 +106,7 @@ public class CSVreader {
 					    
 					    if(morePriorParticipant==null && !newData.getDataManagerParticipant().validParticipantName(morePriorAgent)) throw new AgentPriorityException("El nombre "+morePriorAgent+" no es valido.");
 					    
-					    if(lessPriorParticipant==null && !newData.getDataManagerParticipant().validParticipantName(morePriorAgent)) throw new AgentPriorityException("El nombre "+lessPriorAgent+" no es valido.");
+					    if(lessPriorParticipant==null && !newData.getDataManagerParticipant().validParticipantName(lessPriorAgent)) throw new AgentPriorityException("El nombre "+lessPriorAgent+" no es valido.");
 					    
 						Priority newParticipantsPriority = new Priority(morePriorAgent, lessPriorAgent);
 						String validPrior = newParticipantsPriority.isValid(newData);

@@ -39,7 +39,7 @@ public class BPremise extends Premise{
 					return false;
 				}
 			}else {
-				if(minDist>(Integer.parseInt(criteria.getValues()[1])-Integer.parseInt(criteria.getValues()[0])) || minDist<0) {
+				if(minDist>Math.abs(Integer.parseInt(criteria.getValues()[1])-Integer.parseInt(criteria.getValues()[0])) || minDist<0) {
 					return false;
 				}
 			}
@@ -62,8 +62,10 @@ public class BPremise extends Premise{
 			}else {
 				try {
 					minXIndex = Integer.parseInt(minX);
+					int minValue = Math.min(Integer.parseInt(criteria.getValues()[0]), Integer.parseInt(criteria.getValues()[1]));
+					int maxValue = Math.max(Integer.parseInt(criteria.getValues()[0]), Integer.parseInt(criteria.getValues()[1]));
 					
-					if((minXIndex<Integer.parseInt(criteria.getValues()[0]) || minXIndex>Integer.parseInt(criteria.getValues()[1]))) {
+					if(minXIndex<minValue || minXIndex>maxValue) {
 						return false;
 					}
 					
@@ -94,8 +96,10 @@ public class BPremise extends Premise{
 			}else {
 				try {
 					maxYIndex = Integer.parseInt(maxY);
+					int minValue = Math.min(Integer.parseInt(criteria.getValues()[0]), Integer.parseInt(criteria.getValues()[1]));
+					int maxValue = Math.max(Integer.parseInt(criteria.getValues()[0]), Integer.parseInt(criteria.getValues()[1]));
 					
-					if((maxYIndex<Integer.parseInt(criteria.getValues()[0]) || maxYIndex>Integer.parseInt(criteria.getValues()[1]))) {
+					if(maxYIndex<minValue || maxYIndex>maxValue) {
 						return false;
 					}
 				}catch(NumberFormatException e) {

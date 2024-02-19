@@ -69,8 +69,10 @@ public class EPremise extends Premise{
 			}else {
 				try {
 					minXIndex = Integer.parseInt(minX);
+					int minValue = Math.min(Integer.parseInt(criteria.getValues()[0]), Integer.parseInt(criteria.getValues()[1]));
+					int maxValue = Math.max(Integer.parseInt(criteria.getValues()[0]), Integer.parseInt(criteria.getValues()[1]));
 					
-					if((minXIndex<Integer.parseInt(criteria.getValues()[0]) || minXIndex>Integer.parseInt(criteria.getValues()[1]))) {
+					if(minXIndex<minValue || minXIndex>maxValue) {
 						return false;
 					}
 				}catch(NumberFormatException e) {
@@ -98,8 +100,10 @@ public class EPremise extends Premise{
 			}else {
 				try {
 					maxYIndex = Integer.parseInt(maxY);
+					int minValue = Math.min(Integer.parseInt(criteria.getValues()[0]), Integer.parseInt(criteria.getValues()[1]));
+					int maxValue = Math.max(Integer.parseInt(criteria.getValues()[0]), Integer.parseInt(criteria.getValues()[1]));
 					
-					if((maxYIndex<Integer.parseInt(criteria.getValues()[0]) || maxYIndex>Integer.parseInt(criteria.getValues()[1]))) {
+					if(maxYIndex<minValue || maxYIndex>maxValue) {
 						return false;
 					}
 				}catch(NumberFormatException e) {
