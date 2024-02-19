@@ -32,7 +32,20 @@ public class Criteria {
 	
 	private String addNoInformationValue() {
 		if(isNumeric) {
-			setNoInformationValue(""+((Integer.parseInt(values[0]))-1));
+			int minValue = Math.min(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+			boolean ascendent;
+			if(minValue == (Integer.parseInt(values[0]))){
+				ascendent = true;
+			}else {
+				ascendent = false;
+			}
+			
+			if(ascendent) {
+				setNoInformationValue(""+((Integer.parseInt(values[0]))-1));
+			}else {
+				setNoInformationValue(""+((Integer.parseInt(values[0]))+1));
+			}
+			
 			return getNoInformationValue();
 		}else {
 			boolean finish = false;
