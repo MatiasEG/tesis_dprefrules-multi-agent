@@ -39,7 +39,7 @@ public class BPremise extends Premise{
 					return false;
 				}
 			}else {
-				if(minDist>Math.abs(Integer.parseInt(criteria.getValues()[1])-Integer.parseInt(criteria.getValues()[0])) || minDist<0) {
+				if(minDist>Math.abs(Math.abs(Integer.parseInt(criteria.getValues()[1])-Math.abs(Integer.parseInt(criteria.getValues()[0])))) || minDist<0) {
 					return false;
 				}
 			}

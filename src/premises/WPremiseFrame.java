@@ -72,6 +72,7 @@ public class WPremiseFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public WPremiseFrame(DataManager data, Rule rule) {
+		setTitle("Creacion de nueva W_Premise");
 		this.data = data;
 		this.rule = rule;
 		setBounds(100, 100, 800, 500);
@@ -98,7 +99,7 @@ public class WPremiseFrame extends JFrame {
 				criteria = WPremiseFrame.this.data.getDataManagerCriteria().getCriteria((String)WPremiseFrame.this.comboBoxAvailableCriterias.getSelectedItem());
 				if(criteria != null) {
 					textFieldMaxDist.setEnabled(true);
-					lblMaxDist.setText("La distancia minima entre los valores posibles para el criterio "+criteria.getName()+" debe ser:");
+					lblMaxDist.setText("La distancia maxima entre los valores posibles para el criterio "+criteria.getName()+" debe ser:");
 					lblCriteria1.setText("en el criterio "+criteria.getName()+".");
 					lblCriteria2.setText("en el criterio "+criteria.getName()+".");
 					btnSave.setEnabled(true);

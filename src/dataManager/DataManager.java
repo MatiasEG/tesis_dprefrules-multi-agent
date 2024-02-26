@@ -91,7 +91,11 @@ public class DataManager {
 		if(s == null || s.equals("")) return "Cadena de caracteres vacia";
 		
 		for(int i = 0; i < s.length(); i++) {
-			if(!Character.isLetter(s.charAt(i))) {
+			if(i == 0) {
+				if(!Character.isLetter(s.charAt(i))) {
+					return "Caracter invalido ("+s.charAt(i)+") en "+s+".";
+				}
+			}else if(!Character.isLetterOrDigit(s.charAt(i))){
 				return "Caracter invalido ("+s.charAt(i)+") en "+s+".";
 			}
 		}

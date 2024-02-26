@@ -39,7 +39,7 @@ public class WPremise extends Premise{
 					return false;
 				}
 			}else {
-				if(maxDist>(Integer.parseInt(criteria.getValues()[1])-Integer.parseInt(criteria.getValues()[0])) || maxDist<0) {
+				if(maxDist>Math.abs(Math.abs(Integer.parseInt(criteria.getValues()[1])-Math.abs(Integer.parseInt(criteria.getValues()[0])))) || maxDist<0) {
 					return false;
 				}
 			}

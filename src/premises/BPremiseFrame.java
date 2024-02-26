@@ -72,6 +72,7 @@ public class BPremiseFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public BPremiseFrame(DataManager data, Rule rule) {
+		setTitle("Creacion de nueva B_Premise");
 		this.data = data;
 		this.rule = rule;
 		setBounds(100, 100, 800, 500);

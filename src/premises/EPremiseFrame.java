@@ -74,6 +74,7 @@ public class EPremiseFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public EPremiseFrame(DataManager data, Rule rule) {
+		setTitle("Creacion de nueva E_Premise");
 		this.data = data;
 		this.rule = rule;
 		setBounds(100, 100, 800, 500);
