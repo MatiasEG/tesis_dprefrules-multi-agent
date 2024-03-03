@@ -138,7 +138,7 @@ public class BPremiseFrame extends JFrame {
 					}else {
 						lblSelectedCriteriaValues.setText("between("+criteria.getCriteriaValuesString()+")");
 
-						lblMinDistMaxValue.setText("(Valor maximo: "+(Integer.parseInt(criteria.getValues()[1])-Integer.parseInt(criteria.getValues()[0]))+")");
+						lblMinDistMaxValue.setText("(Valor maximo: "+Math.abs(Math.abs(Integer.parseInt(criteria.getValues()[1]))-Math.abs(Integer.parseInt(criteria.getValues()[0])))+")");
 						
 						textFieldXMinValue = new JTextField();
 						textFieldXMinValue.setText("-");
