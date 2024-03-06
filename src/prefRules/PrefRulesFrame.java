@@ -268,7 +268,7 @@ public class PrefRulesFrame extends JFrame {
 		        	String ruleName = listRules.getSelectedValue();
 	            	for(int i=0; i<PrefRulesFrame.this.data.getDataManagerRule().getRules().size(); i++) {
 	            		if(PrefRulesFrame.this.data.getDataManagerRule().getRules().get(i).getName().equals(ruleName)) {
-	            			JOptionPane.showMessageDialog(null, PrefRulesFrame.this.data.getDataManagerRule().getRules().get(i).getRuleDescription(), "Error", JOptionPane.INFORMATION_MESSAGE);
+	            			JOptionPane.showMessageDialog(null, PrefRulesFrame.this.data.getDataManagerRule().getRules().get(i).getRuleDescription(), "Descripcion de la regla", JOptionPane.INFORMATION_MESSAGE);
 	            			break;
 	            		}
 	            	}
