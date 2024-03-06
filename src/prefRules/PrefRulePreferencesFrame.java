@@ -236,7 +236,6 @@ public class PrefRulePreferencesFrame extends JFrame {
 			comboBoxWorst.setEnabled(false);
 			
 		    btnLoadRulePreferencesFromFiles.setEnabled(false);
-		    btnSaveRulePreferenes.setEnabled(false);
 		    btnAddPriority.setEnabled(false);
 		    btnDeletePriority.setEnabled(false);
 		}
